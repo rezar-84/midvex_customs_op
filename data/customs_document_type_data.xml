@@ -190,5 +190,25 @@
             <field name="original_normally_required" eval="False"/>
             <field name="sequence">190</field>
         </record>
+
+        <record id="doc_type_atr" model="customs.document.type">
+            <field name="code">ATR</field>
+            <field name="name">A.TR Movement Certificate</field>
+            <field name="name_tr">A.TR Dolaşım Belgesi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="True"/>
+            <field name="sequence">85</field>
+        </record>
+
+        <record id="doc_type_ce" model="customs.document.type">
+            <field name="code">CE</field>
+            <field name="name">CE Certificate of Conformity</field>
+            <field name="name_tr">CE Uygunluk Belgesi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">86</field>
+        </record>
     </data>
 </odoo>

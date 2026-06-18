@@ -176,6 +176,108 @@ class CustomsOperation(models.Model):
     override_reason = fields.Text(string='Override Reason', tracking=True)
     override_user_id = fields.Many2one('res.users', string='Overridden By', readonly=True, tracking=True)
     override_date = fields.Datetime(string='Override Date', readonly=True, tracking=True)
+
+    # Production & Preparation Fields
+    production_status = fields.Selection([
+        ('not_started', 'Not Started'),
+        ('in_production', 'In Production'),
+        ('ready', 'Ready'),
+        ('loaded', 'Loaded'),
+        ('delayed', 'Delayed'),
+        ('cancelled', 'Cancelled')
+    ], string='Production Status', default='not_started', tracking=True)
+    production_ready_date = fields.Date(string='Production Ready Date', tracking=True)
+    goods_prepared_date = fields.Date(string='Goods Prepared Date', tracking=True)
+    loading_date = fields.Date(string='Loading Date', tracking=True)
+
+    # Purchase & Supplier Commercial Fields
+    supplier_ref = fields.Char(string='Supplier Order Reference', tracking=True)
+    manufacturer_id = fields.Many2one(
+        'res.partner',
+        string='Manufacturer/Factory',
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        tracking=True
+    )
+    payment_term_id = fields.Many2one(
+        'account.payment.term',
+        string='Payment Term',
+        tracking=True
+    )
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        compute='_compute_commercial_defaults',
+        store=True,
+        readonly=False,
+        tracking=True
+    )
+    total_amount = fields.Monetary(
+        string='Total Amount',
+        currency_field='currency_id',
+        compute='_compute_commercial_defaults',
+        store=True,
+        readonly=False,
+        tracking=True
+    )
+
+    # Logistics & Tracking Additional Fields
+    seal_number = fields.Char(string='Seal Number', tracking=True)
+    bl_number = fields.Char(string='Bill of Lading (B/L) Number', tracking=True)
+    vessel_name = fields.Char(string='Vessel Name', tracking=True)
+    tracking_link = fields.Char(string='Logistics Tracking Link', tracking=True)
+
+    # Customs Sub-Status (Process Stage details)
+    customs_status = fields.Selection([
+        ('waiting', 'Documents Waiting'),
+        ('opened', 'Declaration Opened'),
+        ('inspection', 'Inspection'),
+        ('tax_paid', 'Tax Paid'),
+        ('released', 'Released / Clearance Completed'),
+        ('completed', 'Completed')
+    ], string='Customs Sub-Status', tracking=True)
+
+    # Accounting & Costs
+    cost_freight = fields.Monetary(string='Freight Cost', currency_field='currency_id', tracking=True)
+    cost_customs_tax = fields.Monetary(string='Customs Tax', currency_field='currency_id', tracking=True)
+    cost_broker_expenses = fields.Monetary(string='Customs Broker Expenses', currency_field='currency_id', tracking=True)
+    cost_stamp_tax = fields.Monetary(string='Stamp Tax', currency_field='currency_id', tracking=True)
+    cost_storage = fields.Monetary(string='Storage / Demurrage', currency_field='currency_id', tracking=True)
+    cost_exchange_diff = fields.Monetary(string='Exchange-Rate Difference', currency_field='currency_id', tracking=True)
+    cost_other = fields.Monetary(string='Other Costs', currency_field='currency_id', tracking=True)
+    cost_total = fields.Monetary(
+        string='Total Costs',
+        currency_field='currency_id',
+        compute='_compute_cost_total',
+        store=True
+    )
+    accounting_status = fields.Selection([
+        ('not_started', 'Not Started'),
+        ('waiting_invoice', 'Waiting Invoice'),
+        ('waiting_payment', 'Waiting Payment'),
+        ('completed', 'Completed')
+    ], string='Accounting Closing Status', default='not_started', tracking=True)
+
+    # Warehouse Receiving
+    warehouse_received = fields.Boolean(string='Warehouse Received', default=False, tracking=True)
+    warehouse_received_date = fields.Date(string='Warehouse Received Date', tracking=True)
+    missing_packages = fields.Boolean(string='Missing Packages/Boxes', default=False, tracking=True)
+    damaged_product = fields.Boolean(string='Damaged Product', default=False, tracking=True)
+    damage_description = fields.Text(string='Damage / Missing Description', tracking=True)
+    warehouse_photo_ids = fields.Many2many(
+        'ir.attachment',
+        'customs_operation_warehouse_photo_rel',
+        'operation_id',
+        'attachment_id',
+        string='Photo Attachments'
+    )
+    delivery_note_ids = fields.Many2many(
+        'ir.attachment',
+        'customs_operation_delivery_note_rel',
+        'operation_id',
+        'attachment_id',
+        string='Delivery Notes / POD'
+    )
+
     is_draft = fields.Boolean(string='Is Draft Stage', compute='_compute_is_draft', store=True)
 
     @api.model_create_multi
@@ -196,6 +298,24 @@ class CustomsOperation(models.Model):
     def _compute_is_draft(self):
         for op in self:
             op.is_draft = not op.stage_id or op.stage_id.code == 'draft'
+
+    @api.depends('purchase_order_ids', 'purchase_order_ids.amount_total', 'purchase_order_ids.currency_id')
+    def _compute_commercial_defaults(self):
+        for op in self:
+            if op.purchase_order_ids:
+                op.currency_id = op.purchase_order_ids[0].currency_id
+                op.total_amount = sum(po.amount_total for po in op.purchase_order_ids)
+            else:
+                if not op.currency_id:
+                    op.currency_id = op.company_id.currency_id or self.env.company.currency_id
+
+    @api.depends('cost_freight', 'cost_customs_tax', 'cost_broker_expenses', 'cost_stamp_tax', 'cost_storage', 'cost_exchange_diff', 'cost_other')
+    def _compute_cost_total(self):
+        for op in self:
+            op.cost_total = (
+                op.cost_freight + op.cost_customs_tax + op.cost_broker_expenses +
+                op.cost_stamp_tax + op.cost_storage + op.cost_exchange_diff + op.cost_other
+            )
 
     @api.depends('document_requirement_ids', 'document_requirement_ids.state')
     def _compute_document_stats(self):
