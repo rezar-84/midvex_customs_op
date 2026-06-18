@@ -32,6 +32,12 @@
 | 2026-06-19 | Restrict backward/skip stage transitions and active archiving | Prevents users from randomly skipping stages, moving confirmed files back to draft, or archiving active compliance histories. | Unrestricted stage switches and archiving | Added validations in `write()` limiting backward/skip moves and archiving to Customs Managers. |
 | 2026-06-19 | Add explicit ACL rows for all roles | Segregates security permissions explicitly across User, Approver, Manager, and Admin groups in CSV rather than relying purely on implied inheritance. | Rely purely on implied group privileges | Reconfigured `ir.model.access.csv` with explicit entries for all groups. |
 
+| 2026-06-19 | Rename app to Import & Customs Operations | Feedback from Nevzat Bey highlights that the module tracks the entire import process (from PO to warehouse and accounting), not just customs. | Keep name as Customs Operations | Update user-facing app and menu labels to "Import & Customs Operations" |
+| 2026-06-19 | Direct cost fields on operation for MVP | Keeps database structure simple and straightforward for MVP costing. | Table-based cost lines | Added fields for freight, customs tax, broker fees, storage, etc. and a total cost computed field |
+| 2026-06-19 | Expose warehouse photo and delivery note attachments | Helps users easily view and upload proof of delivery and photos of damaged packages directly in the Warehouse tab. | Rely only on standard chatter attachments | Added `Many2many` fields linking to `ir.attachment` for specific categories |
+| 2026-06-19 | Add customs sub-status Selection field | Allows tracking customs process details (e.g. tax paid, declaration opened) without modifying the main staging sequence. | Add new workflow stages | Added `customs_status` selection field on the main operation model |
+| 2026-06-19 | Python activity triggers for logistics notifications | Automates task creation for logistics and accounting users on key events (ETA approaching, BL upload, warehouse delivery) without heavy external mail/SMS server integration dependencies. | Manual activities only | Added automated activity triggers in Python `write` and creation methods |
+
 ## Pending decisions
 
 None. All pending architectural decisions have been resolved.
