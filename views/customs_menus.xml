@@ -61,7 +61,7 @@
         <field name="name">Missing Documents</field>
         <field name="res_model">customs.document.requirement</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('state', 'in', ('not_requested', 'requested', 'vendor_preparing'))]</field>
+        <field name="domain">[('state', 'in', ['not_requested', 'requested', 'vendor_preparing'])]</field>
     </record>
 
     <record id="action_customs_document_requirement_review" model="ir.actions.act_window">

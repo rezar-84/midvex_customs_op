@@ -25,4 +25,4 @@ All notable changes to the Customs Operations module should be documented here.
 
 ### Fixed
 
-- None
+- Fixed Odoo search view parse error in `customs.document.requirement` by replacing tuple syntax with standard list syntax in `state` domain filters in `views/customs_document_requirement_views.xml` and `views/customs_menus.xml`.

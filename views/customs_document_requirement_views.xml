@@ -13,11 +13,11 @@
                 <filter string="My Requirements" name="my_requirements" domain="[('responsible_user_id', '=', uid)]"/>
                 <filter string="Blocking" name="blocking" domain="[('is_blocking', '=', True)]"/>
                 <separator/>
-                <filter string="Missing" name="missing" domain="[('state', 'in', ('not_requested', 'requested', 'vendor_preparing'))]"/>
+                <filter string="Missing" name="missing" domain="[('state', 'in', ['not_requested', 'requested', 'vendor_preparing'])]"/>
                 <filter string="Under Review" name="under_review" domain="[('state', '=', 'under_review')]"/>
                 <filter string="Correction Required" name="correction_required" domain="[('state', '=', 'correction_required')]"/>
                 <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
-                <filter string="Approved" name="approved" domain="[('state', 'in', ('approved', 'accepted'))]"/>
+                <filter string="Approved" name="approved" domain="[('state', 'in', ['approved', 'accepted'])]"/>
                 <separator/>
                 <filter string="Original Required" name="original_required" domain="[('original_required', '=', True)]"/>
                 <filter string="Original Missing" name="original_missing" domain="[('original_required', '=', True), ('original_received', '=', False)]"/>
