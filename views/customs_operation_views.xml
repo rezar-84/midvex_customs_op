@@ -377,6 +377,8 @@
                 </sheet>
             </form>
         </field>
+    </record>
+
     <!-- Customs Operation Calendar View -->
     <record id="view_customs_operation_calendar" model="ir.ui.view">
         <field name="name">customs.operation.calendar</field>
