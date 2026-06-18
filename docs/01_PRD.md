@@ -2,6 +2,8 @@
 
 ## Odoo Customs Operations
 
+Technical module name: `midvex_customs_op`
+
 ## 1. Product summary
 
 *Customs Operations is an Odoo 19 application for managing international shipments, required customs documents, vendor follow-up, customs-clearance progress, original document delivery, inspections, approvals, and warehouse handover.*
@@ -294,6 +296,8 @@ The module must follow standard Odoo architecture.
 ### NFR-005 Upgrade safety
 
 The module must avoid modifications to Odoo core.
+
+The repository license and addon license must be explicitly aligned before release packaging.
 
 ### NFR-006 Multi-company
 

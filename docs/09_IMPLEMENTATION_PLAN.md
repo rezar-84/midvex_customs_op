@@ -2,7 +2,7 @@
 
 ## Milestone 0 — Repository and requirements review
 
-Status: In progress
+Status: Complete; awaiting approval for Milestone 1
 
 - Inspect repository
 - Read all documentation
@@ -18,6 +18,11 @@ Progress notes:
 - Repository root and remote identify the project as `midvex_customs_op`.
 - Documentation technical module name references were aligned to `midvex_customs_op`.
 - Implementation has not started; Milestone 1 requires explicit approval.
+- Master-agent repository review is recorded in `docs/16_MASTER_AGENT_REVIEW.md`.
+- No existing Odoo addon, manifest, tests, security files, translation files, or local Odoo config were found.
+- Milestone 1 should establish the addon structure and baseline conventions.
+- Conducted the `grill-me` design review interview on 2026-06-18, resolving all pending architecture decisions (documented in `docs/10_DECISIONS.md`).
+- Confirmed that Odoo is not installed on the development machine; validation will be handled via static analysis and AI review, with deployment and testing in the user's environment.
 
 ## Milestone 1 — Scaffold and security foundation
 
@@ -31,6 +36,17 @@ Status: Not started
 - Sequence
 - Base menus
 - Default stages
+
+Acceptance criteria:
+
+- Addon directory `midvex_customs_op/` exists.
+- Manifest installs with valid dependencies.
+- Security groups and initial access rights are defined.
+- Base menu and actions load.
+- Sequence and default stage data are loaded.
+- No unrelated files are modified.
+- Documentation and changelog are updated.
+- Install or upgrade test is attempted in the available Odoo environment.
 
 ## Milestone 2 — Customs File and product lines
 

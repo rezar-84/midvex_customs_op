@@ -12,10 +12,12 @@ All notable changes to the Customs Operations module should be documented here.
 - UX and security specifications
 - Acceptance criteria
 - Test planning templates
+- Master-agent repository review and Milestone 1 acceptance criteria
 
 ### Changed
 
 - Aligned documented technical module name with repository name: `midvex_customs_op`
+- Resolved pending architecture decisions (global/company-specific stages and document types, Odoo Documents scope, approved states, critical activities, versioning, licensing, and validation method) in `docs/10_DECISIONS.md` after the `grill-me` design review interview.
 
 ### Fixed
 
