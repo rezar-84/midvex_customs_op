@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Partners / Parties -->
+        <record id="partner_demo_supplier" model="res.partner">
+            <field name="name">Nippon Aqua Feed Corp.</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="partner_demo_broker" model="res.partner">
+            <field name="name">Gümrükçü Ahmet ve Ortakları Müşavirlik</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="partner_demo_forwarder" model="res.partner">
+            <field name="name">Global Logistics Solutions LLC</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="partner_demo_carrier" model="res.partner">
+            <field name="name">Mediterranean Shipping Line</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="partner_demo_manufacturer" model="res.partner">
+            <field name="name">Hokkaido Bio Production Factory</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- Demo Products -->
+        <record id="product_demo_aquaculture_feed" model="product.product">
+            <field name="name">Aquaculture Starter Feed EX-10</field>
+            <field name="detailed_type">product</field>
+            <field name="uom_id" ref="uom.product_uom_kgm"/>
+            <field name="uom_po_id" ref="uom.product_uom_kgm"/>
+        </record>
+
+        <!-- Demo Operations -->
+
+        <!-- 1. Import Operation - In Production -->
+        <record id="customs_op_demo_production" model="customs.operation">
+            <field name="company_id" ref="base.main_company"/>
+            <field name="stage_id" ref="midvex_customs_op.stage_draft"/>
+            <field name="production_status">in_production</field>
+            <field name="total_amount">15000.0</field>
+            <field name="currency_id" ref="base.USD"/>
+            <field name="supplier_ids" eval="[(4, ref('partner_demo_supplier'))]"/>
+            <field name="broker_id" ref="partner_demo_broker"/>
+            <field name="forwarder_id" ref="partner_demo_forwarder"/>
+            <field name="manufacturer_id" ref="partner_demo_manufacturer"/>
+            <field name="supplier_ref">PO-NIPPON-2026-98</field>
+            <field name="transport_mode">sea</field>
+            <field name="origin_country_id" ref="base.jp"/>
+            <field name="departure_country_id" ref="base.jp"/>
+            <field name="destination_country_id" ref="base.tr"/>
+        </record>
+
+        <!-- 2. Import Operation - Shipped (In Transit) -->
+        <record id="customs_op_demo_shipped" model="customs.operation">
+            <field name="company_id" ref="base.main_company"/>
+            <field name="stage_id" ref="midvex_customs_op.stage_shipped"/>
+            <field name="production_status">loaded</field>
+            <field name="loading_date" eval="time.strftime('%Y-%m-10')"/>
+            <field name="planned_departure_date" eval="time.strftime('%Y-%m-12')"/>
+            <field name="actual_departure_date" eval="time.strftime('%Y-%m-12')"/>
+            <field name="planned_arrival_date" eval="(datetime.now() + relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="bl_number">BL-SH12345678</field>
+            <field name="container_number">CONT-9876543</field>
+            <field name="seal_number">SEAL-0001</field>
+            <field name="vessel_name">OCEAN EXPLORER</field>
+            <field name="tracking_link">https://www.searates.com/container/tracking/?container=CONT-9876543</field>
+            <field name="supplier_ids" eval="[(4, ref('partner_demo_supplier'))]"/>
+            <field name="broker_id" ref="partner_demo_broker"/>
+            <field name="forwarder_id" ref="partner_demo_forwarder"/>
+            <field name="carrier_id" ref="partner_demo_carrier"/>
+            <field name="transport_mode">sea</field>
+            <field name="origin_country_id" ref="base.jp"/>
+            <field name="departure_country_id" ref="base.jp"/>
+            <field name="destination_country_id" ref="base.tr"/>
+        </record>
+
+        <!-- 3. Import Operation - Customs Clearance with Missing Documents -->
+        <record id="customs_op_demo_customs" model="customs.operation">
+            <field name="company_id" ref="base.main_company"/>
+            <field name="stage_id" ref="midvex_customs_op.stage_customs_clearance"/>
+            <field name="customs_status">opened</field>
+            <field name="customs_declaration_number">190000-2026-00561</field>
+            <field name="customs_declaration_date" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="planned_arrival_date" eval="(datetime.now() - relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="actual_arrival_date" eval="(datetime.now() - relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="bl_number">BL-CS98765432</field>
+            <field name="supplier_ids" eval="[(4, ref('partner_demo_supplier'))]"/>
+            <field name="broker_id" ref="partner_demo_broker"/>
+            <field name="transport_mode">sea</field>
+            <field name="origin_country_id" ref="base.jp"/>
+            <field name="departure_country_id" ref="base.jp"/>
+            <field name="destination_country_id" ref="base.tr"/>
+        </record>
+
+        <!-- Document requirements for customs demo to show completeness state -->
+        <record id="req_demo_customs_inv" model="customs.document.requirement">
+            <field name="operation_id" ref="customs_op_demo_customs"/>
+            <field name="document_type_id" ref="midvex_customs_op.doc_type_inv"/>
+            <field name="name">Commercial Invoice for BL-CS98765432</field>
+            <field name="state">approved</field>
+            <field name="requirement_level">mandatory</field>
+            <field name="responsible_party">supplier</field>
+            <field name="vendor_id" ref="partner_demo_supplier"/>
+        </record>
+
+        <record id="req_demo_customs_hc" model="customs.document.requirement">
+            <field name="operation_id" ref="customs_op_demo_customs"/>
+            <field name="document_type_id" ref="midvex_customs_op.doc_type_hc"/>
+            <field name="name">Health Certificate for BL-CS98765432</field>
+            <field name="state">requested</field>
+            <field name="requirement_level">mandatory</field>
+            <field name="responsible_party">supplier</field>
+            <field name="vendor_id" ref="partner_demo_supplier"/>
+        </record>
+
+        <!-- 4. Import Operation - Delivered with Damages -->
+        <record id="customs_op_demo_delivered" model="customs.operation">
+            <field name="company_id" ref="base.main_company"/>
+            <field name="stage_id" ref="midvex_customs_op.stage_delivered"/>
+            <field name="warehouse_received">True</field>
+            <field name="warehouse_received_date" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="missing_packages">True</field>
+            <field name="damaged_product">True</field>
+            <field name="damage_description">Pallet 3 fell off forklift during discharge. 5 bags of feed torn and contents spilled. Proof photos attached.</field>
+            <field name="cost_freight">1200.00</field>
+            <field name="cost_customs_tax">450.00</field>
+            <field name="cost_broker_expenses">250.00</field>
+            <field name="cost_stamp_tax">75.00</field>
+            <field name="cost_storage">150.00</field>
+            <field name="cost_exchange_diff">0.00</field>
+            <field name="cost_other">50.00</field>
+            <field name="accounting_status">waiting_invoice</field>
+            <field name="supplier_ids" eval="[(4, ref('partner_demo_supplier'))]"/>
+            <field name="broker_id" ref="partner_demo_broker"/>
+            <field name="transport_mode">sea</field>
+            <field name="origin_country_id" ref="base.jp"/>
+            <field name="departure_country_id" ref="base.jp"/>
+            <field name="destination_country_id" ref="base.tr"/>
+        </record>
+    </data>
+</odoo>

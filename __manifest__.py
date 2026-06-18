@@ -32,6 +32,9 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'views/mail_activity_type_views.xml',
         'views/customs_menus.xml',
     ],
+    'demo': [
+        'demo/customs_demo_data.xml',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,

@@ -6,6 +6,19 @@ All notable changes to the Customs Operations module should be documented here.
 
 ### Added
 
+- Extended the main Customs File (`customs.operation`) model with 30+ fields for comprehensive import tracking: production tracking (status, ready date, loading date), logistics (vessel, tracking link, container/seal info, BL number), customs sub-status, simple cost accounting (freight, tax, storage, stamp, broker, exchange diff, other, total computed cost), and warehouse receiving checklist.
+- Added dedicated relational photo attachments (`warehouse_photo_ids`) and delivery notes/POD (`delivery_note_ids`) to the Warehouse tab.
+- Programmed automatic python mail activity triggers for key import milestones: Bill of Lading uploaded, warehouse delivery completed, discrepancies/damaged cargo recorded, and ETA approaching (under 3 days).
+- Implemented comprehensive demonstration seed data in `demo/customs_demo_data.xml` with representative records at different stages (In Production, Shipped, Customs Clearance with missing documents, and Delivered with damages).
+- Added step-by-step instructions and a safe python cleanup script to `README.md` to remove demo data via the Odoo shell.
+- Added automated unit tests covering commercial PO computations, cost aggregation, and automatic activity generation.
+
+### Changed
+
+- Reorganized the client form view into 9 structured notebook tabs aligning with the import lifecycle (Overview, Purchase & Supplier, Production, Logistics, Product Lines, Required Documents, Customs & Laboratory, Warehouse, Accounting & Costs).
+- Renamed the application, menus, and action labels to "Import & Customs Operations" to match its expanded scope.
+- Translated all new fields, status selection options, tab titles, and activity log text into Turkish inside `i18n/tr.po`.
+
 - Initial project requirements
 - AI coding-agent instructions
 - Product requirements

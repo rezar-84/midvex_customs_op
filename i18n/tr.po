@@ -529,3 +529,338 @@ msgstr "Reddet"
 msgid "Reset to Draft"
 msgstr "Taslağa Geri Al"
 
+# Nevzat Bey Feedback Fields & Tabs Translations
+#. module: midvex_customs_op
+#: field:customs.operation,production_status:0
+msgid "Production Status"
+msgstr "Üretim Durumu"
+
+#. module: midvex_customs_op
+#: field:customs.operation,production_ready_date:0
+msgid "Production Ready Date"
+msgstr "Üretim Hazır Tarihi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,goods_prepared_date:0
+msgid "Goods Prepared Date"
+msgstr "Mal Hazır Tarihi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,loading_date:0
+msgid "Loading Date"
+msgstr "Yükleme Tarihi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,supplier_ref:0
+msgid "Supplier Order Reference"
+msgstr "Tedarikçi Sipariş Referansı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,manufacturer_id:0
+msgid "Manufacturer/Factory"
+msgstr "Üretici / Fabrika"
+
+#. module: midvex_customs_op
+#: field:customs.operation,payment_term_id:0
+msgid "Payment Term"
+msgstr "Ödeme Koşulu"
+
+#. module: midvex_customs_op
+#: field:customs.operation,currency_id:0
+msgid "Currency"
+msgstr "Para Birimi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,total_amount:0
+msgid "Total Amount"
+msgstr "Toplam Tutar"
+
+#. module: midvex_customs_op
+#: field:customs.operation,seal_number:0
+msgid "Seal Number"
+msgstr "Mühür Numarası"
+
+#. module: midvex_customs_op
+#: field:customs.operation,bl_number:0
+msgid "Bill of Lading (B/L) Number"
+msgstr "Konşimento (B/L) Numarası"
+
+#. module: midvex_customs_op
+#: field:customs.operation,vessel_name:0
+msgid "Vessel Name"
+msgstr "Gemi Adı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,tracking_link:0
+msgid "Logistics Tracking Link"
+msgstr "Lojistik Takip Linki"
+
+#. module: midvex_customs_op
+#: field:customs.operation,customs_status:0
+msgid "Customs Sub-Status"
+msgstr "Gümrük Alt Durumu"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_freight:0
+msgid "Freight Cost"
+msgstr "Navlun Maliyeti"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_customs_tax:0
+msgid "Customs Tax"
+msgstr "Gümrük Vergisi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_broker_expenses:0
+msgid "Customs Broker Expenses"
+msgstr "Gümrük Müşavirlik Giderleri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_stamp_tax:0
+msgid "Stamp Tax"
+msgstr "Damga Vergisi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_storage:0
+msgid "Storage / Demurrage"
+msgstr "Ardiye / Demoraj"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_exchange_diff:0
+msgid "Exchange-Rate Difference"
+msgstr "Kur Farkı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_other:0
+msgid "Other Costs"
+msgstr "Diğer Maliyetler"
+
+#. module: midvex_customs_op
+#: field:customs.operation,cost_total:0
+msgid "Total Costs"
+msgstr "Toplam Maliyet"
+
+#. module: midvex_customs_op
+#: field:customs.operation,accounting_status:0
+msgid "Accounting Closing Status"
+msgstr "Muhasebe Kapanış Durumu"
+
+#. module: midvex_customs_op
+#: field:customs.operation,warehouse_received:0
+msgid "Warehouse Received"
+msgstr "Depo Teslim Alındı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,warehouse_received_date:0
+msgid "Warehouse Received Date"
+msgstr "Depo Teslim Tarihi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,missing_packages:0
+msgid "Missing Packages/Boxes"
+msgstr "Eksik Paket / Koli"
+
+#. module: midvex_customs_op
+#: field:customs.operation,damaged_product:0
+msgid "Damaged Product"
+msgstr "Hasarlı Ürün"
+
+#. module: midvex_customs_op
+#: field:customs.operation,damage_description:0
+msgid "Damage / Missing Description"
+msgstr "Hasar / Eksik Açıklaması"
+
+#. module: midvex_customs_op
+#: field:customs.operation,warehouse_photo_ids:0
+msgid "Photo Attachments"
+msgstr "Fotoğraf Ekleri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,delivery_note_ids:0
+msgid "Delivery Notes / POD"
+msgstr "Teslimat Notları / POD"
+
+#. module: midvex_customs_op
+#: field:customs.operation,is_draft:0
+msgid "Is Draft Stage"
+msgstr "Taslak Aşamasında mı"
+
+# Selection Option Translations
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "Not Started"
+msgstr "Başlamadı"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "In Production"
+msgstr "Üretimde"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "Ready"
+msgstr "Hazır"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "Loaded"
+msgstr "Yüklendi"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "Delayed"
+msgstr "Gecikti"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,production_status:0
+msgid "Cancelled"
+msgstr "İptal Edildi"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Documents Waiting"
+msgstr "Belgeler Bekleniyor"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Declaration Opened"
+msgstr "Beyanname Açıldı"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Inspection"
+msgstr "Muayene"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Tax Paid"
+msgstr "Vergi Ödendi"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Released / Clearance Completed"
+msgstr "Serbest Bırakıldı / İşlem Tamamlandı"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,customs_status:0
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,accounting_status:0
+msgid "Waiting Invoice"
+msgstr "Fatura Bekleniyor"
+
+#. module: midvex_customs_op
+#: selection:customs.operation,accounting_status:0
+msgid "Waiting Payment"
+msgstr "Ödeme Bekleniyor"
+
+# Tab / XML Page Translations
+#. module: midvex_customs_op
+#: page:customs.operation,overview:0
+msgid "Overview"
+msgstr "Genel Bakış"
+
+#. module: midvex_customs_op
+#: page:customs.operation,purchase_supplier:0
+msgid "Purchase & Supplier"
+msgstr "Satınalma ve Tedarikçi"
+
+#. module: midvex_customs_op
+#: page:customs.operation,production:0
+msgid "Production"
+msgstr "Üretim"
+
+#. module: midvex_customs_op
+#: page:customs.operation,logistics:0
+msgid "Logistics"
+msgstr "Lojistik"
+
+#. module: midvex_customs_op
+#: page:customs.operation,product_lines:0
+msgid "Product Lines"
+msgstr "Ürün Satırları"
+
+#. module: midvex_customs_op
+#: page:customs.operation,documents:0
+msgid "Required Documents"
+msgstr "Zorunlu Belgeler"
+
+#. module: midvex_customs_op
+#: page:customs.operation,customs_lab:0
+msgid "Customs & Laboratory"
+msgstr "Gümrük ve Laboratuvar"
+
+#. module: midvex_customs_op
+#: page:customs.operation,warehouse:0
+msgid "Warehouse"
+msgstr "Depo"
+
+#. module: midvex_customs_op
+#: page:customs.operation,accounting_costs:0
+msgid "Accounting & Costs"
+msgstr "Muhasebe ve Maliyetler"
+
+#. module: midvex_customs_op
+#: page:customs.operation,override:0
+msgid "Readiness Override"
+msgstr "Hazırlık Geçersiz Kılma"
+
+# Activity notification translation strings
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "B/L Uploaded - Action Required"
+msgstr "Konşimento Yüklendi - Eylem Gerekli"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Bill of Lading %s has been uploaded. Please notify the customs broker to prepare the declaration."
+msgstr "%s numaralı konşimento yüklendi. Lütfen beyannameyi hazırlaması için gümrük müşavirini bilgilendirin."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Warehouse Delivery Completed"
+msgstr "Depo Teslimi Tamamlandı"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Warehouse entry has been recorded for operation %s. Please review and process for closing."
+msgstr "%s operasyonu için depo girişi kaydedildi. Lütfen inceleyin ve kapatma işlemini başlatın."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Discrepancy / Damaged Cargo Recorded"
+msgstr "Uyuşmazlık / Hasarlı Kargo Kaydedildi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Damaged product or missing packages have been reported for operation %s. Description: %s"
+msgstr "%s operasyonu için hasarlı ürün veya eksik paketler bildirildi. Açıklama: %s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "No description provided."
+msgstr "Açıklama belirtilmedi."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "ETA Approaching"
+msgstr "ETA Yaklaşıyor"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "The arrival date (ETA) for operation %s is approaching on %s."
+msgstr "%s operasyonu için varış tarihi (ETA) %s tarihinde yaklaşıyor."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Missing Documents Near ETA Alert"
+msgstr "ETA Yakınında Eksik Belge Uyarısı"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "The shipment is arriving soon on %s, but there are %s missing documents."
+msgstr "Sevkiyat yakında (%s tarihinde) varacak ancak %s eksik belge bulunuyor."
+
+

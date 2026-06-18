@@ -371,4 +371,67 @@ class TestCustomsOperation(TransactionCase):
                 'package_count': 0,
             })
 
+    def test_import_operation_feedback_fields_and_computes(self):
+        """Test commercial default values and costs aggregation computes."""
+        supplier = self.env['res.partner'].create({'name': 'Nevzat Test Supplier'})
+        po = self.env['purchase.order'].create({
+            'partner_id': supplier.id,
+        })
+        currency_eur = self.env.ref('base.EUR')
+        po.write({
+            'currency_id': currency_eur.id,
+        })
+        
+        op = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+            'purchase_order_ids': [(4, po.id)],
+        })
+        op.flush_recordset()
+        
+        self.assertEqual(op.currency_id, currency_eur)
+        
+        op.write({
+            'cost_freight': 500.0,
+            'cost_customs_tax': 150.0,
+            'cost_broker_expenses': 100.0,
+            'cost_stamp_tax': 50.0,
+            'cost_storage': 80.0,
+            'cost_exchange_diff': 20.0,
+            'cost_other': 10.0,
+        })
+        op.flush_recordset()
+        self.assertEqual(op.cost_total, 910.0, "Total costs should sum up all cost items correctly.")
+
+    def test_import_operation_automatic_activities(self):
+        """Test that key changes automatically trigger mail activities."""
+        op = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+        op.flush_recordset()
+        
+        op.write({'bl_number': 'BL123456'})
+        op.flush_recordset()
+        
+        activities = self.env['mail.activity'].search([
+            ('res_model', '=', 'customs.operation'),
+            ('res_id', '=', op.id),
+        ])
+        self.assertTrue(any(act.summary == "B/L Uploaded - Action Required" for act in activities))
+        
+        op.write({'warehouse_received': True})
+        op.flush_recordset()
+        activities = self.env['mail.activity'].search([
+            ('res_model', '=', 'customs.operation'),
+            ('res_id', '=', op.id),
+        ])
+        self.assertTrue(any(act.summary == "Warehouse Delivery Completed" for act in activities))
+
+        op.write({'damaged_product': True, 'damage_description': 'Feed bags torn'})
+        op.flush_recordset()
+        activities = self.env['mail.activity'].search([
+            ('res_model', '=', 'customs.operation'),
+            ('res_id', '=', op.id),
+        ])
+        self.assertTrue(any(act.summary == "Discrepancy / Damaged Cargo Recorded" for act in activities))
+
 

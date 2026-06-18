@@ -9,6 +9,51 @@ Customs Operations is an Odoo 19 module designed to manage international shipmen
 3. Go to Apps > Update Apps List.
 4. Search for `Customs Operations` (technical name: `midvex_customs_op`) and click **Install**.
 
+## Demonstration Data & Cleanup
+
+The module includes standard Odoo demonstration data which can be loaded during database creation to showcase the Nevzat Bey operational feedback flows:
+* **Import Operation - In Production**: Illustrates the early production status stage, supplier order references, and commercial totals.
+* **Import Operation - Shipped (In Transit)**: Showcases logistics details like Vessel Name, container/seal tracking, ETA/ETD, and carrier tracking links.
+* **Import Operation - Customs Clearance**: Features customs sub-stage details, declaration number/date, and highlights missing mandatory compliance document requirements.
+* **Import Operation - Delivered with Damages**: Shows warehouse receiving completed with missing packages, damaged cargo descriptions, and simple cost accounting aggregates (freight, tax, storage, etc.).
+
+### Safe Cleanup / Uninstallation of Demo Data
+
+If demo data was loaded and needs to be deleted without removing the module, run the following script in the Odoo shell:
+
+```bash
+python3 odoo-bin shell -d <your_database>
+```
+
+```python
+# Inside the Odoo shell, execute:
+demo_xml_ids = [
+    'req_demo_customs_inv',
+    'req_demo_customs_hc',
+    'customs_op_demo_production',
+    'customs_op_demo_shipped',
+    'customs_op_demo_customs',
+    'customs_op_demo_delivered',
+    'partner_demo_supplier',
+    'partner_demo_broker',
+    'partner_demo_forwarder',
+    'partner_demo_carrier',
+    'partner_demo_manufacturer',
+    'product_demo_aquaculture_feed'
+]
+for xml_id in demo_xml_ids:
+    record = env.ref(f'midvex_customs_op.{xml_id}', raise_if_not_found=False)
+    if record:
+        # Avoid validation blocks on deleting confirmed/delivered operations by reverting to Draft
+        if record._name == 'customs.operation':
+            draft_stage = env.ref('midvex_customs_op.stage_draft', raise_if_not_found=False)
+            if draft_stage:
+                record.write({'stage_id': draft_stage.id})
+        record.unlink()
+env.cr.commit()
+print("Demo data removed successfully.")
+```
+
 ## Configuration
 
 Before general users can access the application, an administrator must assign user access rights:

@@ -208,4 +208,21 @@ Status: Complete (on branch `main`)
   - Updated the risk register with current mitigation statuses (`Mitigated` / `Closed`).
   - Added default document type data file (`data/customs_document_type_data.xml`) containing 19 predefined types to the manifest.
 
+## Operational Feedback Phase: Nevzat Bey Import Operation Feedback
 
+Status: Complete
+
+- Create feature branch: `feature/nevzat-import-operation-feedback` (Completed)
+- Milestone 1: Database Extensions (Completed)
+  - Extended `customs.operation` with 30+ new fields including production tracking, commercial PO values, logistics (vessel, tracking link, container details), customs sub-status, costs, and warehouse checklists.
+- Milestone 2: UI view and menu updates (Completed)
+  - Reorganized form view tabs (Overview, Purchase/Supplier, Production, Logistics, Product Lines, Documents, Customs/Lab, Warehouse, Accounting/Costs).
+  - Renamed all app and menu references to "Import & Customs".
+- Milestone 3: Python Activity Notification Triggers (Completed)
+  - Automated activity creation hooks on: BL upload, warehouse delivery, damaged cargo detection, and approaching ETA.
+- Milestone 4: Tests and Turkish Translations (Completed)
+  - Added unit test coverage for commercial PO computations, cost totals, and activity triggers.
+  - Translated all new fields, selection values, tab titles, and activity alerts inside `i18n/tr.po`.
+- Milestone 5: Demo Seed Data & Documentation (Completed)
+  - Seeded representative operation records showing various workflow stages (Production, Shipped, Customs Clearance with missing docs, Delivered with damages) in `demo/customs_demo_data.xml`.
+  - Added safe cleanup instructions and Odoo shell script to `README.md`.
