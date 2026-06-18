@@ -26,7 +26,7 @@ Progress notes:
 
 ## Milestone 1 — Scaffold and security foundation
 
-Status: Not started
+Status: Complete; awaiting approval for Milestone 2
 
 - Module directory
 - Manifest
@@ -37,6 +37,17 @@ Status: Not started
 - Base menus
 - Default stages
 
+Progress notes:
+- Created the module scaffold under `midvex_customs_op/` with `__manifest__.py` and imports.
+- Defined all base models (`customs.stage`, `customs.document.type`, `customs.operation`, `customs.document.requirement`) in `models/`.
+- Created security category and linear groups (`User`, `Approver`, `Manager`, `Admin`) in `security/customs_security.xml`.
+- Added global multi-company record rules to secure stages, document types, operations, and requirements.
+- Configured data access rules in `ir.model.access.csv`.
+- Loaded sequence prefix `CUS/%(year)s/` with yearly date-range reset.
+- Seeded default workflow stages (`Draft` through `Cancelled`) with folding/closed settings.
+- Structured base views, actions, and menu items in `views/customs_menus.xml`.
+- Created basic unit test checking group inheritance and stage read restrictions in `tests/test_customs_security.py`.
+
 Acceptance criteria:
 
 - Addon directory `midvex_customs_op/` exists.
@@ -46,7 +57,7 @@ Acceptance criteria:
 - Sequence and default stage data are loaded.
 - No unrelated files are modified.
 - Documentation and changelog are updated.
-- Install or upgrade test is attempted in the available Odoo environment.
+- Install or upgrade test is attempted in the available Odoo environment. (N/A; no local Odoo instance, deployment/testing handled by user)
 
 ## Milestone 2 — Customs File and product lines
 

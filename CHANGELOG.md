@@ -13,6 +13,7 @@ All notable changes to the Customs Operations module should be documented here.
 - Acceptance criteria
 - Test planning templates
 - Master-agent repository review and Milestone 1 acceptance criteria
+- Milestone 1 scaffold: technical Odoo 19 module skeleton, models (`customs.stage`, `customs.document.type`, `customs.operation`, `customs.document.requirement`), custom security category and user groups (`User`, `Approver`, `Manager`, `Admin`), global multi-company record rules, XML sequences (`CUS/YYYY/NNNN`), default stages, root/child menus, and security unit tests in `tests/test_customs_security.py`.
 
 ### Changed
 

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customs_stage_user,customs.stage.user,model_customs_stage,group_customs_user,1,0,0,0
+access_customs_stage_admin,customs.stage.admin,model_customs_stage,group_customs_admin,1,1,1,1
+access_customs_document_type_user,customs.document.type.user,model_customs_document_type,group_customs_user,1,0,0,0
+access_customs_document_type_admin,customs.document.type.admin,model_customs_document_type,group_customs_admin,1,1,1,1
+access_customs_operation_user,customs.operation.user,model_customs_operation,group_customs_user,1,1,1,1
+access_customs_document_requirement_user,customs.document.requirement.user,model_customs_document_requirement,group_customs_user,1,1,1,1

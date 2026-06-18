@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions for Operations -->
+    <record id="action_customs_operation_all" model="ir.actions.act_window">
+        <field name="name">All Customs Files</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Customs File!
+            </p>
+            <p>
+                Manage import shipments, track required documents, and follow customs clearance progress.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_customs_operation_my" model="ir.actions.act_window">
+        <field name="name">My Customs Files</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+    </record>
+
+    <record id="action_customs_operation_waiting_docs" model="ir.actions.act_window">
+        <field name="name">Waiting for Documents</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('stage_id.name', '=', 'Waiting for Documents')]</field>
+    </record>
+
+    <record id="action_customs_operation_ready_ship" model="ir.actions.act_window">
+        <field name="name">Ready to Ship</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('stage_id.name', '=', 'Ready to Ship')]</field>
+    </record>
+
+    <record id="action_customs_operation_arriving_soon" model="ir.actions.act_window">
+        <field name="name">Arriving Soon</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('stage_id.name', '=', 'Shipped')]</field>
+    </record>
+
+    <record id="action_customs_operation_clearance" model="ir.actions.act_window">
+        <field name="name">Customs Clearance</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('stage_id.name', '=', 'Customs Clearance')]</field>
+    </record>
+
+    <!-- Actions for Document Requirements -->
+    <record id="action_customs_document_requirement_all" model="ir.actions.act_window">
+        <field name="name">All Requirements</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_customs_document_requirement_missing" model="ir.actions.act_window">
+        <field name="name">Missing Documents</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ('not_requested', 'requested', 'vendor_preparing'))]</field>
+    </record>
+
+    <record id="action_customs_document_requirement_review" model="ir.actions.act_window">
+        <field name="name">Under Review</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'under_review')]</field>
+    </record>
+
+    <record id="action_customs_document_requirement_correction" model="ir.actions.act_window">
+        <field name="name">Correction Required</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'correction_required')]</field>
+    </record>
+
+    <record id="action_customs_document_requirement_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Documents</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'expired')]</field>
+    </record>
+
+    <!-- Action for Document Types Configuration -->
+    <record id="action_customs_document_type" model="ir.actions.act_window">
+        <field name="name">Document Types</field>
+        <field name="res_model">customs.document.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Action for Stages Configuration -->
+    <record id="action_customs_stage" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">customs.stage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_customs_root" name="Customs Operations" web_icon="midvex_customs_op,static/description/icon.png" sequence="60"/>
+
+    <!-- Operations Section -->
+    <menuitem id="menu_customs_operations" name="Operations" parent="menu_customs_root" sequence="10"/>
+    <menuitem id="menu_customs_operation_all" name="All Customs Files" parent="menu_customs_operations" action="action_customs_operation_all" sequence="10"/>
+    <menuitem id="menu_customs_operation_my" name="My Customs Files" parent="menu_customs_operations" action="action_customs_operation_my" sequence="20"/>
+    <menuitem id="menu_customs_operation_waiting_docs" name="Waiting for Documents" parent="menu_customs_operations" action="action_customs_operation_waiting_docs" sequence="30"/>
+    <menuitem id="menu_customs_operation_ready_ship" name="Ready to Ship" parent="menu_customs_operations" action="action_customs_operation_ready_ship" sequence="40"/>
+    <menuitem id="menu_customs_operation_arriving_soon" name="Arriving Soon" parent="menu_customs_operations" action="action_customs_operation_arriving_soon" sequence="50"/>
+    <menuitem id="menu_customs_operation_clearance" name="Customs Clearance" parent="menu_customs_operations" action="action_customs_operation_clearance" sequence="60"/>
+
+    <!-- Documents Section -->
+    <menuitem id="menu_customs_documents" name="Documents" parent="menu_customs_root" sequence="20"/>
+    <menuitem id="menu_customs_document_requirement_all" name="All Requirements" parent="menu_customs_documents" action="action_customs_document_requirement_all" sequence="10"/>
+    <menuitem id="menu_customs_document_requirement_missing" name="Missing" parent="menu_customs_documents" action="action_customs_document_requirement_missing" sequence="20"/>
+    <menuitem id="menu_customs_document_requirement_review" name="Under Review" parent="menu_customs_documents" action="action_customs_document_requirement_review" sequence="30"/>
+    <menuitem id="menu_customs_document_requirement_correction" name="Correction Required" parent="menu_customs_documents" action="action_customs_document_requirement_correction" sequence="40"/>
+    <menuitem id="menu_customs_document_requirement_expiring" name="Expiring" parent="menu_customs_documents" action="action_customs_document_requirement_expiring" sequence="50"/>
+
+    <!-- Reporting Section (Placeholder for MVP, actions can be defined later in Milestone 5) -->
+    <menuitem id="menu_customs_reporting" name="Reporting" parent="menu_customs_root" sequence="30"/>
+
+    <!-- Configuration Section -->
+    <menuitem id="menu_customs_configuration" name="Configuration" parent="menu_customs_root" groups="group_customs_admin" sequence="90"/>
+    <menuitem id="menu_customs_stage" name="Stages" parent="menu_customs_configuration" action="action_customs_stage" sequence="10"/>
+    <menuitem id="menu_customs_document_type" name="Document Types" parent="menu_customs_configuration" action="action_customs_document_type" sequence="20"/>
+</odoo>
