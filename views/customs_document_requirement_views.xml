@@ -71,7 +71,31 @@
         <field name="arch" type="xml">
             <form string="Document Requirement">
                 <header>
-                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                    <!-- Customs User actions -->
+                    <button name="action_request" string="Request Document" type="object" class="oe_highlight" 
+                            invisible="state != 'not_requested'"/>
+                    <button name="action_prepare" string="Mark as Preparing" type="object" 
+                            invisible="state not in ('requested', 'correction_required')"/>
+                    <button name="action_submit" string="Submit for Review" type="object" class="oe_highlight" 
+                            invisible="state not in ('requested', 'vendor_preparing', 'draft_received')"/>
+                    
+                    <!-- Approver/Manager actions -->
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" 
+                            groups="midvex_customs_op.group_customs_approver"
+                            invisible="state not in ('under_review', 'draft_received')"/>
+                    <button name="action_require_correction" string="Require Correction" type="object" 
+                            groups="midvex_customs_op.group_customs_approver"
+                            invisible="state != 'under_review'"/>
+                    <button name="action_reject" string="Reject" type="object" 
+                            groups="midvex_customs_op.group_customs_approver"
+                            invisible="state != 'under_review'"/>
+                    
+                    <!-- Reset action for Managers -->
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
+                            groups="midvex_customs_op.group_customs_manager"
+                            invisible="state == 'not_requested'"/>
+
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

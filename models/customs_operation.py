@@ -318,12 +318,44 @@ class CustomsOperation(models.Model):
         self.message_post(body=body)
 
     def write(self, vals):
+        is_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
+        
+        # 1. Enforce active/archiving permissions
+        if 'active' in vals:
+            if not is_manager:
+                raise AccessError(_("Only Customs Managers or Administrators can archive or unarchive Customs Files."))
+
         if 'stage_id' in vals:
             new_stage = self.env['customs.stage'].browse(vals['stage_id'])
+            
+            for op in self:
+                old_stage = op.stage_id
+                if old_stage and new_stage and old_stage != new_stage:
+                    # A. Reopening closed file protection
+                    if old_stage.is_closed and not is_manager:
+                        raise AccessError(_("Only Customs Managers or Administrators can reopen or move a Customs File out of a closed stage."))
+                    
+                    # B. Prevent backward transitions for regular users (unless cancelled or hold/folded)
+                    if new_stage.sequence < old_stage.sequence and not is_manager:
+                        if not (new_stage.is_cancelled or new_stage.fold):
+                            raise AccessError(
+                                _("You cannot move the Customs File backward from '%s' to '%s'. Only Customs Managers can perform backward transitions.") % 
+                                (old_stage.name, new_stage.name)
+                            )
+                    
+                    # C. Prevent large forward skips for regular users (skipping more than 3 stages)
+                    if new_stage.sequence - old_stage.sequence > 3 and not is_manager:
+                        if not (new_stage.is_cancelled or new_stage.is_closed or new_stage.fold):
+                            raise ValidationError(
+                                _("You cannot jump from stage '%s' to '%s'. Moving forward more than 3 stages at once requires a Customs Manager.") % 
+                                (old_stage.name, new_stage.name)
+                            )
+            
+            # 2. Existing closing stage validations
             if new_stage.is_closed:
                 approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
                 for op in self:
-                    # 1. Verify all mandatory document requirements are complete
+                    # Verify all mandatory document requirements are complete
                     incomplete_docs = op.document_requirement_ids.filtered(
                         lambda r: r.requirement_level == 'mandatory' and r.state not in approved_states
                     )
@@ -333,7 +365,7 @@ class CustomsOperation(models.Model):
                             (op.name, "\n".join(("- %s" % d.name for d in incomplete_docs)))
                         )
                     
-                    # 2. Verify no critical activities are open
+                    # Verify no critical activities are open
                     open_critical_activities = self.env['mail.activity'].search([
                         ('res_model', 'in', ('customs.operation', 'customs.document.requirement')),
                         ('res_id', 'in', [op.id] + op.document_requirement_ids.ids),
@@ -345,7 +377,7 @@ class CustomsOperation(models.Model):
                             (op.name, "\n".join(("- %s (%s)" % (a.summary or a.activity_type_id.name, a.activity_type_id.name) for a in open_critical_activities)))
                         )
                     
-                    # 3. Warning checks for missing optional fields:
+                    # Warning checks for missing optional fields:
                     missing_warn_fields = []
                     if not op.customs_declaration_number:
                         missing_warn_fields.append(_("Customs Declaration Number"))

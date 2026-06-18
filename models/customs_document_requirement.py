@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, AccessError
 
 class CustomsDocumentRequirement(models.Model):
     _name = 'customs.document.requirement'
@@ -194,8 +194,13 @@ class CustomsDocumentRequirement(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        approver_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted', 'rejected', 'correction_required'}
+        is_approver = self.env.user.has_group('midvex_customs_op.group_customs_approver')
+        
         for vals in vals_list:
-            state = vals.get('state')
+            state = vals.get('state', 'not_requested')
+            if state in approver_states and not is_approver:
+                raise AccessError(_("Only Customs Document Approvers or Managers can create compliance documents in approved or rejected states."))
             if state in ('rejected', 'correction_required') and not vals.get('rejection_reason'):
                 raise ValidationError(
                     _("A rejection reason is required when the document state is set to '%s'.") % state
@@ -215,6 +220,20 @@ class CustomsDocumentRequirement(models.Model):
         
         if 'state' in vals:
             new_state = vals['state']
+            approver_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted', 'rejected', 'correction_required'}
+            is_approver = self.env.user.has_group('midvex_customs_op.group_customs_approver')
+            is_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
+            
+            for rec in self:
+                # 1. Permission Check: basic Customs User cannot set an approver/manager state directly
+                if new_state in approver_states and not is_approver:
+                    raise AccessError(_("Only Customs Document Approvers or Managers can approve, reject, or require corrections on compliance documents."))
+                
+                # 2. Permission Check: only Customs Manager can reset already approved documents
+                approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
+                if rec.state in approved_states and new_state not in approved_states and not is_manager:
+                    raise AccessError(_("Only Customs Managers can reset or modify the state of an already approved compliance document."))
+
             if new_state in ('approved', 'accepted', 'rejected', 'correction_required'):
                 vals['reviewed_by'] = self.env.user.id
                 vals['reviewed_date'] = fields.Date.today()
@@ -253,3 +272,32 @@ class CustomsDocumentRequirement(models.Model):
                     _("You cannot delete a document requirement (%s) when the Customs File is past the 'Waiting for Documents' stage. Please mark the status as 'Not Applicable' instead.") % rec.name
                 )
         return super(CustomsDocumentRequirement, self).unlink()
+
+    # Dynamic action transition methods
+    def action_request(self):
+        self.write({'state': 'requested', 'requested_date': fields.Date.today()})
+
+    def action_prepare(self):
+        self.write({'state': 'vendor_preparing'})
+
+    def action_submit(self):
+        self.write({'state': 'under_review'})
+
+    def action_approve(self):
+        self.write({'state': 'approved', 'received_date': fields.Date.today()})
+
+    def action_require_correction(self):
+        self.write({'state': 'correction_required'})
+
+    def action_reject(self):
+        self.write({'state': 'rejected'})
+
+    def action_reset_to_draft(self):
+        self.write({
+            'state': 'not_requested',
+            'requested_date': False,
+            'received_date': False,
+            'reviewed_by': False,
+            'reviewed_date': False,
+            'rejection_reason': False,
+        })

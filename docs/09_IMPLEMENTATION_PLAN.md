@@ -190,6 +190,11 @@ Status: Complete (on branch `fix/critical-audit-issues`)
 - **H3**: Added a server-side Customs Manager group validation in the override wizard `action_confirm()`.
 - **H4**: Sanitized all user inputs in `message_post()` chatter updates using `Markup` and `escape`.
 - **H5**: Restricted deletion of product lines in `customs.operation.line` to Draft/Waiting stages.
-- Added automated test coverage in `test_customs_operation.py` asserting all deletion restrictions.
+- **H1**: Added explicit Access Control List rows in `ir.model.access.csv` for Approver, Manager, and Admin groups across all core models.
+- **H2**: Removed the `clickable` statusbar option on the document requirement form and implemented workflow action buttons with role-based visibility.
+- **H6**: Added write restrictions on the `active` field to prevent basic users from archiving records.
+- **H8**: Added write restrictions on `stage_id` preventing non-managers from making backward stage transitions or jumping forward more than 3 stages at once.
+- **H7**: Removed global scope override on the reference sequence to support company-scoped numbering.
+- Added automated test coverage in `test_customs_operation.py` and `test_customs_security.py` asserting all deletion, transition, and archiving restrictions.
 
 

@@ -7,7 +7,6 @@
             <field name="code">customs.operation</field>
             <field name="prefix">CUS/%(year)s/</field>
             <field name="padding">4</field>
-            <field name="company_id" eval="False"/>
             <field name="use_date_range" eval="True"/>
         </record>
     </data>

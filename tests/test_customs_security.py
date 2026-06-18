@@ -108,3 +108,92 @@ class TestCustomsSecurity(TransactionCase):
             self.assertEqual(res.get('res_model'), 'customs.operation.override.wizard')
         except AccessError:
             self.fail("Customs Manager should be allowed to override readiness check.")
+
+    def test_document_requirement_state_transitions(self):
+        """Test document requirement state change protections."""
+        user_manager = self.env['res.users'].create({
+            'name': 'Customs Manager',
+            'login': 'customs_manager_state_test',
+            'email': 'manager_state@test.com',
+            'group_ids': [(6, 0, [self.group_manager.id])]
+        })
+        op = self.env['customs.operation'].create({'name': 'CUS/DOC/001'})
+        doc_type = self.env['customs.document.type'].create({'name': 'Invoice', 'code': 'INV'})
+        
+        req = self.env['customs.document.requirement'].create({
+            'operation_id': op.id,
+            'document_type_id': doc_type.id,
+            'name': 'Test Invoice',
+        })
+
+        # 1. Customs User cannot approve the document
+        with self.assertRaises(AccessError):
+            req.with_user(self.user_customs_user).write({'state': 'approved'})
+
+        # 2. Document Approver can approve
+        req.with_user(self.user_customs_approver).write({'state': 'approved'})
+        self.assertEqual(req.state, 'approved')
+
+        # 3. Document Approver cannot reset back to requested
+        with self.assertRaises(AccessError):
+            req.with_user(self.user_customs_approver).write({'state': 'requested'})
+
+        # 4. Customs Manager can reset back to requested
+        req.with_user(user_manager).write({'state': 'requested'})
+        self.assertEqual(req.state, 'requested')
+
+    def test_stage_transition_restrictions(self):
+        """Test that regular users cannot perform backward or large forward transitions on operations."""
+        user_manager = self.env['res.users'].create({
+            'name': 'Customs Manager',
+            'login': 'customs_manager_stage_test',
+            'email': 'manager_stage@test.com',
+            'group_ids': [(6, 0, [self.group_manager.id])]
+        })
+        stage_draft = self.env.ref('midvex_customs_op.stage_draft')
+        stage_waiting = self.env.ref('midvex_customs_op.stage_waiting_docs')
+        stage_doc_review = self.env.ref('midvex_customs_op.stage_doc_review')
+        stage_ready = self.env.ref('midvex_customs_op.stage_ready_ship') # sequence 5
+        stage_closed = self.env.ref('midvex_customs_op.stage_closed') # sequence 12 (is_closed=True)
+
+        op = self.env['customs.operation'].create({
+            'stage_id': stage_draft.id,
+        })
+
+        # 1. Customs User moves Draft (1) -> Waiting (2) -> Document Review (3): Succeeds (linear forward)
+        op.with_user(self.user_customs_user).write({'stage_id': stage_waiting.id})
+        op.with_user(self.user_customs_user).write({'stage_id': stage_doc_review.id})
+        self.assertEqual(op.stage_id, stage_doc_review)
+
+        # 2. Customs User moves backward Document Review (3) -> Waiting (2): Fails with AccessError
+        with self.assertRaises(AccessError):
+            op.with_user(self.user_customs_user).write({'stage_id': stage_waiting.id})
+
+        # 3. Manager moves backward: Succeeds
+        op.with_user(user_manager).write({'stage_id': stage_waiting.id})
+        self.assertEqual(op.stage_id, stage_waiting)
+
+        # Move forward to Ready to Ship (5)
+        op.with_user(user_manager).write({'stage_id': stage_ready.id})
+
+        # 4. Customs User tries to jump Ready to Ship (5) -> Closed (12, skip > 3): Fails with ValidationError/AccessError
+        with self.assertRaises(ValidationError):
+            op.with_user(self.user_customs_user).write({'stage_id': stage_closed.id})
+
+    def test_active_archiving_restrictions(self):
+        """Test that regular users cannot archive Customs Files."""
+        user_manager = self.env['res.users'].create({
+            'name': 'Customs Manager',
+            'login': 'customs_manager_active_test',
+            'email': 'manager_active@test.com',
+            'group_ids': [(6, 0, [self.group_manager.id])]
+        })
+        op = self.env['customs.operation'].create({'name': 'CUS/ACTIVE/001'})
+
+        # 1. Customs User cannot archive
+        with self.assertRaises(AccessError):
+            op.with_user(self.user_customs_user).write({'active': False})
+
+        # 2. Customs Manager can archive
+        op.with_user(user_manager).write({'active': False})
+        self.assertFalse(op.active)
