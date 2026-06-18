@@ -162,19 +162,21 @@ Progress notes:
 
 ## Milestone 7 — Localization and documentation
 
-Status: In Progress
+Status: Complete
 
 - Turkish translation (Complete)
 - User guide (Complete)
 - Administrator guide (Complete)
 - Installation guide (Complete - in README.md)
 - Upgrade guide (Complete - in README.md)
-- Final UX review (Not started)
-- Final acceptance review (Not started)
+- Final UX review (Complete)
+- Final acceptance review (Complete)
 
 Progress notes:
 - Created a comprehensive User & Administration Manual covering Setup, Master Data Configuration, Operation Management, Document Tracking, Shipment Entry, and closing validation.
 - Incorporated the manual into the repository `README.md` and created an aesthetic HTML dashboard description in `static/description/index.html`.
 - Implemented Turkish PO translation mappings inside `i18n/tr.po` localizing stages, models, status selections, field labels, and buttons.
 - Suppressed readiness block ribbons and text on draft Customs Files (where `is_draft` is True) to prevent pre-shipment alerts on fresh forms, and added Turkish translation entries for all dynamic python-computed error messages and status components.
+- Conducted the final role-based UX review and verified licensing alignment (both repository and manifest using GPL-3).
+
 
