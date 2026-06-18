@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Requirement List View -->
+    <record id="view_customs_document_requirement_tree" model="ir.ui.view">
+        <field name="name">customs.document.requirement.list</field>
+        <field name="model">customs.document.requirement</field>
+        <field name="arch" type="xml">
+            <list string="Document Requirements" decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
+                <field name="operation_id"/>
+                <field name="document_type_id"/>
+                <field name="name"/>
+                <field name="is_blocking"/>
+                <field name="state" widget="badge" 
+                       decoration-success="state in ('approved', 'accepted')" 
+                       decoration-warning="state in ('requested', 'vendor_preparing', 'draft_received', 'correction_required')"
+                       decoration-danger="state in ('rejected', 'expired')"
+                       decoration-muted="state == 'n_a'"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Document Requirement Form View -->
+    <record id="view_customs_document_requirement_form" model="ir.ui.view">
+        <field name="name">customs.document.requirement.form</field>
+        <field name="model">customs.document.requirement</field>
+        <field name="arch" type="xml">
+            <form string="Document Requirement">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="operation_id"/>
+                            <field name="document_type_id"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="is_blocking"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

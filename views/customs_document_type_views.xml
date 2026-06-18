@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Type List View -->
+    <record id="view_customs_document_type_tree" model="ir.ui.view">
+        <field name="name">customs.document.type.list</field>
+        <field name="model">customs.document.type</field>
+        <field name="arch" type="xml">
+            <list string="Document Types">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="name_tr"/>
+                <field name="default_responsible_party"/>
+                <field name="default_requirement_level"/>
+                <field name="original_normally_required"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Document Type Form View -->
+    <record id="view_customs_document_type_form" model="ir.ui.view">
+        <field name="name">customs.document.type.form</field>
+        <field name="model">customs.document.type</field>
+        <field name="arch" type="xml">
+            <form string="Document Type">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <span class="o_form_label">Document Code</span>
+                        <h1>
+                            <field name="code" placeholder="e.g. COA, HC, COO" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="English Name"/>
+                            <field name="name_tr" placeholder="Turkish Name"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="default_responsible_party"/>
+                            <field name="default_requirement_level"/>
+                            <field name="original_normally_required"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" placeholder="Describe the document purpose, standard guidelines, etc..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
