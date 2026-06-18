@@ -179,22 +179,33 @@ Progress notes:
 - Suppressed readiness block ribbons and text on draft Customs Files (where `is_draft` is True) to prevent pre-shipment alerts on fresh forms, and added Turkish translation entries for all dynamic python-computed error messages and status components.
 - Conducted the final role-based UX review and verified licensing alignment (both repository and manifest using GPL-3).
 
-## Post-Audit Remediation: Critical & High-Severity Fixes
+## Post-Audit Remediation: All Phases Completed
 
-Status: Complete (on branch `fix/critical-audit-issues`)
+Status: Complete (on branch `main`)
 
-- **C1**: Fixed `AccessError` import in `tests/test_customs_operation.py`.
-- **C2**: Added a `code` field to `customs.stage` and updated `customs_menus.xml` domains to avoid translation bugs.
-- **C3**: Restructured `unlink()` in `customs.operation` to block deletion outside Draft stage.
-- **C4**: Generated and saved Odoo module icon `static/description/icon.png`.
-- **H3**: Added a server-side Customs Manager group validation in the override wizard `action_confirm()`.
-- **H4**: Sanitized all user inputs in `message_post()` chatter updates using `Markup` and `escape`.
-- **H5**: Restricted deletion of product lines in `customs.operation.line` to Draft/Waiting stages.
-- **H1**: Added explicit Access Control List rows in `ir.model.access.csv` for Approver, Manager, and Admin groups across all core models.
-- **H2**: Removed the `clickable` statusbar option on the document requirement form and implemented workflow action buttons with role-based visibility.
-- **H6**: Added write restrictions on the `active` field to prevent basic users from archiving records.
-- **H8**: Added write restrictions on `stage_id` preventing non-managers from making backward stage transitions or jumping forward more than 3 stages at once.
-- **H7**: Removed global scope override on the reference sequence to support company-scoped numbering.
-- Added automated test coverage in `test_customs_operation.py` and `test_customs_security.py` asserting all deletion, transition, and archiving restrictions.
+- **Phase 1: Critical Fixes**:
+  - **C1**: Fixed `AccessError` import in `tests/test_customs_operation.py`.
+  - **C2**: Added a `code` field to `customs.stage` and updated `customs_menus.xml` domains to avoid translation bugs.
+  - **C3**: Restructured `unlink()` in `customs.operation` to block deletion outside Draft stage.
+  - **C4**: Generated and saved Odoo module icon `static/description/icon.png`.
+  - **H3**: Added a server-side Customs Manager group validation in the override wizard `action_confirm()`.
+  - **H4**: Sanitized all user inputs in `message_post()` chatter updates using `Markup` and `escape`.
+  - **H5**: Restricted deletion of product lines in `customs.operation.line` to Draft/Waiting stages.
+- **Phase 2: Security Hardening**:
+  - **H1**: Added explicit Access Control List rows in `ir.model.access.csv` for Approver, Manager, and Admin groups across all core models.
+  - **H2**: Removed the `clickable` statusbar option on the document requirement form and implemented workflow action buttons with role-based visibility.
+  - **H6**: Added write restrictions on the `active` field to prevent basic users from archiving records.
+  - **H8**: Added write restrictions on `stage_id` preventing non-managers from making backward stage transitions or jumping forward more than 3 stages at once.
+  - **H7**: Removed global scope override on the reference sequence to support company-scoped numbering.
+  - Added automated test coverage in `tests/test_customs_operation.py` and `tests/test_customs_security.py` asserting all deletion, transition, and archiving restrictions.
+- **Phase 3: Robustness & Quality**:
+  - Replaced hardcoded stage sequence numbers with XML ref lookups (`self.env.ref`) in python models.
+  - Replaced legacy Bootstrap CSS classes like `font-weight-bold` with `fw-bold` for standard layout rendering.
+  - Added dedicated Search views for `customs.stage`, `customs.document.type`, and `customs.operation.line` to support better admin lookup/filtering.
+  - Extended automated test suites to enforce `@classmethod setUpClass` migrations across all unit tests.
+- **Phase 4: Documentation & Data Cleanup**:
+  - Aligned the manifest and planning instructions to standard `GPL-3` licensing terms.
+  - Updated the risk register with current mitigation statuses (`Mitigated` / `Closed`).
+  - Added default document type data file (`data/customs_document_type_data.xml`) containing 19 predefined types to the manifest.
 
 
