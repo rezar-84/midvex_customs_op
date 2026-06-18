@@ -7,31 +7,37 @@
         <field name="sequence">100</field>
     </record>
 
+    <!-- Privilege for Customs Operations (Odoo 19 requirement) -->
+    <record id="privilege_customs_operations" model="res.groups.privilege">
+        <field name="name">Customs Operations Privilege</field>
+        <field name="category_id" ref="module_category_customs_operations"/>
+    </record>
+
     <!-- Security Groups -->
     <record id="group_customs_user" model="res.groups">
         <field name="name">Customs User</field>
-        <field name="category_id" ref="module_category_customs_operations"/>
+        <field name="privilege_id" ref="privilege_customs_operations"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="comment">Can create and edit Customs Files, upload documents, and manage shipment details.</field>
     </record>
 
     <record id="group_customs_approver" model="res.groups">
         <field name="name">Customs Document Approver</field>
-        <field name="category_id" ref="module_category_customs_operations"/>
+        <field name="privilege_id" ref="privilege_customs_operations"/>
         <field name="implied_ids" eval="[(4, ref('group_customs_user'))]"/>
         <field name="comment">Can review, approve, or reject customs document requirements.</field>
     </record>
 
     <record id="group_customs_manager" model="res.groups">
         <field name="name">Customs Manager</field>
-        <field name="category_id" ref="module_category_customs_operations"/>
+        <field name="privilege_id" ref="privilege_customs_operations"/>
         <field name="implied_ids" eval="[(4, ref('group_customs_approver'))]"/>
         <field name="comment">Can override shipment readiness checks, close files, and view operational reports.</field>
     </record>
 
     <record id="group_customs_admin" model="res.groups">
         <field name="name">Customs Administrator</field>
-        <field name="category_id" ref="module_category_customs_operations"/>
+        <field name="privilege_id" ref="privilege_customs_operations"/>
         <field name="implied_ids" eval="[(4, ref('group_customs_manager'))]"/>
         <field name="comment">Can configure workflow stages, document types, and manage system-wide customs master data.</field>
     </record>

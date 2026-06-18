@@ -19,14 +19,14 @@ class TestCustomsSecurity(TransactionCase):
             'name': 'Test Customs User',
             'login': 'customs_user_test',
             'email': 'user@test.com',
-            'groups_id': [(6, 0, [self.group_user.id])]
+            'group_ids': [(6, 0, [self.group_user.id])]
         })
 
         self.user_customs_approver = self.env['res.users'].create({
             'name': 'Test Customs Approver',
             'login': 'customs_approver_test',
             'email': 'approver@test.com',
-            'groups_id': [(6, 0, [self.group_approver.id])]
+            'group_ids': [(6, 0, [self.group_approver.id])]
         })
 
     def test_group_inheritance(self):
