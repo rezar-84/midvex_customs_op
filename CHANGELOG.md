@@ -17,7 +17,7 @@ All notable changes to the Customs Operations module should be documented here.
 ### Changed
 
 - Aligned documented technical module name with repository name: `midvex_customs_op`
-- Resolved pending architecture decisions (global/company-specific stages and document types, Odoo Documents scope, approved states, critical activities, versioning, licensing, and validation method) in `docs/10_DECISIONS.md` after the `grill-me` design review interview.
+- Resolved initial pending architecture decisions (global/company-specific stages and document types, Odoo Documents scope, approved states, critical activities, versioning, licensing, and validation method) and detailed specific requirements (security inheritance, yearly sequence reset, product line locking, document requirement deletion, vendor restriction, expiration blocking, and non-mandatory closing warnings) in `docs/10_DECISIONS.md` after the `grill-me` design review interview.
 
 ### Fixed
 

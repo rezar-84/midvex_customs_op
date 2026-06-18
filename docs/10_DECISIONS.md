@@ -18,6 +18,13 @@
 | 2026-06-18 | Automatically increment document requirement version | Simplifies version tracking when uploading new file versions | Manual version input | Increment `version_number` field automatically when attachments change |
 | 2026-06-18 | Use GPL-3 as the module license | Avoids licensing mismatch with the existing repository LICENSE file | LGPL-3 | Set license to GPL-3 in `__manifest__.py` |
 | 2026-06-18 | Use static analysis and AI review for validation | No local Odoo runtime is available on the development machine | Local docker setup / mock testing | Strict code validation by AI; user validates in own environment |
+| 2026-06-18 | Linear security group inheritance | Simplifies access management and ensures higher roles automatically gain lower permissions | Parallel/non-inherited groups | Approver inherits User; Manager inherits Approver; Admin inherits Manager |
+| 2026-06-18 | Reset sequence number yearly | Keeps sequence numbers short and organized by calendar year (CUS/YYYY/NNNN) | Continuous sequence | Use date-range sequences in Odoo standard configuration |
+| 2026-06-18 | Lock product lines out of Draft/Waiting for Docs | Prevents document requirements and readiness calculations from breaking after verification starts | Lock only when Shipped / never lock | Set product lines to read-only in `Document Review` and later stages |
+| 2026-06-18 | Restrict deletion of document requirements | Preserves historical files and upload history for auditability | Allow deletion at any time | Disallow deleting requirements if attachments exist or if stage is past Waiting for Docs (use 'Not Applicable' state instead) |
+| 2026-06-18 | Restrict vendor_id to Customs File related parties | Prevents assigning document requirements to unrelated partners while maintaining flexibility | Strictly suppliers only / completely unrestricted | Restrict selection to suppliers, broker, forwarder, carrier, and manufacturer |
+| 2026-06-18 | Expired documents block pre-shipment stages only | Prevents blocking operations post-shipment while ensuring compliance prior to departure | Block all stages / warning only | Expiration blocks readiness only before 'Shipped' stage; warnings in chatter after |
+| 2026-06-18 | Non-mandatory customs/delivery fields on closing | Retains user flexibility while ensuring validation notifications | Strictly database-mandatory | Fields are not database-mandatory; log warnings in chatter if closing with empty fields |
 
 ## Pending decisions
 

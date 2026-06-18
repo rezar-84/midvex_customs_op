@@ -21,7 +21,7 @@ Progress notes:
 - Master-agent repository review is recorded in `docs/16_MASTER_AGENT_REVIEW.md`.
 - No existing Odoo addon, manifest, tests, security files, translation files, or local Odoo config were found.
 - Milestone 1 should establish the addon structure and baseline conventions.
-- Conducted the `grill-me` design review interview on 2026-06-18, resolving all pending architecture decisions (documented in `docs/10_DECISIONS.md`).
+- Conducted the `grill-me` design review interview on 2026-06-18, resolving all initial pending architecture decisions and detailing specific requirements for security inheritance, sequence resetting, product locking, document deletion, vendor restriction, expiration stages, and closing conditions (all documented in `docs/10_DECISIONS.md`).
 - Confirmed that Odoo is not installed on the development machine; validation will be handled via static analysis and AI review, with deployment and testing in the user's environment.
 
 ## Milestone 1 — Scaffold and security foundation
