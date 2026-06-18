@@ -285,7 +285,57 @@ class CustomsOperation(models.Model):
         for vals in vals_list:
             if vals.get('name', 'New') == 'New':
                 vals['name'] = self.env['ir.sequence'].next_by_code('customs.operation') or 'New'
-        return super(CustomsOperation, self).create(vals_list)
+        records = super(CustomsOperation, self).create(vals_list)
+        
+        # Trigger activities for initial values if appropriate
+        for op in records:
+            if op.bl_number:
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("B/L Uploaded - Action Required"),
+                    _("Bill of Lading %s has been uploaded. Please notify the customs broker to prepare the declaration.") % op.bl_number,
+                    op.user_id.id
+                )
+            if op.warehouse_received:
+                purchasing_user_id = op.user_id.id
+                if op.purchase_order_ids:
+                    purchasing_user_id = op.purchase_order_ids[0].user_id.id
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("Warehouse Delivery Completed"),
+                    _("Warehouse entry has been recorded for operation %s. Please review and process for closing.") % op.name,
+                    purchasing_user_id
+                )
+            if op.damaged_product or op.missing_packages:
+                manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
+                manager_users = manager_group.users if manager_group else self.env['res.users']
+                notify_user = manager_users[0].id if manager_users else op.user_id.id
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("Discrepancy / Damaged Cargo Recorded"),
+                    _("Damaged product or missing packages have been reported for operation %s. Description: %s") % (
+                        op.name, op.damage_description or _("No description provided.")
+                    ),
+                    notify_user
+                )
+            if op.planned_arrival_date:
+                eta_date = fields.Date.to_date(op.planned_arrival_date)
+                days_left = (eta_date - fields.Date.today()).days
+                if 0 <= days_left <= 3:
+                    op._create_operation_activity(
+                        'mail.mail_activity_data_todo',
+                        _("ETA Approaching"),
+                        _("The arrival date (ETA) for operation %s is approaching on %s.") % (op.name, op.planned_arrival_date),
+                        op.user_id.id
+                    )
+                    if op.document_missing_count > 0:
+                        op._create_operation_activity(
+                            'mail.mail_activity_data_todo',
+                            _("Missing Documents Near ETA Alert"),
+                            _("The shipment is arriving soon on %s, but there are %s missing documents.") % (op.planned_arrival_date, op.document_missing_count),
+                            op.user_id.id
+                        )
+        return records
 
     @api.model
     def _read_group_stage_ids(self, stages, domain):
@@ -433,9 +483,36 @@ class CustomsOperation(models.Model):
         body = Markup(_("Readiness check override reset by %s.")) % escape(self.env.user.name)
         self.message_post(body=body)
 
+    def _create_operation_activity(self, activity_xml_id, summary, note, user_id):
+        self.ensure_one()
+        activity_type = self.env.ref(activity_xml_id, raise_if_not_found=False)
+        if not activity_type:
+            activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+        if not activity_type:
+            activity_type = self.env['mail.activity.type'].search([], limit=1)
+            
+        if not activity_type:
+            return
+            
+        model_id = self.env['ir.model']._get('customs.operation').id
+        self.env['mail.activity'].create({
+            'activity_type_id': activity_type.id,
+            'summary': summary,
+            'note': note,
+            'res_id': self.id,
+            'res_model_id': model_id,
+            'user_id': user_id or self.user_id.id or self.env.user.id,
+        })
+
     def write(self, vals):
         is_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
         
+        # Capture old values before write for trigger conditions
+        old_values = {}
+        trigger_fields = {'bl_number', 'warehouse_received', 'damaged_product', 'missing_packages', 'planned_arrival_date'}
+        for op in self:
+            old_values[op.id] = {f: op[f] for f in trigger_fields if f in op._fields}
+
         # 1. Enforce active/archiving permissions
         if 'active' in vals:
             if not is_manager:
@@ -490,7 +567,7 @@ class CustomsOperation(models.Model):
                     if open_critical_activities:
                         raise ValidationError(
                             _("You cannot close Customs File %s because there are open critical activities:\n%s") %
-                            (op.name, "\n".join(("- %s (%s)" % (a.summary or a.activity_type_id.name, a.activity_type_id.name) for a in open_critical_activities)))
+                            (op.name, "\n".join(("- %s" % (a.summary or a.activity_type_id.name, a.activity_type_id.name) for a in open_critical_activities)))
                         )
                     
                     # Warning checks for missing optional fields:
@@ -509,7 +586,67 @@ class CustomsOperation(models.Model):
                             escape(", ".join(missing_warn_fields))
                         op.message_post(body=body)
                         
-        return super(CustomsOperation, self).write(vals)
+        res = super(CustomsOperation, self).write(vals)
+
+        # Trigger automatic activities after write
+        for op in self:
+            old = old_values.get(op.id, {})
+            # 1. BL Uploaded Trigger
+            if 'bl_number' in vals and vals['bl_number'] and not old.get('bl_number'):
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("B/L Uploaded - Action Required"),
+                    _("Bill of Lading %s has been uploaded. Please notify the customs broker to prepare the declaration.") % vals['bl_number'],
+                    op.user_id.id
+                )
+            
+            # 2. Warehouse Delivery Completed Trigger
+            if 'warehouse_received' in vals and vals['warehouse_received'] and not old.get('warehouse_received'):
+                purchasing_user_id = op.user_id.id
+                if op.purchase_order_ids:
+                    purchasing_user_id = op.purchase_order_ids[0].user_id.id
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("Warehouse Delivery Completed"),
+                    _("Warehouse entry has been recorded for operation %s. Please review and process for closing.") % op.name,
+                    purchasing_user_id
+                )
+
+            # 3. Discrepancy / Damaged Product Trigger
+            if ('damaged_product' in vals and vals['damaged_product'] and not old.get('damaged_product')) or \
+               ('missing_packages' in vals and vals['missing_packages'] and not old.get('missing_packages')):
+                manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
+                manager_users = manager_group.users if manager_group else self.env['res.users']
+                notify_user = manager_users[0].id if manager_users else op.user_id.id
+                op._create_operation_activity(
+                    'mail.mail_activity_data_todo',
+                    _("Discrepancy / Damaged Cargo Recorded"),
+                    _("Damaged product or missing packages have been reported for operation %s. Description: %s") % (
+                        op.name, vals.get('damage_description') or op.damage_description or _("No description provided.")
+                    ),
+                    notify_user
+                )
+
+            # 4. ETA Approaching Trigger (and Missing Documents check)
+            if 'planned_arrival_date' in vals and vals['planned_arrival_date']:
+                eta_date = fields.Date.to_date(vals['planned_arrival_date'])
+                days_left = (eta_date - fields.Date.today()).days
+                if 0 <= days_left <= 3:
+                    op._create_operation_activity(
+                        'mail.mail_activity_data_todo',
+                        _("ETA Approaching"),
+                        _("The arrival date (ETA) for operation %s is approaching on %s.") % (op.name, vals['planned_arrival_date']),
+                        op.user_id.id
+                    )
+                    if op.document_missing_count > 0:
+                        op._create_operation_activity(
+                            'mail.mail_activity_data_todo',
+                            _("Missing Documents Near ETA Alert"),
+                            _("The shipment is arriving soon on %s, but there are %s missing documents.") % (vals['planned_arrival_date'], op.document_missing_count),
+                            op.user_id.id
+                        )
+
+        return res
  
     def unlink(self):
         for op in self:
