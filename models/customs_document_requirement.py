@@ -5,6 +5,7 @@ from odoo import models, fields
 class CustomsDocumentRequirement(models.Model):
     _name = 'customs.document.requirement'
     _description = 'Customs Document Requirement'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
     operation_id = fields.Many2one(
@@ -37,7 +38,7 @@ class CustomsDocumentRequirement(models.Model):
         ('rejected', 'Rejected'),
         ('expired', 'Expired'),
         ('n_a', 'Not Applicable'),
-    ], string='Status', default='not_requested', required=True)
+    ], string='Status', default='not_requested', required=True, tracking=True)
     company_id = fields.Many2one(
         'res.company', 
         related='operation_id.company_id', 
@@ -48,5 +49,6 @@ class CustomsDocumentRequirement(models.Model):
     is_blocking = fields.Boolean(
         string='Blocking Requirement', 
         default=True,
+        tracking=True,
         help="If set, this document requirement will block shipment readiness if not completed."
     )
