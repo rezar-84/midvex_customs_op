@@ -403,8 +403,6 @@
                 <field name="transport_mode" type="col"/>
                 <field name="document_completion_percentage" type="measure"/>
                 <field name="document_missing_count" type="measure"/>
-                <field name="net_weight" type="measure"/>
-                <field name="gross_weight" type="measure"/>
             </pivot>
         </field>
     </record>
