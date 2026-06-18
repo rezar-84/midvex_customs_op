@@ -179,4 +179,17 @@ Progress notes:
 - Suppressed readiness block ribbons and text on draft Customs Files (where `is_draft` is True) to prevent pre-shipment alerts on fresh forms, and added Turkish translation entries for all dynamic python-computed error messages and status components.
 - Conducted the final role-based UX review and verified licensing alignment (both repository and manifest using GPL-3).
 
+## Post-Audit Remediation: Critical & High-Severity Fixes
+
+Status: Complete (on branch `fix/critical-audit-issues`)
+
+- **C1**: Fixed `AccessError` import in `tests/test_customs_operation.py`.
+- **C2**: Added a `code` field to `customs.stage` and updated `customs_menus.xml` domains to avoid translation bugs.
+- **C3**: Restructured `unlink()` in `customs.operation` to block deletion outside Draft stage.
+- **C4**: Generated and saved Odoo module icon `static/description/icon.png`.
+- **H3**: Added a server-side Customs Manager group validation in the override wizard `action_confirm()`.
+- **H4**: Sanitized all user inputs in `message_post()` chatter updates using `Markup` and `escape`.
+- **H5**: Restricted deletion of product lines in `customs.operation.line` to Draft/Waiting stages.
+- Added automated test coverage in `test_customs_operation.py` asserting all deletion restrictions.
+
 

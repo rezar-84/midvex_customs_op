@@ -4,6 +4,7 @@
         <!-- Default Workflow Stages -->
         <record id="stage_draft" model="customs.stage">
             <field name="name">Draft</field>
+            <field name="code">draft</field>
             <field name="sequence">1</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -12,6 +13,7 @@
 
         <record id="stage_waiting_docs" model="customs.stage">
             <field name="name">Waiting for Documents</field>
+            <field name="code">waiting_docs</field>
             <field name="sequence">2</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -20,6 +22,7 @@
 
         <record id="stage_doc_review" model="customs.stage">
             <field name="name">Document Review</field>
+            <field name="code">doc_review</field>
             <field name="sequence">3</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -28,6 +31,7 @@
 
         <record id="stage_correction" model="customs.stage">
             <field name="name">Correction Required</field>
+            <field name="code">correction</field>
             <field name="sequence">4</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -36,6 +40,7 @@
 
         <record id="stage_ready_ship" model="customs.stage">
             <field name="name">Ready to Ship</field>
+            <field name="code">ready_ship</field>
             <field name="sequence">5</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -44,6 +49,7 @@
 
         <record id="stage_shipped" model="customs.stage">
             <field name="name">Shipped</field>
+            <field name="code">shipped</field>
             <field name="sequence">6</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -52,6 +58,7 @@
 
         <record id="stage_arrived" model="customs.stage">
             <field name="name">Arrived</field>
+            <field name="code">arrived</field>
             <field name="sequence">7</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -60,6 +67,7 @@
 
         <record id="stage_customs_clearance" model="customs.stage">
             <field name="name">Customs Clearance</field>
+            <field name="code">customs_clearance</field>
             <field name="sequence">8</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -68,6 +76,7 @@
 
         <record id="stage_inspection_lab" model="customs.stage">
             <field name="name">Inspection / Laboratory</field>
+            <field name="code">inspection_lab</field>
             <field name="sequence">9</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -76,6 +85,7 @@
 
         <record id="stage_cleared" model="customs.stage">
             <field name="name">Customs Cleared</field>
+            <field name="code">cleared</field>
             <field name="sequence">10</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -84,6 +94,7 @@
 
         <record id="stage_delivered" model="customs.stage">
             <field name="name">Delivered to Warehouse</field>
+            <field name="code">delivered</field>
             <field name="sequence">11</field>
             <field name="fold" eval="False"/>
             <field name="is_closed" eval="False"/>
@@ -92,6 +103,7 @@
 
         <record id="stage_closed" model="customs.stage">
             <field name="name">Closed</field>
+            <field name="code">closed</field>
             <field name="sequence">12</field>
             <field name="fold" eval="True"/>
             <field name="is_closed" eval="True"/>
@@ -100,6 +112,7 @@
 
         <record id="stage_hold" model="customs.stage">
             <field name="name">On Hold</field>
+            <field name="code">hold</field>
             <field name="sequence">13</field>
             <field name="fold" eval="True"/>
             <field name="is_closed" eval="False"/>
@@ -108,6 +121,7 @@
 
         <record id="stage_cancelled" model="customs.stage">
             <field name="name">Cancelled</field>
+            <field name="code">cancelled</field>
             <field name="sequence">14</field>
             <field name="fold" eval="True"/>
             <field name="is_closed" eval="False"/>

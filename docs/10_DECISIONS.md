@@ -26,8 +26,9 @@
 | 2026-06-18 | Expired documents block pre-shipment stages only | Prevents blocking operations post-shipment while ensuring compliance prior to departure | Block all stages / warning only | Expiration blocks readiness only before 'Shipped' stage; warnings in chatter after |
 | 2026-06-18 | Non-mandatory customs/delivery fields on closing | Retains user flexibility while ensuring validation notifications | Strictly database-mandatory | Fields are not database-mandatory; log warnings in chatter if closing with empty fields |
 | 2026-06-18 | Hide readiness blocking list and ribbons in Draft stage | Brand new or draft files are expected to be incomplete initially, so showing loud warnings/ribbons adds unnecessary visual noise | Show warnings at all stages | Hide ribbons and blocking reasons in the form view when is_draft is true |
+| 2026-06-18 | Use a `code` field on `customs.stage` for action domains and lookups | Avoids breaking menu filters and python logic under language translation (e.g. Turkish) or user-customized stage names/sequences | Hardcoded names or magic numbers | Clean, translation-safe, and configuration-robust references |
+| 2026-06-18 | Restrict deletion of Customs Files and product lines | Prevents deleting confirmed/shipped/closed operations and lines, securing compliance audit trails | Global user unlink allowed | Added `unlink()` overrides on `customs.operation` (Draft stage only) and `customs.operation.line` (Draft/Waiting stages only) |
 
 ## Pending decisions
 
-None. All pending architectural decisions for the initial phase have been resolved.
-
+None. All pending architectural decisions have been resolved.

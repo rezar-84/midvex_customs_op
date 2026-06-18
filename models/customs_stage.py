@@ -9,6 +9,7 @@ class CustomsStage(models.Model):
     _order = 'sequence, id'
 
     name = fields.Char(string='Stage Name', required=True, translate=True, tracking=True)
+    code = fields.Char(string='Stage Code', copy=False, index=True)
     sequence = fields.Integer(string='Sequence', default=10, tracking=True, help="Used to order stages.")
     fold = fields.Boolean(string='Folded in Kanban', default=False, tracking=True, help="This stage will be folded in the Kanban view.")
     is_closed = fields.Boolean(string='Closed Stage', default=False, tracking=True, help="Customs files in this stage are considered closed.")

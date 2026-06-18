@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo.tests.common import TransactionCase
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, AccessError
 
 class TestCustomsOperation(TransactionCase):
 
@@ -250,5 +250,65 @@ class TestCustomsOperation(TransactionCase):
         self.assertEqual(action_doc_analysis.res_model, 'customs.document.requirement')
         self.assertIn('pivot', action_doc_analysis.view_mode)
         self.assertIn('graph', action_doc_analysis.view_mode)
+
+    def test_customs_operation_deletion_protection(self):
+        """Test that Customs Files can only be deleted in Draft stage."""
+        stage_waiting = self.env.ref('midvex_customs_op.stage_waiting_docs')
+        
+        # 1. Deleting a Draft operation succeeds
+        op_draft = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+        op_id = op_draft.id
+        op_draft.unlink()
+        self.assertFalse(self.env['customs.operation'].browse(op_id).exists())
+
+        # 2. Deleting an operation in a non-Draft stage fails
+        op_non_draft = self.env['customs.operation'].create({
+            'stage_id': stage_waiting.id,
+        })
+        with self.assertRaises(ValidationError):
+            op_non_draft.unlink()
+
+    def test_customs_operation_line_deletion_protection(self):
+        """Test that product lines can only be deleted in Draft and Waiting for Docs stages."""
+        stage_waiting = self.env.ref('midvex_customs_op.stage_waiting_docs')
+        stage_doc_review = self.env.ref('midvex_customs_op.stage_doc_review')
+
+        op = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+        line = self.env['customs.operation.line'].create({
+            'operation_id': op.id,
+            'product_id': self.product_a.id,
+        })
+
+        # 1. Delete succeeds in Draft stage
+        line_id = line.id
+        line.unlink()
+        self.assertFalse(self.env['customs.operation.line'].browse(line_id).exists())
+
+        # Create new line for Waiting for Docs stage
+        line2 = self.env['customs.operation.line'].create({
+            'operation_id': op.id,
+            'product_id': self.product_a.id,
+        })
+        op.write({'stage_id': stage_waiting.id})
+        
+        # 2. Delete succeeds in Waiting for Documents stage
+        line2_id = line2.id
+        line2.unlink()
+        self.assertFalse(self.env['customs.operation.line'].browse(line2_id).exists())
+
+        # Create new line for Document Review stage
+        line3 = self.env['customs.operation.line'].create({
+            'operation_id': op.id,
+            'product_id': self.product_a.id,
+        })
+        op.write({'stage_id': stage_doc_review.id})
+
+        # 3. Delete fails in Document Review stage
+        with self.assertRaises(ValidationError):
+            line3.unlink()
 
 

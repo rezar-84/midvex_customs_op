@@ -246,7 +246,9 @@ class CustomsDocumentRequirement(models.Model):
                 raise ValidationError(
                     _("You cannot delete a document requirement (%s) that has uploaded attachments. Please remove the attachments or mark the status as 'Not Applicable' instead.") % rec.name
                 )
-            if rec.operation_id.stage_id and rec.operation_id.stage_id.sequence > 2:
+            waiting_docs_stage = self.env.ref('midvex_customs_op.stage_waiting_docs', raise_if_not_found=False)
+            waiting_docs_seq = waiting_docs_stage.sequence if waiting_docs_stage else 2
+            if rec.operation_id.stage_id and rec.operation_id.stage_id.sequence > waiting_docs_seq:
                 raise ValidationError(
                     _("You cannot delete a document requirement (%s) when the Customs File is past the 'Waiting for Documents' stage. Please mark the status as 'Not Applicable' instead.") % rec.name
                 )

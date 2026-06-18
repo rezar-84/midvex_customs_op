@@ -26,28 +26,28 @@
         <field name="name">Waiting for Documents</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('stage_id.name', '=', 'Waiting for Documents')]</field>
+        <field name="domain">[('stage_id.code', '=', 'waiting_docs')]</field>
     </record>
 
     <record id="action_customs_operation_ready_ship" model="ir.actions.act_window">
         <field name="name">Ready to Ship</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('stage_id.name', '=', 'Ready to Ship')]</field>
+        <field name="domain">[('stage_id.code', '=', 'ready_ship')]</field>
     </record>
 
     <record id="action_customs_operation_arriving_soon" model="ir.actions.act_window">
         <field name="name">Arriving Soon</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('stage_id.name', '=', 'Shipped')]</field>
+        <field name="domain">[('stage_id.code', '=', 'shipped')]</field>
     </record>
 
     <record id="action_customs_operation_clearance" model="ir.actions.act_window">
         <field name="name">Customs Clearance</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('stage_id.name', '=', 'Customs Clearance')]</field>
+        <field name="domain">[('stage_id.code', '=', 'customs_clearance')]</field>
     </record>
 
     <!-- Actions for Document Requirements -->

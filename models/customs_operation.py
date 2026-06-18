@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, AccessError
+from markupsafe import Markup, escape
 
 class CustomsOperation(models.Model):
     _name = 'customs.operation'
@@ -231,7 +232,8 @@ class CustomsOperation(models.Model):
     )
     def _compute_readiness(self):
         approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
-        pre_shipment_seq = 6 # Shipped stage is sequence 6
+        shipped_stage = self.env.ref('midvex_customs_op.stage_shipped', raise_if_not_found=False)
+        pre_shipment_seq = shipped_stage.sequence if shipped_stage else 6
         
         for op in self:
             reasons = []
@@ -312,7 +314,8 @@ class CustomsOperation(models.Model):
             'override_user_id': False,
             'override_date': False,
         })
-        self.message_post(body=_("Readiness check override reset by %s.") % self.env.user.name)
+        body = Markup(_("Readiness check override reset by %s.")) % escape(self.env.user.name)
+        self.message_post(body=body)
 
     def write(self, vals):
         if 'stage_id' in vals:
@@ -354,12 +357,22 @@ class CustomsOperation(models.Model):
                         missing_warn_fields.append(_("Warehouse Delivery Date"))
                     
                     if missing_warn_fields:
-                        op.message_post(
-                            body=_("<strong>Warning:</strong> The Customs File was closed, but the following operational details are missing: %s") % 
-                            ", ".join(missing_warn_fields)
-                        )
+                        body = Markup(_("<strong>Warning:</strong> The Customs File was closed, but the following operational details are missing: %s")) % \
+                            escape(", ".join(missing_warn_fields))
+                        op.message_post(body=body)
                         
         return super(CustomsOperation, self).write(vals)
+ 
+    def unlink(self):
+        draft_stage = self.env.ref('midvex_customs_op.stage_draft', raise_if_not_found=False)
+        for op in self:
+            is_draft = (op.stage_id == draft_stage) if (draft_stage and op.stage_id) else (not op.stage_id or op.stage_id.sequence == 1)
+            if not is_draft:
+                raise ValidationError(
+                    _("You can only delete a Customs File when it is in the 'Draft' stage. Operation %s is currently in '%s'.") % 
+                    (op.name, op.stage_id.name or '')
+                )
+        return super(CustomsOperation, self).unlink()
 
     def action_view_purchase_orders(self):
         self.ensure_one()
