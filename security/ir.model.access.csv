@@ -1,34 +1,23 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-# Stage Access
 access_customs_stage_user,customs.stage.user,model_customs_stage,group_customs_user,1,0,0,0
 access_customs_stage_approver,customs.stage.approver,model_customs_stage,group_customs_approver,1,0,0,0
 access_customs_stage_manager,customs.stage.manager,model_customs_stage,group_customs_manager,1,0,0,0
 access_customs_stage_admin,customs.stage.admin,model_customs_stage,group_customs_admin,1,1,1,1
-
-# Document Type Access
 access_customs_document_type_user,customs.document.type.user,model_customs_document_type,group_customs_user,1,0,0,0
 access_customs_document_type_approver,customs.document.type.approver,model_customs_document_type,group_customs_approver,1,0,0,0
 access_customs_document_type_manager,customs.document.type.manager,model_customs_document_type,group_customs_manager,1,0,0,0
 access_customs_document_type_admin,customs.document.type.admin,model_customs_document_type,group_customs_admin,1,1,1,1
-
-# Customs Operation Access
 access_customs_operation_user,customs.operation.user,model_customs_operation,group_customs_user,1,1,1,0
 access_customs_operation_approver,customs.operation.approver,model_customs_operation,group_customs_approver,1,1,1,0
 access_customs_operation_manager,customs.operation.manager,model_customs_operation,group_customs_manager,1,1,1,1
 access_customs_operation_admin,customs.operation.admin,model_customs_operation,group_customs_admin,1,1,1,1
-
-# Customs Operation Line Access
 access_customs_operation_line_user,customs.operation.line.user,model_customs_operation_line,group_customs_user,1,1,1,1
 access_customs_operation_line_approver,customs.operation.line.approver,model_customs_operation_line,group_customs_approver,1,1,1,1
 access_customs_operation_line_manager,customs.operation.line.manager,model_customs_operation_line,group_customs_manager,1,1,1,1
 access_customs_operation_line_admin,customs.operation.line.admin,model_customs_operation_line,group_customs_admin,1,1,1,1
-
-# Customs Document Requirement Access
 access_customs_document_requirement_user,customs.document.requirement.user,model_customs_document_requirement,group_customs_user,1,1,1,0
 access_customs_document_requirement_approver,customs.document.requirement.approver,model_customs_document_requirement,group_customs_approver,1,1,1,0
 access_customs_document_requirement_manager,customs.document.requirement.manager,model_customs_document_requirement,group_customs_manager,1,1,1,1
 access_customs_document_requirement_admin,customs.document.requirement.admin,model_customs_document_requirement,group_customs_admin,1,1,1,1
-
-# Override Wizard Access
 access_customs_operation_override_wizard_manager,customs.operation.override.wizard.manager,model_customs_operation_override_wizard,group_customs_manager,1,1,1,1
 access_customs_operation_override_wizard_admin,customs.operation.override.wizard.admin,model_customs_operation_override_wizard,group_customs_admin,1,1,1,1
