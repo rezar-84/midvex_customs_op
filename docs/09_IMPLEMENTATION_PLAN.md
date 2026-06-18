@@ -38,7 +38,7 @@ Status: Complete; awaiting approval for Milestone 2
 - Default stages
 
 Progress notes:
-- Created the module scaffold under `midvex_customs_op/` with `__manifest__.py` and imports.
+- Created the module scaffold directly at the repository root with `__manifest__.py` and imports.
 - Defined all base models (`customs.stage`, `customs.document.type`, `customs.operation`, `customs.document.requirement`) in `models/`.
 - Created security category and linear groups (`User`, `Approver`, `Manager`, `Admin`) in `security/customs_security.xml`.
 - Added global multi-company record rules to secure stages, document types, operations, and requirements.
@@ -50,7 +50,7 @@ Progress notes:
 
 Acceptance criteria:
 
-- Addon directory `midvex_customs_op/` exists.
+- Odoo manifest and code files exist directly at the repository root (clonable as `midvex_customs_op`).
 - Manifest installs with valid dependencies.
 - Security groups and initial access rights are defined.
 - Base menu and actions load.
