@@ -107,15 +107,25 @@ Progress notes:
 
 ## Milestone 4 — Readiness and approval controls
 
-Status: Not started
+Status: Complete; awaiting approval for Milestone 5
 
-- Completion calculation
-- Blocking reasons
-- Shipment readiness
-- Manager override
-- Closing validation
-- Security tests
-- Business-rule tests
+- Completion calculation (Completed)
+- Blocking reasons (Completed in compute methods)
+- Shipment readiness (Completed)
+- Manager override (Completed using transient wizard actions)
+- Closing validation (Completed in write overrides)
+- Security tests (Completed in tests/test_customs_operation.py)
+- Business-rule tests (Completed in tests/test_customs_operation.py)
+
+Progress notes:
+- Implemented `shipment_ready` calculation based on mandatory documents, original requirements, expiration status (pre-shipment block), and key shipment details completion.
+- Formulated human-readable reasons in `blocking_reason_text`.
+- Created TransientModel `customs.operation.override.wizard` and action buttons to audit and execute readiness overrides.
+- Exposed "Overridden" yellow status ribbons and override history log sheets inside the form view.
+- Added `is_critical` field to Odoo standard `mail.activity.type` to block file closing if open critical activities remain.
+- Set up database constraint checks on closing preventing final transitions if mandatory documents are incomplete or critical activities remain open.
+- Logged warning notifications to the chatter if closing with empty optional/customs declaration details.
+- Extended automated tests covering readiness calculations, override transitions, wizard execution, and closing boundary limits.
 
 ## Milestone 5 — Reporting
 

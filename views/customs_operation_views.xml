@@ -105,6 +105,18 @@
         <field name="arch" type="xml">
             <form string="Customs File">
                 <header>
+                    <button name="action_override_readiness" 
+                            string="Override Readiness" 
+                            type="object" 
+                            class="btn-warning" 
+                            invisible="shipment_ready or is_overridden"
+                            groups="midvex_customs_op.group_customs_manager"/>
+                    <button name="action_reset_override" 
+                            string="Reset Override" 
+                            type="object" 
+                            class="btn-secondary" 
+                            invisible="not is_overridden"
+                            groups="midvex_customs_op.group_customs_manager"/>
                     <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
                 </header>
                 <sheet>
@@ -133,8 +145,9 @@
                         </button>
                     </div>
 
-                    <widget name="web_ribbon" title="Ready to Ship" bg_color="bg-success" invisible="not shipment_ready"/>
+                    <widget name="web_ribbon" title="Ready to Ship" bg_color="bg-success" invisible="not shipment_ready or is_overridden"/>
                     <widget name="web_ribbon" title="Ready Blocked" bg_color="bg-danger" invisible="shipment_ready"/>
+                    <widget name="web_ribbon" title="Overridden" bg_color="bg-warning" invisible="not is_overridden"/>
 
                     <div class="oe_title">
                         <span class="o_form_label">Customs Reference</span>
@@ -148,6 +161,7 @@
                             <field name="user_id" widget="many2one_avatar_user"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="active" invisible="1"/>
+                            <field name="is_overridden" invisible="1"/>
                         </group>
                         <group>
                             <field name="priority" widget="priority"/>
@@ -268,6 +282,17 @@
                                 </group>
                                 <group>
                                     <field name="warehouse_delivery_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Readiness Override" name="override" invisible="not is_overridden">
+                            <group>
+                                <group>
+                                    <field name="override_user_id" widget="many2one_avatar_user"/>
+                                    <field name="override_date"/>
+                                </group>
+                                <group>
+                                    <field name="override_reason" readonly="1"/>
                                 </group>
                             </group>
                         </page>

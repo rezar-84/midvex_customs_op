@@ -5,3 +5,4 @@ from . import customs_document_type
 from . import customs_operation
 from . import customs_operation_line
 from . import customs_document_requirement
+from . import mail_activity_type

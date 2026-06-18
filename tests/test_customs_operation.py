@@ -95,3 +95,144 @@ class TestCustomsOperation(TransactionCase):
         self.assertEqual(operation.document_approved_count, 1, "Approved documents count should be 1")
         self.assertEqual(operation.document_missing_count, 1, "Missing documents count should be 1")
         self.assertEqual(operation.document_completion_percentage, 50.0, "Completion percentage should be 50%")
+
+    def test_customs_operation_shipment_readiness(self):
+        """Test the shipment readiness calculation logic."""
+        # 1. Initially false due to missing logistics data
+        operation = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+        operation.flush_recordset()
+        self.assertFalse(operation.shipment_ready)
+        self.assertIn("Missing fields:", operation.blocking_reason_text)
+
+        # 2. Add logistics data -> becomes true (as no doc requirements exist yet)
+        country_tr = self.env['res.country'].search([], limit=1)
+        incoterm_fob = self.env['account.incoterms'].search([], limit=1)
+        operation.write({
+            'transport_mode': 'sea',
+            'origin_country_id': country_tr.id,
+            'departure_country_id': country_tr.id,
+            'destination_country_id': country_tr.id,
+            'incoterm_id': incoterm_fob.id,
+        })
+        operation.flush_recordset()
+        self.assertTrue(operation.shipment_ready)
+        self.assertEqual(operation.blocking_reason_text, "")
+
+        # 3. Add blocking document requirement -> becomes false
+        req = self.env['customs.document.requirement'].create({
+            'operation_id': operation.id,
+            'document_type_id': self.doc_type_invoice.id,
+            'name': 'Invoice Doc',
+            'state': 'requested',
+            'is_blocking': True,
+        })
+        operation.flush_recordset()
+        self.assertFalse(operation.shipment_ready)
+        self.assertIn("Document 'Invoice Doc': incomplete", operation.blocking_reason_text)
+
+        # 4. Mark document as approved -> becomes true
+        req.write({'state': 'approved'})
+        operation.flush_recordset()
+        self.assertTrue(operation.shipment_ready)
+
+    def test_customs_operation_manager_override(self):
+        """Test manager override controls and wizards."""
+        # Setup operation blocked by missing fields
+        operation = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+        operation.flush_recordset()
+        self.assertFalse(operation.shipment_ready)
+
+        # Setup security groups
+        group_manager = self.env.ref('midvex_customs_op.group_customs_manager')
+        group_user = self.env.ref('midvex_customs_op.group_customs_user')
+        
+        manager_user = self.env['res.users'].create({
+            'name': 'Manager User',
+            'login': 'manager_override_test',
+            'email': 'manager@test.com',
+            'group_ids': [(6, 0, [group_manager.id])]
+        })
+        normal_user = self.env['res.users'].create({
+            'name': 'Normal User',
+            'login': 'normal_user_override_test',
+            'email': 'normal@test.com',
+            'group_ids': [(6, 0, [group_user.id])]
+        })
+
+        # 1. Normal user attempts override -> raises AccessError
+        with self.assertRaises(AccessError):
+            operation.with_user(normal_user).action_override_readiness()
+
+        # 2. Manager user overrides using the wizard
+        wizard_action = operation.with_user(manager_user).action_override_readiness()
+        wizard = self.env[wizard_action['res_model']].with_user(manager_user).create({
+            'operation_id': wizard_action['context']['default_operation_id'],
+            'reason': 'Urgent shipment, documents incoming tomorrow.',
+        })
+        wizard.action_confirm()
+
+        operation.flush_recordset()
+        self.assertTrue(operation.shipment_ready)
+        self.assertTrue(operation.is_overridden)
+        self.assertEqual(operation.override_user_id, manager_user)
+
+        # 3. Manager resets override
+        operation.with_user(manager_user).action_reset_override()
+        operation.flush_recordset()
+        self.assertFalse(operation.shipment_ready)
+        self.assertFalse(operation.is_overridden)
+
+    def test_customs_operation_closing_validations(self):
+        """Test validation controls when closing a Customs File."""
+        stage_closed = self.env['customs.stage'].create({
+            'name': 'Test Closed Stage',
+            'sequence': 12,
+            'is_closed': True,
+        })
+        operation = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+
+        # Add incomplete mandatory document
+        self.env['customs.document.requirement'].create({
+            'operation_id': operation.id,
+            'document_type_id': self.doc_type_invoice.id,
+            'name': 'Invoice Doc',
+            'state': 'requested',
+            'requirement_level': 'mandatory',
+        })
+
+        # 1. Attempt to close fails due to incomplete documents
+        with self.assertRaises(ValidationError):
+            operation.write({'stage_id': stage_closed.id})
+
+        # Approve the document requirement
+        operation.document_requirement_ids[0].write({'state': 'approved'})
+
+        # Create critical activity type and an activity
+        act_type_critical = self.env['mail.activity.type'].create({
+            'name': 'Critical Review',
+            'is_critical': True,
+        })
+        self.env['mail.activity'].create({
+            'res_model': 'customs.operation',
+            'res_id': operation.id,
+            'activity_type_id': act_type_critical.id,
+            'user_id': self.env.user.id,
+        })
+
+        # 2. Attempt to close fails due to open critical activities
+        with self.assertRaises(ValidationError):
+            operation.write({'stage_id': stage_closed.id})
+
+        # Complete the activity
+        operation.activity_ids.action_done()
+
+        # 3. Attempt to close succeeds
+        operation.write({'stage_id': stage_closed.id})
+        self.assertEqual(operation.stage_id, stage_closed)
+

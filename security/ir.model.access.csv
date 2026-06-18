@@ -6,3 +6,5 @@ access_customs_document_type_admin,customs.document.type.admin,model_customs_doc
 access_customs_operation_user,customs.operation.user,model_customs_operation,group_customs_user,1,1,1,1
 access_customs_operation_line_user,customs.operation.line.user,model_customs_operation_line,group_customs_user,1,1,1,1
 access_customs_document_requirement_user,customs.document.requirement.user,model_customs_document_requirement,group_customs_user,1,1,1,1
+access_customs_operation_override_wizard_manager,customs.operation.override.wizard.manager,model_customs_operation_override_wizard,group_customs_manager,1,1,1,1
+

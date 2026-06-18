@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError, AccessError
 
 class CustomsOperation(models.Model):
     _name = 'customs.operation'
@@ -151,15 +152,22 @@ class CustomsOperation(models.Model):
     inspection_date = fields.Date(string='Inspection Date', tracking=True)
     release_date = fields.Date(string='Customs Release Date', tracking=True)
 
-    # Computed Controls (Stubs / Initial implementation for Milestone 2)
+    # Computed Controls
     document_total = fields.Integer(string='Total Documents', compute='_compute_document_stats', store=True)
     document_approved_count = fields.Integer(string='Approved Documents', compute='_compute_document_stats', store=True)
     document_missing_count = fields.Integer(string='Missing Documents', compute='_compute_document_stats', store=True)
     document_rejected_count = fields.Integer(string='Rejected Documents', compute='_compute_document_stats', store=True)
     document_completion_percentage = fields.Float(string='Document Completion %', compute='_compute_document_stats', store=True)
+    
     shipment_ready = fields.Boolean(string='Ready to Ship', compute='_compute_readiness', store=True)
     blocking_document_count = fields.Integer(string='Blocking Documents', compute='_compute_readiness', store=True)
     blocking_reason_text = fields.Text(string='Blocking Reasons', compute='_compute_readiness', store=True)
+
+    # Override Fields
+    is_overridden = fields.Boolean(string='Readiness Overridden', default=False, tracking=True)
+    override_reason = fields.Text(string='Override Reason', tracking=True)
+    override_user_id = fields.Many2one('res.users', string='Overridden By', readonly=True, tracking=True)
+    override_date = fields.Datetime(string='Override Date', readonly=True, tracking=True)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -191,14 +199,150 @@ class CustomsOperation(models.Model):
             op.document_rejected_count = rejected
             op.document_completion_percentage = (approved / total * 100.0) if total > 0 else 0.0
 
-    @api.depends('document_requirement_ids', 'document_requirement_ids.state', 'document_requirement_ids.is_blocking')
+    @api.depends(
+        'document_requirement_ids.state', 
+        'document_requirement_ids.is_blocking', 
+        'document_requirement_ids.original_required', 
+        'document_requirement_ids.original_issued',
+        'stage_id.sequence', 
+        'transport_mode', 
+        'origin_country_id', 
+        'departure_country_id', 
+        'destination_country_id', 
+        'incoterm_id', 
+        'is_overridden'
+    )
     def _compute_readiness(self):
-        # Initial stub for Milestone 2: Mark ready if no requirements or if all completed
-        # Detailed business logic and blocking reason text will be implemented in Milestone 4
+        approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
+        pre_shipment_seq = 6 # Shipped stage is sequence 6
+        
         for op in self:
-            op.shipment_ready = op.document_total == op.document_approved_count
-            op.blocking_document_count = op.document_total - op.document_approved_count
-            op.blocking_reason_text = _("Documents incomplete: %d of %d approved.") % (op.document_approved_count, op.document_total) if op.blocking_document_count > 0 else ""
+            reasons = []
+            blocking_count = 0
+            
+            for doc in op.document_requirement_ids:
+                if not doc.is_blocking:
+                    continue
+                
+                is_complete = doc.state in approved_states
+                
+                is_pre_shipment = (op.stage_id.sequence or 0) < pre_shipment_seq
+                is_expired = False
+                if doc.expiry_date and doc.state != 'n_a' and not is_complete:
+                    is_expired = doc.expiry_date < fields.Date.today()
+                
+                original_missing = doc.original_required and not doc.original_issued
+                
+                if not is_complete or (is_pre_shipment and is_expired) or original_missing:
+                    blocking_count += 1
+                    doc_reasons = []
+                    if not is_complete:
+                        doc_reasons.append(_("incomplete"))
+                    if is_pre_shipment and is_expired:
+                        doc_reasons.append(_("expired"))
+                    if original_missing:
+                        doc_reasons.append(_("original not issued"))
+                    reasons.append(_("Document '%s': %s") % (doc.name, ", ".join(doc_reasons)))
+            
+            missing_fields = []
+            if not op.transport_mode:
+                missing_fields.append(_("Transport Mode"))
+            if not op.origin_country_id:
+                missing_fields.append(_("Country of Origin"))
+            if not op.departure_country_id:
+                missing_fields.append(_("Country of Departure"))
+            if not op.destination_country_id:
+                missing_fields.append(_("Country of Destination"))
+            if not op.incoterm_id:
+                missing_fields.append(_("Incoterm"))
+            
+            if missing_fields:
+                reasons.append(_("Missing fields: %s") % ", ".join(missing_fields))
+            
+            op.blocking_document_count = blocking_count
+            
+            if reasons:
+                op.blocking_reason_text = "\n".join(reasons)
+                if op.is_overridden:
+                    op.shipment_ready = True
+                else:
+                    op.shipment_ready = False
+            else:
+                op.blocking_reason_text = ""
+                op.shipment_ready = True
+
+    def action_override_readiness(self):
+        self.ensure_one()
+        if not self.env.user.has_group('midvex_customs_op.group_customs_manager'):
+            raise AccessError(_("Only Customs Managers can override readiness controls."))
+            
+        return {
+            'name': _('Override Readiness Check'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'customs.operation.override.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_operation_id': self.id},
+        }
+
+    def action_reset_override(self):
+        self.ensure_one()
+        if not self.env.user.has_group('midvex_customs_op.group_customs_manager'):
+            raise AccessError(_("Only Customs Managers can reset override settings."))
+        self.write({
+            'is_overridden': False,
+            'override_reason': False,
+            'override_user_id': False,
+            'override_date': False,
+        })
+        self.message_post(body=_("Readiness check override reset by %s.") % self.env.user.name)
+
+    def write(self, vals):
+        if 'stage_id' in vals:
+            new_stage = self.env['customs.stage'].browse(vals['stage_id'])
+            if new_stage.is_closed:
+                approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
+                for op in self:
+                    # 1. Verify all mandatory document requirements are complete
+                    incomplete_docs = op.document_requirement_ids.filtered(
+                        lambda r: r.requirement_level == 'mandatory' and r.state not in approved_states
+                    )
+                    if incomplete_docs:
+                        raise ValidationError(
+                            _("You cannot close Customs File %s because the following mandatory documents are incomplete:\n%s") %
+                            (op.name, "\n".join(("- %s" % d.name for d in incomplete_docs)))
+                        )
+                    
+                    # 2. Verify no critical activities are open
+                    open_critical_activities = self.env['mail.activity'].search([
+                        ('res_model', 'in', ('customs.operation', 'customs.document.requirement')),
+                        ('res_id', 'in', [op.id] + op.document_requirement_ids.ids),
+                        ('activity_type_id.is_critical', '=', True)
+                    ])
+                    if open_critical_activities:
+                        raise ValidationError(
+                            _("You cannot close Customs File %s because there are open critical activities:\n%s") %
+                            (op.name, "\n".join(("- %s (%s)" % (a.summary or a.activity_type_id.name, a.activity_type_id.name) for a in open_critical_activities)))
+                        )
+                    
+                    # 3. Warning checks for missing optional fields:
+                    missing_warn_fields = []
+                    if not op.customs_declaration_number:
+                        missing_warn_fields.append(_("Customs Declaration Number"))
+                    if not op.customs_declaration_date:
+                        missing_warn_fields.append(_("Declaration Date"))
+                    if not op.release_date:
+                        missing_warn_fields.append(_("Customs Release Date"))
+                    if not op.warehouse_delivery_date:
+                        missing_warn_fields.append(_("Warehouse Delivery Date"))
+                    
+                    if missing_warn_fields:
+                        op.message_post(
+                            body=_("<strong>Warning:</strong> The Customs File was closed, but the following operational details are missing: %s") % 
+                            ", ".join(missing_warn_fields)
+                        )
+                        
+        return super(CustomsOperation, self).write(vals)
 
     def action_view_purchase_orders(self):
         self.ensure_one()

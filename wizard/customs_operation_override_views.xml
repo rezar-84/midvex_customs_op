@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_customs_operation_override_wizard_form" model="ir.ui.view">
+        <field name="name">customs.operation.override.wizard.form</field>
+        <field name="model">customs.operation.override.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Override Readiness Block">
+                <sheet>
+                    <group>
+                        <field name="operation_id" invisible="1"/>
+                        <field name="reason" placeholder="Provide the business justification for overriding the readiness controls..." required="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Confirm Override" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customs_operation_override_wizard" model="ir.actions.act_window">
+        <field name="name">Override Readiness Check</field>
+        <field name="res_model">customs.operation.override.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
