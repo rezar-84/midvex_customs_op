@@ -151,7 +151,7 @@ Status: Not started
 
 Status: In Progress
 
-- Turkish translation (Not started)
+- Turkish translation (Complete)
 - User guide (Complete)
 - Administrator guide (Complete)
 - Installation guide (Complete - in README.md)
@@ -162,3 +162,4 @@ Status: In Progress
 Progress notes:
 - Created a comprehensive User & Administration Manual covering Setup, Master Data Configuration, Operation Management, Document Tracking, Shipment Entry, and closing validation.
 - Incorporated the manual into the repository `README.md` and created an aesthetic HTML dashboard description in `static/description/index.html`.
+- Implemented Turkish PO translation mappings inside `i18n/tr.po` localizing stages, models, status selections, field labels, and buttons.

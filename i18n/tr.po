@@ -1,0 +1,235 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* midvex_customs_op
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-18 12:00+0000\n"
+"PO-Revision-Date: 2026-06-18 12:00+0000\n"
+"Last-Translator: Midvex\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_operation
+msgid "Customs File"
+msgstr "Gümrük Dosyası"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_operation_line
+msgid "Customs Operation Line"
+msgstr "Gümrük İşlem Satırı"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_stage
+msgid "Customs File Stage"
+msgstr "Gümrük Dosyası Aşaması"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_document_type
+msgid "Customs Document Type"
+msgstr "Gümrük Belge Türü"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_document_requirement
+msgid "Customs Document Requirement"
+msgstr "Gümrük Belge Gereksinimi"
+
+#. module: midvex_customs_op
+#: model:ir.model,name:midvex_customs_op.model_customs_operation_override_wizard
+msgid "Override Customs File Readiness"
+msgstr "Gümrük Dosyası Hazırlığını Geçersiz Kıl"
+
+# Field labels
+#. module: midvex_customs_op
+#: field:customs.operation,name:0
+msgid "Reference"
+msgstr "Referans"
+
+#. module: midvex_customs_op
+#: field:customs.operation,supplier_ids:0
+msgid "Suppliers"
+msgstr "Tedarikçiler"
+
+#. module: midvex_customs_op
+#: field:customs.operation,broker_id:0
+msgid "Customs Broker"
+msgstr "Gümrük Müşaviri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,forwarder_id:0
+msgid "Freight Forwarder"
+msgstr "Nakliyeci/Forwarder"
+
+#. module: midvex_customs_op
+#: field:customs.operation,carrier_id:0
+msgid "Carrier"
+msgstr "Taşıyıcı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,purchase_order_ids:0
+msgid "Purchase Orders"
+msgstr "Satınalma Siparişleri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,picking_ids:0
+msgid "Incoming Shipments"
+msgstr "Gelen Teslimatlar"
+
+#. module: midvex_customs_op
+#: field:customs.operation,operation_line_ids:0
+msgid "Product Lines"
+msgstr "Ürün Satırları"
+
+#. module: midvex_customs_op
+#: field:customs.operation,document_requirement_ids:0
+msgid "Document Requirements"
+msgstr "Belge Gereksinimleri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,transport_mode:0
+msgid "Transport Mode"
+msgstr "Taşıma Şekli"
+
+#. module: midvex_customs_op
+#: field:customs.operation,incoterm_id:0
+msgid "Incoterm"
+msgstr "Teslim Şekli (Incoterm)"
+
+#. module: midvex_customs_op
+#: field:customs.operation,origin_country_id:0
+msgid "Country of Origin"
+msgstr "Menşe Ülke"
+
+#. module: midvex_customs_op
+#: field:customs.operation,departure_country_id:0
+msgid "Country of Departure"
+msgstr "Çıkış Ülkesi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,destination_country_id:0
+msgid "Country of Destination"
+msgstr "Varış Ülkesi"
+
+#. module: midvex_customs_op
+#: field:customs.operation,customs_office:0
+msgid "Customs Office"
+msgstr "Gümrük Müdürlüğü"
+
+#. module: midvex_customs_op
+#: field:customs.operation,container_number:0
+msgid "Container Number"
+msgstr "Konteyner Numarası"
+
+#. module: midvex_customs_op
+#: field:customs.operation,booking_number:0
+msgid "Booking Number"
+msgstr "Rezervasyon No (Booking)"
+
+#. module: midvex_customs_op
+#: field:customs.operation,transport_document_number:0
+msgid "Transport Document No."
+msgstr "Taşıma Belge No."
+
+#. module: midvex_customs_op
+#: field:customs.operation,shipment_ready:0
+msgid "Ready to Ship"
+msgstr "Sevkıyata Hazır"
+
+#. module: midvex_customs_op
+#: field:customs.operation,blocking_reason_text:0
+msgid "Blocking Reasons"
+msgstr "Engelleme Nedenleri"
+
+#. module: midvex_customs_op
+#: field:customs.operation,is_overridden:0
+msgid "Readiness Overridden"
+msgstr "Hazırlık Geçersiz Kılındı"
+
+#. module: midvex_customs_op
+#: field:customs.operation,override_reason:0
+msgid "Override Reason"
+msgstr "Geçersiz Kılma Nedeni"
+
+# Buttons
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Override Readiness"
+msgstr "Hazırlığı Geçersiz Kıl"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Reset Override"
+msgstr "Geçersiz Kılmayı Sıfırla"
+
+# Default Stage Names (From data/customs_stage_data.xml)
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Draft"
+msgstr "Taslak"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Waiting for Documents"
+msgstr "Belgeler Bekleniyor"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Document Review"
+msgstr "Belge İnceleme"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Correction Required"
+msgstr "Düzeltme Gerekli"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Shipped"
+msgstr "Sevk Edildi"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Arrived"
+msgstr "Vardı"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Customs Clearance"
+msgstr "Gümrük İşlemleri"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Inspection / Laboratory"
+msgstr "Muayene / Laboratuvar"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Customs Cleared"
+msgstr "Gümrükten Çekildi"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Delivered to Warehouse"
+msgstr "Depoya Teslim Edildi"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Closed"
+msgstr "Kapandı"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "On Hold"
+msgstr "Beklemede"
+
+#. module: midvex_customs_op
+#: selection:customs.stage,name:0
+msgid "Cancelled"
+msgstr "İptal Edildi"
