@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customs Operation Tree View -->
+    <record id="view_customs_operation_tree" model="ir.ui.view">
+        <field name="name">customs.operation.tree</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <list string="Customs Files" sample="1">
+                <field name="priority" widget="priority" nolabel="1"/>
+                <field name="name" string="Reference"/>
+                <field name="supplier_ids" widget="many2many_tags"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="planned_arrival_date"/>
+                <field name="planned_clearance_date"/>
+                <field name="document_completion_percentage" widget="progressbar"/>
+                <field name="shipment_ready" widget="boolean"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="stage_id" decoration-bf="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Customs Operation Kanban View -->
+    <record id="view_customs_operation_kanban" model="ir.ui.view">
+        <field name="name">customs.operation.kanban</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column" quick_create="false" sample="1">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="supplier_ids"/>
+                <field name="planned_arrival_date"/>
+                <field name="document_completion_percentage"/>
+                <field name="shipment_ready"/>
+                <field name="priority"/>
+                <field name="stage_id"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column h-100 justify-content-between">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <h4 class="mb-0 text-truncate font-weight-bold">
+                                        <field name="name"/>
+                                    </h4>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="text-muted text-truncate mb-2">
+                                    <field name="supplier_ids" widget="many2many_tags"/>
+                                </div>
+                                <div t-if="record.planned_arrival_date.raw_value" class="d-flex align-items-center text-muted mb-2">
+                                    <i class="fa fa-calendar-o mr-1"/>
+                                    <span>ETA: <field name="planned_arrival_date"/></span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-auto">
+                                <div class="d-flex align-items-center">
+                                    <span t-if="record.shipment_ready.raw_value" class="badge badge-success mr-2">Ready</span>
+                                    <span t-else="" class="badge badge-warning mr-2">Blocked</span>
+                                    <span class="text-muted"><t t-out="Math.round(record.document_completion_percentage.raw_value or 0)"/>%</span>
+                                </div>
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Customs Operation Search View -->
+    <record id="view_customs_operation_search" model="ir.ui.view">
+        <field name="name">customs.operation.search</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <search string="Search Customs Files">
+                <field name="name" string="Reference" filter_domain="[('name', 'ilike', self)]"/>
+                <field name="supplier_ids" string="Supplier" filter_domain="[('supplier_ids', 'ilike', self)]"/>
+                <field name="broker_id" string="Broker"/>
+                <field name="purchase_order_ids" string="Purchase Order" filter_domain="[('purchase_order_ids.name', 'ilike', self)]"/>
+                
+                <filter string="My Operations" name="my_operations" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Ready to Ship" name="ready_ship" domain="[('shipment_ready', '=', True)]"/>
+                <filter string="Blocked" name="blocked" domain="[('shipment_ready', '=', False)]"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Responsible" name="group_responsible" context="{'group_by': 'user_id'}"/>
+                    <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Broker" name="group_broker" context="{'group_by': 'broker_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Customs Operation Form View -->
+    <record id="view_customs_operation_form" model="ir.ui.view">
+        <field name="name">customs.operation.form</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <form string="Customs File">
+                <header>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_purchase_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Purchase Orders</span>
+                            </div>
+                        </button>
+                        <button name="action_view_incoming_shipments" type="object" class="oe_stat_button" icon="fa-truck">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Stock Receipts</span>
+                            </div>
+                        </button>
+                        <button name="action_view_document_requirements" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="document_total"/></span>
+                                <span class="o_stat_text">Required Docs</span>
+                            </div>
+                        </button>
+                        <button name="action_view_missing_document_requirements" type="object" class="oe_stat_button" icon="fa-warning text-warning">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value text-warning"><field name="document_missing_count"/></span>
+                                <span class="o_stat_text text-warning">Missing Docs</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Ready to Ship" bg_color="bg-success" invisible="not shipment_ready"/>
+                    <widget name="web_ribbon" title="Ready Blocked" bg_color="bg-danger" invisible="shipment_ready"/>
+
+                    <div class="oe_title">
+                        <span class="o_form_label">Customs Reference</span>
+                        <h1>
+                            <field name="name" placeholder="CUS/YYYY/NNNN"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="priority" widget="priority"/>
+                            <field name="shipment_ready" readonly="1"/>
+                            <field name="blocking_reason_text" invisible="shipment_ready" class="text-danger font-weight-bold"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Overview" name="overview">
+                            <group>
+                                <group string="Parties Involved">
+                                    <field name="supplier_ids" widget="many2many_tags" placeholder="Select Suppliers..."/>
+                                    <field name="broker_id" placeholder="Select Customs Broker..."/>
+                                    <field name="forwarder_id" placeholder="Select Freight Forwarder..."/>
+                                    <field name="carrier_id" placeholder="Select Carrier..."/>
+                                </group>
+                                <group string="Integrations">
+                                    <field name="purchase_order_ids" widget="many2many_tags" placeholder="Link Purchase Orders..."/>
+                                    <field name="picking_ids" widget="many2many_tags" placeholder="Link Incoming Shipments..."/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Product Lines" name="product_lines">
+                            <field name="operation_line_ids" mode="tree">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="hs_code"/>
+                                    <field name="country_of_origin_id"/>
+                                    <field name="manufacturer_id"/>
+                                    <field name="batch_number"/>
+                                    <field name="production_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id" groups="uom.group_uom"/>
+                                    <field name="net_weight"/>
+                                    <field name="gross_weight"/>
+                                    <field name="package_count"/>
+                                    <field name="package_type"/>
+                                    <field name="health_certificate_required" optional="hide"/>
+                                    <field name="analysis_required" optional="hide"/>
+                                    <field name="import_permit_required" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Required Documents" name="documents">
+                            <field name="document_requirement_ids" mode="tree">
+                                <list decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
+                                    <field name="document_type_id"/>
+                                    <field name="name"/>
+                                    <field name="is_blocking"/>
+                                    <field name="state" widget="badge" 
+                                           decoration-success="state in ('approved', 'accepted')" 
+                                           decoration-warning="state in ('requested', 'vendor_preparing', 'draft_received', 'correction_required')"
+                                           decoration-danger="state in ('rejected', 'expired')"
+                                           decoration-muted="state == 'n_a'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Shipment Details" name="shipment">
+                            <group>
+                                <group string="Logistics">
+                                    <field name="operation_type"/>
+                                    <field name="transport_mode"/>
+                                    <field name="incoterm_id"/>
+                                    <field name="container_number"/>
+                                    <field name="booking_number"/>
+                                    <field name="transport_document_number"/>
+                                </group>
+                                <group string="Geography &amp; Offices">
+                                    <field name="origin_country_id"/>
+                                    <field name="departure_country_id"/>
+                                    <field name="destination_country_id"/>
+                                    <field name="customs_office"/>
+                                </group>
+                            </group>
+                            <group string="Shipment Dates">
+                                <group>
+                                    <field name="planned_departure_date"/>
+                                    <field name="actual_departure_date"/>
+                                </group>
+                                <group>
+                                    <field name="planned_arrival_date"/>
+                                    <field name="actual_arrival_date"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Customs &amp; Laboratory" name="customs_lab">
+                            <group>
+                                <group string="Customs Entry">
+                                    <field name="customs_declaration_number"/>
+                                    <field name="customs_declaration_date"/>
+                                    <field name="release_date"/>
+                                </group>
+                                <group string="Inspections">
+                                    <field name="inspection_required"/>
+                                    <field name="inspection_date" invisible="not inspection_required"/>
+                                    <field name="laboratory_required"/>
+                                </group>
+                            </group>
+                            <group string="Handover &amp; Final Dates">
+                                <group>
+                                    <field name="planned_clearance_date"/>
+                                    <field name="actual_clearance_date"/>
+                                </group>
+                                <group>
+                                    <field name="warehouse_delivery_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Customs Operation Line Tree & Form Views -->
+    <record id="view_customs_operation_line_tree" model="ir.ui.view">
+        <field name="name">customs.operation.line.tree</field>
+        <field name="model">customs.operation.line</field>
+        <field name="arch" type="xml">
+            <list string="Product Lines">
+                <field name="operation_id"/>
+                <field name="product_id"/>
+                <field name="description"/>
+                <field name="hs_code"/>
+                <field name="batch_number"/>
+                <field name="quantity"/>
+                <field name="net_weight"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customs_operation_line_form" model="ir.ui.view">
+        <field name="name">customs.operation.line.form</field>
+        <field name="model">customs.operation.line</field>
+        <field name="arch" type="xml">
+            <form string="Product Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="operation_id"/>
+                            <field name="product_id"/>
+                            <field name="description"/>
+                            <field name="customs_description"/>
+                            <field name="hs_code"/>
+                        </group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                            <field name="net_weight"/>
+                            <field name="gross_weight"/>
+                            <field name="package_count"/>
+                            <field name="package_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Origin &amp; Manufacturer">
+                            <field name="country_of_origin_id"/>
+                            <field name="manufacturer_id"/>
+                            <field name="manufacturer_approval_number"/>
+                        </group>
+                        <group string="Batch Information">
+                            <field name="batch_number"/>
+                            <field name="production_date"/>
+                            <field name="expiry_date"/>
+                        </group>
+                    </group>
+                    <group string="Verification Requirements">
+                        <group>
+                            <field name="health_certificate_required"/>
+                            <field name="analysis_required"/>
+                        </group>
+                        <group>
+                            <field name="import_permit_required"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" placeholder="Additional line notes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

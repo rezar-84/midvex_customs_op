@@ -61,15 +61,28 @@ Acceptance criteria:
 
 ## Milestone 2 — Customs File and product lines
 
-Status: Not started
+Status: Complete; awaiting approval for Milestone 3
 
-- Main model
-- Product-line model
-- Purchase order relationships
-- Picking relationships
+- Main model (`customs.operation`)
+- Product-line model (`customs.operation.line`)
+- Purchase order relationships (`purchase.order`)
+- Picking relationships (`stock.picking`)
 - Form, list, search, and kanban views
 - Chatter and activities
 - Initial tests
+
+Progress notes:
+- Implemented core `customs.operation` model with fields for parties (suppliers, broker, forwarder, carrier), integration ids (POs and pickings), shipment logistics, dates, and customs data.
+- Built Odoo 19 computed stats for total, approved, missing, and rejected documents, along with completion percentage.
+- Implemented `customs.operation.line` model for product batching, HS code support, and weights, with constraints for dates and weight integrity.
+- Created `action_view` methods to support stat/smart buttons linking to purchase orders, stock pickings, document requirements, and missing documents.
+- Designed views in `views/customs_operation_views.xml` including:
+  - List view with completion progressbar and status toggles.
+  - Kanban view grouped by stage with colored card styles, ETA info, and user avatar.
+  - Form view structured into header statusbar, smart buttons, ribbons, standard fields, and tabs (Overview, Product Lines, Documents, Shipment, Customs & Lab).
+  - Search view with domain filters for My Operations, Ready/Blocked, Active/Archived, and groupings.
+- Linked views to menus in `__manifest__.py`.
+- Added unit tests in `tests/test_customs_operation.py` checking sequences, date/weight constraints, and document stat recomputations.
 
 ## Milestone 3 — Document management
 

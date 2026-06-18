@@ -45,3 +45,8 @@ class CustomsDocumentRequirement(models.Model):
         store=True, 
         index=True
     )
+    is_blocking = fields.Boolean(
+        string='Blocking Requirement', 
+        default=True,
+        help="If set, this document requirement will block shipment readiness if not completed."
+    )
