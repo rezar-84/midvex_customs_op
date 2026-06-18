@@ -35,6 +35,7 @@ class CustomsOperation(models.Model):
         default=lambda self: self.env.user, 
         tracking=True
     )
+    color = fields.Integer(string='Color Index', default=0)
 
     # Party Relationships
     supplier_ids = fields.Many2many(
