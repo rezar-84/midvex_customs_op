@@ -70,4 +70,11 @@
         <field name="global" eval="True"/>
         <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
+
+    <record id="customs_operation_line_comp_rule" model="ir.rule">
+        <field name="name">Customs Operation Line Multi-Company Rule</field>
+        <field name="model_id" ref="model_customs_operation_line"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
 </odoo>
