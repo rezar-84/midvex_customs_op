@@ -21,7 +21,7 @@
                 <separator/>
                 <filter string="Original Required" name="original_required" domain="[('original_required', '=', True)]"/>
                 <filter string="Original Missing" name="original_missing" domain="[('original_required', '=', True), ('original_received', '=', False)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Customs File" name="group_by_operation" context="{'group_by': 'operation_id'}"/>
                     <filter string="Document Type" name="group_by_doc_type" context="{'group_by': 'document_type_id'}"/>
                     <filter string="Vendor" name="group_by_vendor" context="{'group_by': 'vendor_id'}"/>
