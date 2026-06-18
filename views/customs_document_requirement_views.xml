@@ -164,4 +164,29 @@
             </p>
         </field>
     </record>
+    <!-- Document Requirement Pivot View -->
+    <record id="view_customs_document_requirement_pivot" model="ir.ui.view">
+        <field name="name">customs.document.requirement.pivot</field>
+        <field name="model">customs.document.requirement</field>
+        <field name="arch" type="xml">
+            <pivot string="Document Requirements Analysis" sample="1">
+                <field name="vendor_id" type="row"/>
+                <field name="document_type_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="version_number" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Document Requirement Graph View -->
+    <record id="view_customs_document_requirement_graph" model="ir.ui.view">
+        <field name="name">customs.document.requirement.graph</field>
+        <field name="model">customs.document.requirement</field>
+        <field name="arch" type="xml">
+            <graph string="Document Requirements" type="pie" sample="1">
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
 </odoo>
+

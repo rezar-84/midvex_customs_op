@@ -129,13 +129,21 @@ Progress notes:
 
 ## Milestone 5 — Reporting
 
-Status: Not started
+Status: Complete
 
-- Calendar
-- Pivot
-- Graph
-- Saved filters
-- Operational analysis
+- Calendar (Completed)
+- Pivot (Completed)
+- Graph (Completed)
+- Saved filters (Completed)
+- Operational analysis (Completed with menus and dedicated actions)
+
+Progress notes:
+- Implemented operational calendar view displaying Customs Files based on planned arrival date, colored by workflow stage.
+- Implemented pivot analysis and graph views for Customs Operations aggregating completion rate, weights, and missing documents count.
+- Implemented pivot analysis and graph views for Document Requirements tracking supplier versions and state statistics.
+- Added search filters (Correction/Rejection Pending, Arriving Soon in next 7 days, Open Operations) and group-by (Transport Mode).
+- Designed Reporting menus (Customs Analysis and Document Analysis).
+- Added unit tests verifying action mappings.
 
 ## Milestone 6 — Hardening
 

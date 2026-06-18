@@ -4,7 +4,7 @@
     <record id="action_customs_operation_all" model="ir.actions.act_window">
         <field name="name">All Customs Files</field>
         <field name="res_model">customs.operation</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">kanban,list,calendar,pivot,graph,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first Customs File!
@@ -18,7 +18,7 @@
     <record id="action_customs_operation_my" model="ir.actions.act_window">
         <field name="name">My Customs Files</field>
         <field name="res_model">customs.operation</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">kanban,list,calendar,pivot,graph,form</field>
         <field name="domain">[('user_id', '=', uid)]</field>
     </record>
 
@@ -54,7 +54,7 @@
     <record id="action_customs_document_requirement_all" model="ir.actions.act_window">
         <field name="name">All Requirements</field>
         <field name="res_model">customs.document.requirement</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,pivot,graph,form</field>
     </record>
 
     <record id="action_customs_document_requirement_missing" model="ir.actions.act_window">
@@ -119,8 +119,33 @@
     <menuitem id="menu_customs_document_requirement_correction" name="Correction Required" parent="menu_customs_documents" action="action_customs_document_requirement_correction" sequence="40"/>
     <menuitem id="menu_customs_document_requirement_expiring" name="Expiring" parent="menu_customs_documents" action="action_customs_document_requirement_expiring" sequence="50"/>
 
-    <!-- Reporting Section (Placeholder for MVP, actions can be defined later in Milestone 5) -->
+    <!-- Actions for Reporting -->
+    <record id="action_customs_operation_analysis" model="ir.actions.act_window">
+        <field name="name">Customs Files Analysis</field>
+        <field name="res_model">customs.operation</field>
+        <field name="view_mode">pivot,graph,calendar</field>
+        <field name="help" type="html">
+            <p>
+                Analyze import operations metrics, weights, and stage progress.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_customs_document_analysis" model="ir.actions.act_window">
+        <field name="name">Document Analysis</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="help" type="html">
+            <p>
+                Analyze supplier compliance document submission progress and versions.
+            </p>
+        </field>
+    </record>
+
+    <!-- Reporting Section -->
     <menuitem id="menu_customs_reporting" name="Reporting" parent="menu_customs_root" sequence="30"/>
+    <menuitem id="menu_customs_operation_analysis" name="Customs Analysis" parent="menu_customs_reporting" action="action_customs_operation_analysis" sequence="10"/>
+    <menuitem id="menu_customs_document_analysis" name="Document Analysis" parent="menu_customs_reporting" action="action_customs_document_analysis" sequence="20"/>
 
     <!-- Configuration Section -->
     <menuitem id="menu_customs_configuration" name="Configuration" parent="menu_customs_root" groups="group_customs_admin" sequence="90"/>

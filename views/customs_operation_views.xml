@@ -85,6 +85,10 @@
                 <filter string="Ready to Ship" name="ready_ship" domain="[('shipment_ready', '=', True)]"/>
                 <filter string="Blocked" name="blocked" domain="[('shipment_ready', '=', False)]"/>
                 <separator/>
+                <filter string="Open Operations" name="open_operations" domain="[('stage_id.is_closed', '=', False), ('stage_id.is_cancelled', '=', False)]"/>
+                <filter string="Arriving Soon" name="arriving_soon" domain="[('planned_arrival_date', '&gt;=', context_today()), ('planned_arrival_date', '&lt;=', (context_today() + datetime.timedelta(days=7)))]"/>
+                <filter string="Correction/Rejection Pending" name="correction_rejected" domain="[('document_requirement_ids.state', 'in', ('correction_required', 'rejected'))]"/>
+                <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
 
@@ -92,6 +96,7 @@
                     <filter string="Responsible" name="group_responsible" context="{'group_by': 'user_id'}"/>
                     <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
                     <filter string="Broker" name="group_broker" context="{'group_by': 'broker_id'}"/>
+                    <filter string="Transport Mode" name="group_transport_mode" context="{'group_by': 'transport_mode'}"/>
                     <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
                 </group>
             </search>
@@ -372,5 +377,46 @@
                 </sheet>
             </form>
         </field>
+    <!-- Customs Operation Calendar View -->
+    <record id="view_customs_operation_calendar" model="ir.ui.view">
+        <field name="name">customs.operation.calendar</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <calendar string="Customs Files" date_start="planned_arrival_date" color="stage_id" event_limit="5">
+                <field name="name"/>
+                <field name="user_id" avatar_field="avatar_128"/>
+                <field name="transport_mode"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Customs Operation Pivot View -->
+    <record id="view_customs_operation_pivot" model="ir.ui.view">
+        <field name="name">customs.operation.pivot</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <pivot string="Customs Files Analysis" sample="1">
+                <field name="stage_id" type="row"/>
+                <field name="broker_id" type="row"/>
+                <field name="transport_mode" type="col"/>
+                <field name="document_completion_percentage" type="measure"/>
+                <field name="document_missing_count" type="measure"/>
+                <field name="net_weight" type="measure"/>
+                <field name="gross_weight" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Customs Operation Graph View -->
+    <record id="view_customs_operation_graph" model="ir.ui.view">
+        <field name="name">customs.operation.graph</field>
+        <field name="model">customs.operation</field>
+        <field name="arch" type="xml">
+            <graph string="Customs Files" type="bar" sample="1">
+                <field name="stage_id"/>
+                <field name="document_completion_percentage" type="measure"/>
+            </graph>
+        </field>
     </record>
 </odoo>
+

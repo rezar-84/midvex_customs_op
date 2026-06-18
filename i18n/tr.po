@@ -398,3 +398,39 @@ msgstr "Net ağırlık brüt ağırlığı aşamaz."
 #: code:addons/midvex_customs_op/wizard/customs_operation_override.py:0
 msgid "<strong>Readiness check overridden</strong><br/><strong>User:</strong> %s<br/><strong>Reason:</strong> %s"
 msgstr "<strong>Hazırlık kontrolü geçersiz kılındı</strong><br/><strong>Kullanıcı:</strong> %s<br/><strong>Neden:</strong> %s"
+
+#. module: midvex_customs_op
+#: menuitem:menu_customs_reporting:0
+msgid "Reporting"
+msgstr "Raporlama"
+
+#. module: midvex_customs_op
+#: menuitem:menu_customs_operation_analysis:0
+msgid "Customs Analysis"
+msgstr "Gümrük Analizi"
+
+#. module: midvex_customs_op
+#: menuitem:menu_customs_document_analysis:0
+msgid "Document Analysis"
+msgstr "Belge Analizi"
+
+#. module: midvex_customs_op
+#: action:action_customs_operation_analysis:0
+msgid "Customs Files Analysis"
+msgstr "Gümrük Dosyası Analizi"
+
+#. module: midvex_customs_op
+#: filter:customs.operation,arriving_soon:0
+msgid "Arriving Soon"
+msgstr "Yakında Varacaklar"
+
+#. module: midvex_customs_op
+#: filter:customs.operation,correction_rejected:0
+msgid "Correction/Rejection Pending"
+msgstr "Düzeltme/Red Bekleyenler"
+
+#. module: midvex_customs_op
+#: filter:customs.operation,open_operations:0
+msgid "Open Operations"
+msgstr "Açık İşlemler"
+

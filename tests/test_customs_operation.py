@@ -236,3 +236,19 @@ class TestCustomsOperation(TransactionCase):
         operation.write({'stage_id': stage_closed.id})
         self.assertEqual(operation.stage_id, stage_closed)
 
+    def test_customs_operation_reporting_views(self):
+        """Smoke test verifying that reporting views and actions are correctly defined and loadable."""
+        action_op_analysis = self.env.ref('midvex_customs_op.action_customs_operation_analysis')
+        self.assertTrue(action_op_analysis)
+        self.assertEqual(action_op_analysis.res_model, 'customs.operation')
+        self.assertIn('pivot', action_op_analysis.view_mode)
+        self.assertIn('graph', action_op_analysis.view_mode)
+        self.assertIn('calendar', action_op_analysis.view_mode)
+
+        action_doc_analysis = self.env.ref('midvex_customs_op.action_customs_document_analysis')
+        self.assertTrue(action_doc_analysis)
+        self.assertEqual(action_doc_analysis.res_model, 'customs.document.requirement')
+        self.assertIn('pivot', action_doc_analysis.view_mode)
+        self.assertIn('graph', action_doc_analysis.view_mode)
+
+
