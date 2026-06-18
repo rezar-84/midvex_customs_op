@@ -44,7 +44,7 @@ class CustomsDocumentRequirement(models.Model):
         ('rejected', 'Rejected'),
         ('expired', 'Expired'),
         ('n_a', 'Not Applicable'),
-    ], string='Status', default='not_requested', required=True, tracking=True)
+    ], string='Status', default='not_requested', required=True, tracking=True, index=True)
     
     requirement_level = fields.Selection([
         ('mandatory', 'Mandatory'),

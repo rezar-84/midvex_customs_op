@@ -10,7 +10,7 @@ class CustomsOperation(models.Model):
     _order = 'id desc'
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default='New', tracking=True)
-    active = fields.Boolean(string='Active', default=True, tracking=True)
+    active = fields.Boolean(string='Active', default=True, tracking=True, index=True)
     company_id = fields.Many2one(
         'res.company', 
         string='Company', 
@@ -22,7 +22,8 @@ class CustomsOperation(models.Model):
         string='Stage', 
         tracking=True, 
         group_expand='_read_group_stage_ids',
-        copy=False
+        copy=False,
+        index=True
     )
     priority = fields.Selection([
         ('0', 'Normal'),
@@ -34,7 +35,8 @@ class CustomsOperation(models.Model):
         'res.users', 
         string='Responsible Employee', 
         default=lambda self: self.env.user, 
-        tracking=True
+        tracking=True,
+        index=True
     )
     color = fields.Integer(string='Color Index', default=0)
 
@@ -52,7 +54,8 @@ class CustomsOperation(models.Model):
         'res.partner', 
         string='Customs Broker',
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-        tracking=True
+        tracking=True,
+        index=True
     )
     forwarder_id = fields.Many2one(
         'res.partner', 

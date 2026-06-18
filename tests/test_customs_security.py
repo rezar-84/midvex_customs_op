@@ -51,3 +51,60 @@ class TestCustomsSecurity(TransactionCase):
             self.env['customs.stage'].with_user(self.user_customs_user).create({
                 'name': 'Unauthorized Stage'
             })
+
+    def test_multi_company_record_rules(self):
+        """Test that multi-company record rules prevent cross-company access."""
+        # 1. Create a Customs File in the default company (Company A)
+        operation_comp_a = self.env['customs.operation'].create({
+            'name': 'CUS/COMPA/001',
+            'company_id': self.env.company.id,
+        })
+
+        # 2. Create Company B and a user inside Company B
+        company_b = self.env['res.company'].create({'name': 'Company B'})
+        user_comp_b = self.env['res.users'].create({
+            'name': 'Company B User',
+            'login': 'company_b_user_test',
+            'email': 'compb@test.com',
+            'company_id': company_b.id,
+            'company_ids': [(6, 0, [company_b.id])],
+            'group_ids': [(6, 0, [self.group_user.id])]
+        })
+
+        # 3. Read check as Company B user should fail or return empty list
+        ops_as_user_b = self.env['customs.operation'].with_user(user_comp_b).search([('id', '=', operation_comp_a.id)])
+        self.assertFalse(ops_as_user_b, "User in Company B must not see records from Company A")
+
+        # 4. Write/Update check as Company B user must raise AccessError
+        with self.assertRaises(AccessError):
+            operation_comp_a.with_user(user_comp_b).write({'priority': '1'})
+
+    def test_role_action_limits(self):
+        """Test action limits for Customs User, Document Approver, and Manager."""
+        # Create a manager user
+        user_manager = self.env['res.users'].create({
+            'name': 'Test Customs Manager',
+            'login': 'customs_manager_test',
+            'email': 'manager@test.com',
+            'group_ids': [(6, 0, [self.group_manager.id])]
+        })
+
+        # Create a draft customs operation
+        operation = self.env['customs.operation'].create({
+            'name': 'CUS/TEST/001',
+        })
+
+        # 1. Customs User attempts to override readiness checks -> raises AccessError
+        with self.assertRaises(AccessError):
+            operation.with_user(self.user_customs_user).action_override_readiness()
+
+        # 2. Document Approver attempts to override readiness checks -> raises AccessError
+        with self.assertRaises(AccessError):
+            operation.with_user(self.user_customs_approver).action_override_readiness()
+
+        # 3. Customs Manager attempts to override readiness checks -> should NOT raise AccessError on permission checks
+        try:
+            res = operation.with_user(user_manager).action_override_readiness()
+            self.assertEqual(res.get('res_model'), 'customs.operation.override.wizard')
+        except AccessError:
+            self.fail("Customs Manager should be allowed to override readiness check.")

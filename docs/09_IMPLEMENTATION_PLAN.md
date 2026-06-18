@@ -147,13 +147,18 @@ Progress notes:
 
 ## Milestone 6 — Hardening
 
-Status: Not started
+Status: Complete
 
-- Multi-company tests
-- Access-rule tests
-- Performance review
-- Upgrade test
-- Error and warning review
+- Multi-company tests (Completed)
+- Access-rule tests (Completed)
+- Performance review (Completed with database indexes)
+- Upgrade test (Completed with Odoo 19 config standards)
+- Error and warning review (Completed)
+
+Progress notes:
+- Added search indexes (`index=True`) on core foreign keys and search filter columns: `active`, `stage_id`, `user_id`, and `broker_id` on `customs.operation`, and `state` on `customs.document.requirement`.
+- Extended `tests/test_customs_security.py` with multi-company tests ensuring users in different companies are blocked from cross-reading or writing operations.
+- Added linear group boundary tests in `tests/test_customs_security.py` asserting that basic users and approvers are blocked from override actions, while managers can execute them.
 
 ## Milestone 7 — Localization and documentation
 
