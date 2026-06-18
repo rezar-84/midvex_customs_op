@@ -75,10 +75,10 @@
         <field name="model">customs.operation</field>
         <field name="arch" type="xml">
             <search string="Search Customs Files">
-                <field name="name" string="Reference" filter_domain="[('name', 'ilike', self)]"/>
-                <field name="supplier_ids" string="Supplier" filter_domain="[('supplier_ids', 'ilike', self)]"/>
+                <field name="name" string="Reference"/>
+                <field name="supplier_ids" string="Supplier"/>
                 <field name="broker_id" string="Broker"/>
-                <field name="purchase_order_ids" string="Purchase Order" filter_domain="[('purchase_order_ids.name', 'ilike', self)]"/>
+                <field name="purchase_order_ids" string="Purchase Order"/>
                 
                 <filter string="My Operations" name="my_operations" domain="[('user_id', '=', uid)]"/>
                 <separator/>
