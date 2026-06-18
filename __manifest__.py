@@ -11,7 +11,7 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
     """,
     'category': 'Operations/Customs',
     'author': 'Midvex',
-    'website': 'https://www.varsaquaculture.com',
+    'website': 'https://midvex.com',
     'license': 'GPL-3',
     'depends': [
         'base',

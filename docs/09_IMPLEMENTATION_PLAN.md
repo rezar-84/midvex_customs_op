@@ -86,15 +86,24 @@ Progress notes:
 
 ## Milestone 3 — Document management
 
-Status: Not started
+Status: Complete; awaiting approval for Milestone 4
 
-- Document-type model
-- Requirement model
-- Attachments
-- Review workflow
-- Original-document fields
-- Views and filters
-- Tests
+- Document-type model (Completed)
+- Requirement model (Completed)
+- Attachments (Completed using ir.attachment)
+- Review workflow (Completed with rejection reason validation)
+- Original-document fields (Completed with courier and dispatch info)
+- Views and filters (Completed search, tree, and form view enhancements)
+- Tests (Completed in tests/test_customs_document_requirement.py)
+
+Progress notes:
+- Overhauled `customs.document.requirement` model with fields for responsible employee, vendor/partner, deadlines, and courier dispatch data.
+- Enforced rejection reason input validation on transitions to correction/rejection states.
+- Restrained `vendor_id` on document requirements to related partners on the Customs File.
+- Restricted the deletion of document requirements if attachments exist or if the file's stage is past `Waiting for Documents`.
+- Hooked `write` to auto-increment the requirement `version_number` when attachments are added.
+- Integrated a dynamic allowed-vendor filter for form view selections.
+- Developed a comprehensive unit test suite covering constraints, deletion rules, and versioning.
 
 ## Milestone 4 — Readiness and approval controls
 

@@ -198,12 +198,20 @@
 
                         <page string="Required Documents" name="documents">
                             <field name="document_requirement_ids" mode="list">
-                                <list decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
+                                <list decoration-info="state == 'under_review'" 
+                                      decoration-danger="state in ('rejected', 'expired') or (is_blocking and state in ('not_requested', 'requested'))" 
+                                      decoration-success="state in ('approved', 'accepted')">
                                     <field name="document_type_id"/>
                                     <field name="name"/>
+                                    <field name="vendor_id"/>
+                                    <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                                    <field name="deadline"/>
                                     <field name="is_blocking"/>
+                                    <field name="original_required"/>
+                                    <field name="original_received"/>
+                                    <field name="version_number"/>
                                     <field name="state" widget="badge" 
-                                           decoration-success="state in ('approved', 'accepted')" 
+                                           decoration-success="state in ('approved', 'accepted', 'original_received')" 
                                            decoration-warning="state in ('requested', 'vendor_preparing', 'draft_received', 'correction_required')"
                                            decoration-danger="state in ('rejected', 'expired')"
                                            decoration-muted="state == 'n_a'"/>

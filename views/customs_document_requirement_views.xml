@@ -1,21 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Document Requirement Search View -->
+    <record id="view_customs_document_requirement_search" model="ir.ui.view">
+        <field name="name">customs.document.requirement.search</field>
+        <field name="model">customs.document.requirement</field>
+        <field name="arch" type="xml">
+            <search string="Search Document Requirements">
+                <field name="operation_id"/>
+                <field name="document_type_id"/>
+                <field name="vendor_id"/>
+                <field name="responsible_user_id"/>
+                <filter string="My Requirements" name="my_requirements" domain="[('responsible_user_id', '=', uid)]"/>
+                <filter string="Blocking" name="blocking" domain="[('is_blocking', '=', True)]"/>
+                <separator/>
+                <filter string="Missing" name="missing" domain="[('state', 'in', ('not_requested', 'requested', 'vendor_preparing'))]"/>
+                <filter string="Under Review" name="under_review" domain="[('state', '=', 'under_review')]"/>
+                <filter string="Correction Required" name="correction_required" domain="[('state', '=', 'correction_required')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Approved" name="approved" domain="[('state', 'in', ('approved', 'accepted'))]"/>
+                <separator/>
+                <filter string="Original Required" name="original_required" domain="[('original_required', '=', True)]"/>
+                <filter string="Original Missing" name="original_missing" domain="[('original_required', '=', True), ('original_received', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customs File" name="group_by_operation" context="{'group_by': 'operation_id'}"/>
+                    <filter string="Document Type" name="group_by_doc_type" context="{'group_by': 'document_type_id'}"/>
+                    <filter string="Vendor" name="group_by_vendor" context="{'group_by': 'vendor_id'}"/>
+                    <filter string="Responsible Party" name="group_by_resp_party" context="{'group_by': 'responsible_party'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Document Requirement List View -->
     <record id="view_customs_document_requirement_tree" model="ir.ui.view">
         <field name="name">customs.document.requirement.list</field>
         <field name="model">customs.document.requirement</field>
         <field name="arch" type="xml">
-            <list string="Document Requirements" decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
-                <field name="operation_id"/>
+            <list string="Document Requirements" 
+                  decoration-info="state == 'under_review'" 
+                  decoration-danger="state in ('rejected', 'expired') or (is_blocking and state in ('not_requested', 'requested'))" 
+                  decoration-success="state in ('approved', 'accepted')"
+                  decoration-muted="state == 'n_a'">
                 <field name="document_type_id"/>
-                <field name="name"/>
+                <field name="operation_id"/>
+                <field name="vendor_id"/>
+                <field name="requirement_level"/>
+                <field name="responsible_party"/>
+                <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                <field name="deadline"/>
                 <field name="is_blocking"/>
+                <field name="original_required"/>
+                <field name="original_received"/>
+                <field name="reviewed_by" optional="hide"/>
+                <field name="version_number"/>
                 <field name="state" widget="badge" 
-                       decoration-success="state in ('approved', 'accepted')" 
+                       decoration-success="state in ('approved', 'accepted', 'original_received')" 
                        decoration-warning="state in ('requested', 'vendor_preparing', 'draft_received', 'correction_required')"
                        decoration-danger="state in ('rejected', 'expired')"
                        decoration-muted="state == 'n_a'"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
             </list>
         </field>
     </record>
@@ -30,17 +74,75 @@
                     <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <label for="document_type_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="document_type_id" placeholder="Select Document Type..."/>
+                        </h1>
+                        <label for="name" class="oe_edit_only"/>
+                        <h3>
+                            <field name="name" placeholder="Description e.g. Invoice copy..."/>
+                        </h3>
+                    </div>
                     <group>
-                        <group>
+                        <group name="operation_info" string="Customs File Info">
                             <field name="operation_id"/>
-                            <field name="document_type_id"/>
-                            <field name="name"/>
+                            <field name="operation_line_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="allowed_vendor_ids" invisible="1"/>
+                            <field name="vendor_id" domain="[('id', 'in', allowed_vendor_ids)]" options="{'no_create': True}"/>
                         </group>
-                        <group>
+                        <group name="responsibility" string="Assignment &amp; Level">
+                            <field name="requirement_level"/>
+                            <field name="responsible_party"/>
+                            <field name="responsible_user_id" widget="many2one_avatar_user"/>
                             <field name="is_blocking"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="version_number" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page id="verification_review" string="Verification &amp; Review">
+                            <group>
+                                <group string="Dates">
+                                    <field name="requested_date"/>
+                                    <field name="deadline"/>
+                                    <field name="received_date"/>
+                                    <field name="expiry_date"/>
+                                </group>
+                                <group string="Audit Log">
+                                    <field name="reviewed_by" readonly="1"/>
+                                    <field name="reviewed_date" readonly="1"/>
+                                </group>
+                            </group>
+                            <group string="Rejection &amp; Notes">
+                                <field name="rejection_reason" 
+                                       placeholder="Provide detailed description of why the document is rejected or correction is required..."
+                                       invisible="state not in ('rejected', 'correction_required')"
+                                       required="state in ('rejected', 'correction_required')"/>
+                                <field name="review_notes" placeholder="Internal review notes..."/>
+                            </group>
+                        </page>
+                        <page id="original_tracking" string="Original Document Tracking">
+                            <group>
+                                <group string="Statuses">
+                                    <field name="original_required"/>
+                                    <field name="original_issued" invisible="not original_required"/>
+                                    <field name="original_dispatched" invisible="not original_required"/>
+                                    <field name="original_received" invisible="not original_required"/>
+                                </group>
+                                <group string="Courier &amp; Shipment Info" invisible="not original_required">
+                                    <field name="dispatch_date"/>
+                                    <field name="courier_name"/>
+                                    <field name="tracking_number"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page id="attachments" string="Files &amp; Attachments">
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary" string="Upload Document Versions"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
@@ -48,6 +150,22 @@
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
             </form>
+        </field>
+    </record>
+
+    <!-- Document Requirement Actions -->
+    <record id="action_customs_document_requirement" model="ir.actions.act_window">
+        <field name="name">Document Requirements</field>
+        <field name="res_model">customs.document.requirement</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_customs_document_requirement_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Track compliance documents here.
+            </p>
+            <p>
+                Manage, review, and approve document copies and track physical originals.
+            </p>
         </field>
     </record>
 </odoo>
