@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="doc_type_inv" model="customs.document.type">
+            <field name="code">INV</field>
+            <field name="name">Commercial Invoice</field>
+            <field name="name_tr">Ticari Fatura</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="doc_type_pkl" model="customs.document.type">
+            <field name="code">PKL</field>
+            <field name="name">Packing List</field>
+            <field name="name_tr">Çeki Listesi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="doc_type_coa" model="customs.document.type">
+            <field name="code">COA</field>
+            <field name="name">Certificate of Analysis</field>
+            <field name="name_tr">Analiz Sertifikası (COA)</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="doc_type_hc" model="customs.document.type">
+            <field name="code">HC</field>
+            <field name="name">Health Certificate</field>
+            <field name="name_tr">Sağlık Sertifikası</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="True"/>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="doc_type_coo" model="customs.document.type">
+            <field name="code">COO</field>
+            <field name="name">Certificate of Origin</field>
+            <field name="name_tr">Menşe Şahadetnamesi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="True"/>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="doc_type_msds" model="customs.document.type">
+            <field name="code">MSDS</field>
+            <field name="name">Safety Data Sheet</field>
+            <field name="name_tr">Güvenlik Bilgi Formu (MSDS)</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="doc_type_md" model="customs.document.type">
+            <field name="code">MD</field>
+            <field name="name">Manufacturer Declaration</field>
+            <field name="name_tr">Üretici Beyanı</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">70</field>
+        </record>
+
+        <record id="doc_type_fa" model="customs.document.type">
+            <field name="code">FA</field>
+            <field name="name">Facility Approval Certificate</field>
+            <field name="name_tr">Tesis Onay Belgesi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="doc_type_bl" model="customs.document.type">
+            <field name="code">BL</field>
+            <field name="name">Bill of Lading</field>
+            <field name="name_tr">Konşimento (B/L)</field>
+            <field name="default_responsible_party">carrier</field>
+            <field name="default_requirement_level">mandatory</field>
+            <field name="original_normally_required" eval="True"/>
+            <field name="sequence">90</field>
+        </record>
+
+        <record id="doc_type_awb" model="customs.document.type">
+            <field name="code">AWB</field>
+            <field name="name">Air Waybill</field>
+            <field name="name_tr">Hava Yolu Taşıma Senedi (AWB)</field>
+            <field name="default_responsible_party">carrier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">100</field>
+        </record>
+
+        <record id="doc_type_cmr" model="customs.document.type">
+            <field name="code">CMR</field>
+            <field name="name">CMR Consignment Note</field>
+            <field name="name_tr">Karayolu Taşıma Belgesi (CMR)</field>
+            <field name="default_responsible_party">carrier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">110</field>
+        </record>
+
+        <record id="doc_type_ins" model="customs.document.type">
+            <field name="code">INS</field>
+            <field name="name">Insurance Certificate</field>
+            <field name="name_tr">Sigorta Poliçesi</field>
+            <field name="default_responsible_party">internal</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">120</field>
+        </record>
+
+        <record id="doc_type_ip" model="customs.document.type">
+            <field name="code">IP</field>
+            <field name="name">Import Permit</field>
+            <field name="name_tr">İthalat İzni</field>
+            <field name="default_responsible_party">internal</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">130</field>
+        </record>
+
+        <record id="doc_type_lbl" model="customs.document.type">
+            <field name="code">LBL</field>
+            <field name="name">Product Label</field>
+            <field name="name_tr">Ürün Etiketi</field>
+            <field name="default_responsible_party">supplier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">140</field>
+        </record>
+
+        <record id="doc_type_cd" model="customs.document.type">
+            <field name="code">CD</field>
+            <field name="name">Customs Declaration</field>
+            <field name="name_tr">Gümrük Beyannamesi</field>
+            <field name="default_responsible_party">broker</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">150</field>
+        </record>
+
+        <record id="doc_type_tax" model="customs.document.type">
+            <field name="code">TAX</field>
+            <field name="name">Tax and Duty Calculation</field>
+            <field name="name_tr">Vergi ve Harç Hesaplama Cetveli</field>
+            <field name="default_responsible_party">broker</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">160</field>
+        </record>
+
+        <record id="doc_type_lr" model="customs.document.type">
+            <field name="code">LR</field>
+            <field name="name">Laboratory Result</field>
+            <field name="name_tr">Laboratuvar Analiz Sonucu</field>
+            <field name="default_responsible_party">internal</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">170</field>
+        </record>
+
+        <record id="doc_type_cr" model="customs.document.type">
+            <field name="code">CR</field>
+            <field name="name">Customs Release Document</field>
+            <field name="name_tr">Gümrük Serbest Bırakma Belgesi</field>
+            <field name="default_responsible_party">broker</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">180</field>
+        </record>
+
+        <record id="doc_type_pod" model="customs.document.type">
+            <field name="code">POD</field>
+            <field name="name">Proof of Delivery</field>
+            <field name="name_tr">Teslimat Kanıtı (POD)</field>
+            <field name="default_responsible_party">carrier</field>
+            <field name="default_requirement_level">optional</field>
+            <field name="original_normally_required" eval="False"/>
+            <field name="sequence">190</field>
+        </record>
+    </data>
+</odoo>

@@ -6,15 +6,16 @@ from odoo import fields
 
 class TestCustomsDocumentRequirement(TransactionCase):
 
-    def setUp(self):
-        super(TestCustomsDocumentRequirement, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestCustomsDocumentRequirement, cls).setUpClass()
 
-        self.stage_draft = self.env.ref('midvex_customs_op.stage_draft')
-        self.stage_waiting_docs = self.env.ref('midvex_customs_op.stage_waiting_docs')
-        self.stage_doc_review = self.env.ref('midvex_customs_op.stage_doc_review')
+        cls.stage_draft = cls.env.ref('midvex_customs_op.stage_draft')
+        cls.stage_waiting_docs = cls.env.ref('midvex_customs_op.stage_waiting_docs')
+        cls.stage_doc_review = cls.env.ref('midvex_customs_op.stage_doc_review')
 
         # Create document type
-        self.doc_type_invoice = self.env['customs.document.type'].create({
+        cls.doc_type_invoice = cls.env['customs.document.type'].create({
             'name': 'Invoice',
             'code': 'INV',
             'default_requirement_level': 'mandatory',
@@ -22,15 +23,15 @@ class TestCustomsDocumentRequirement(TransactionCase):
         })
 
         # Partners
-        self.partner_supplier = self.env['res.partner'].create({'name': 'Vendor Supplier'})
-        self.partner_broker = self.env['res.partner'].create({'name': 'Customs Broker Partner'})
-        self.partner_unrelated = self.env['res.partner'].create({'name': 'Unrelated Partner'})
+        cls.partner_supplier = cls.env['res.partner'].create({'name': 'Vendor Supplier'})
+        cls.partner_broker = cls.env['res.partner'].create({'name': 'Customs Broker Partner'})
+        cls.partner_unrelated = cls.env['res.partner'].create({'name': 'Unrelated Partner'})
 
         # Customs File (operation)
-        self.operation = self.env['customs.operation'].create({
-            'stage_id': self.stage_draft.id,
-            'supplier_ids': [(4, self.partner_supplier.id)],
-            'broker_id': self.partner_broker.id,
+        cls.operation = cls.env['customs.operation'].create({
+            'stage_id': cls.stage_draft.id,
+            'supplier_ids': [(4, cls.partner_supplier.id)],
+            'broker_id': cls.partner_broker.id,
         })
 
     def test_rejection_reason_constraint(self):

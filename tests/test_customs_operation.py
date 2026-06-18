@@ -5,18 +5,19 @@ from odoo.exceptions import ValidationError, AccessError
 
 class TestCustomsOperation(TransactionCase):
 
-    def setUp(self):
-        super(TestCustomsOperation, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestCustomsOperation, cls).setUpClass()
 
         # Retrieve required base models for testing
-        self.stage_draft = self.env.ref('midvex_customs_op.stage_draft')
-        self.doc_type_invoice = self.env['customs.document.type'].create({
+        cls.stage_draft = cls.env.ref('midvex_customs_op.stage_draft')
+        cls.doc_type_invoice = cls.env['customs.document.type'].create({
             'name': 'Invoice',
             'code': 'INV',
         })
 
         # Test product creation
-        self.product_a = self.env['product.product'].create({
+        cls.product_a = cls.env['product.product'].create({
             'name': 'Aquaculture Feed A',
             'type': 'consu',
         })
@@ -310,5 +311,64 @@ class TestCustomsOperation(TransactionCase):
         # 3. Delete fails in Document Review stage
         with self.assertRaises(ValidationError):
             line3.unlink()
+
+    def test_customs_operation_name_unique_constraint(self):
+        """Test SQL constraint: Customs File reference must be unique per company."""
+        from psycopg2 import IntegrityError
+        from odoo.tools import mute_logger
+
+        self.env['customs.operation'].create({
+            'name': 'CUS/UNIQUE/TEST',
+            'stage_id': self.stage_draft.id,
+        })
+
+        # Creating another record with the same name and company should raise IntegrityError
+        with self.assertRaises(IntegrityError), mute_logger('odoo.sql_db'):
+            self.env['customs.operation'].create({
+                'name': 'CUS/UNIQUE/TEST',
+                'stage_id': self.stage_draft.id,
+            })
+
+    def test_customs_operation_line_quantity_constraints(self):
+        """Test constraints verifying positive range values for quantity and package_count."""
+        op = self.env['customs.operation'].create({
+            'stage_id': self.stage_draft.id,
+        })
+
+        # 1. Negative quantity fails
+        with self.assertRaises(ValidationError):
+            self.env['customs.operation.line'].create({
+                'operation_id': op.id,
+                'product_id': self.product_a.id,
+                'quantity': -5.0,
+                'package_count': 5,
+            })
+
+        # 2. Zero quantity fails
+        with self.assertRaises(ValidationError):
+            self.env['customs.operation.line'].create({
+                'operation_id': op.id,
+                'product_id': self.product_a.id,
+                'quantity': 0.0,
+                'package_count': 5,
+            })
+
+        # 3. Negative package count fails
+        with self.assertRaises(ValidationError):
+            self.env['customs.operation.line'].create({
+                'operation_id': op.id,
+                'product_id': self.product_a.id,
+                'quantity': 10.0,
+                'package_count': -1,
+            })
+
+        # 4. Zero package count fails
+        with self.assertRaises(ValidationError):
+            self.env['customs.operation.line'].create({
+                'operation_id': op.id,
+                'product_id': self.product_a.id,
+                'quantity': 10.0,
+                'package_count': 0,
+            })
 
 

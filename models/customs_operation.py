@@ -10,6 +10,10 @@ class CustomsOperation(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
+    _sql_constraints = [
+        ('name_unique', 'unique(name, company_id)', 'The Customs File reference must be unique per company!')
+    ]
+
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default='New', tracking=True)
     active = fields.Boolean(string='Active', default=True, tracking=True, index=True)
     company_id = fields.Many2one(
@@ -190,16 +194,8 @@ class CustomsOperation(models.Model):
 
     @api.depends('stage_id')
     def _compute_is_draft(self):
-        draft_stage = self.env.ref('midvex_customs_op.stage_draft', raise_if_not_found=False)
         for op in self:
-            if draft_stage and op.stage_id == draft_stage:
-                op.is_draft = True
-            elif op.stage_id and op.stage_id.sequence == 1:
-                op.is_draft = True
-            elif not op.stage_id:
-                op.is_draft = True
-            else:
-                op.is_draft = False
+            op.is_draft = not op.stage_id or op.stage_id.code == 'draft'
 
     @api.depends('document_requirement_ids', 'document_requirement_ids.state')
     def _compute_document_stats(self):
@@ -396,9 +392,8 @@ class CustomsOperation(models.Model):
         return super(CustomsOperation, self).write(vals)
  
     def unlink(self):
-        draft_stage = self.env.ref('midvex_customs_op.stage_draft', raise_if_not_found=False)
         for op in self:
-            is_draft = (op.stage_id == draft_stage) if (draft_stage and op.stage_id) else (not op.stage_id or op.stage_id.sequence == 1)
+            is_draft = not op.stage_id or op.stage_id.code == 'draft'
             if not is_draft:
                 raise ValidationError(
                     _("You can only delete a Customs File when it is in the 'Draft' stage. Operation %s is currently in '%s'.") % 

@@ -23,6 +23,7 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'security/ir.model.access.csv',
         'data/customs_sequence.xml',
         'data/customs_stage_data.xml',
+        'data/customs_document_type_data.xml',
         'wizard/customs_operation_override_views.xml',
         'views/customs_operation_views.xml',
         'views/customs_stage_views.xml',

@@ -5,28 +5,29 @@ from odoo.exceptions import AccessError
 
 class TestCustomsSecurity(TransactionCase):
 
-    def setUp(self):
-        super(TestCustomsSecurity, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestCustomsSecurity, cls).setUpClass()
         
         # Find the groups
-        self.group_user = self.env.ref('midvex_customs_op.group_customs_user')
-        self.group_approver = self.env.ref('midvex_customs_op.group_customs_approver')
-        self.group_manager = self.env.ref('midvex_customs_op.group_customs_manager')
-        self.group_admin = self.env.ref('midvex_customs_op.group_customs_admin')
+        cls.group_user = cls.env.ref('midvex_customs_op.group_customs_user')
+        cls.group_approver = cls.env.ref('midvex_customs_op.group_customs_approver')
+        cls.group_manager = cls.env.ref('midvex_customs_op.group_customs_manager')
+        cls.group_admin = cls.env.ref('midvex_customs_op.group_customs_admin')
 
         # Create test users for different roles
-        self.user_customs_user = self.env['res.users'].create({
+        cls.user_customs_user = cls.env['res.users'].create({
             'name': 'Test Customs User',
             'login': 'customs_user_test',
             'email': 'user@test.com',
-            'group_ids': [(6, 0, [self.group_user.id])]
+            'group_ids': [(6, 0, [cls.group_user.id])]
         })
 
-        self.user_customs_approver = self.env['res.users'].create({
+        cls.user_customs_approver = cls.env['res.users'].create({
             'name': 'Test Customs Approver',
             'login': 'customs_approver_test',
             'email': 'approver@test.com',
-            'group_ids': [(6, 0, [self.group_approver.id])]
+            'group_ids': [(6, 0, [cls.group_approver.id])]
         })
 
     def test_group_inheritance(self):

@@ -14,7 +14,7 @@ Your task is to design, implement, test, document, and review a production-ready
 - Database: PostgreSQL
 - Company: VARS Aquaculture
 - Developer: Midvex
-- License: LGPL-3 unless a dependency requires otherwise
+- License: GPL-3
 - Source language: English
 - Additional translation: Turkish
 

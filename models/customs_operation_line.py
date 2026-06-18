@@ -86,6 +86,14 @@ class CustomsOperationLine(models.Model):
             if line.net_weight > line.gross_weight:
                 raise ValidationError(_("Net weight cannot exceed gross weight."))
 
+    @api.constrains('quantity', 'package_count')
+    def _check_quantities(self):
+        for line in self:
+            if line.quantity <= 0:
+                raise ValidationError(_("Quantity must be a positive value."))
+            if line.package_count <= 0:
+                raise ValidationError(_("Package count must be a positive value."))
+
     def unlink(self):
         for line in self:
             op = line.operation_id

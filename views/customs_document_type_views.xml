@@ -55,4 +55,28 @@
             </form>
         </field>
     </record>
+
+    <!-- Document Type Search View -->
+    <record id="view_customs_document_type_search" model="ir.ui.view">
+        <field name="name">customs.document.type.search</field>
+        <field name="model">customs.document.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Document Types">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="name_tr"/>
+                <filter string="Mandatory by Default" name="mandatory" domain="[('default_requirement_level', '=', 'mandatory')]"/>
+                <filter string="Optional by Default" name="optional" domain="[('default_requirement_level', '=', 'optional')]"/>
+                <filter string="Original Required" name="original_required" domain="[('original_normally_required', '=', True)]"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Responsible Party" name="group_responsible" context="{'group_by': 'default_responsible_party'}"/>
+                    <filter string="Requirement Level" name="group_level" context="{'group_by': 'default_requirement_level'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
 </odoo>
