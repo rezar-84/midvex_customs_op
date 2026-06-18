@@ -130,12 +130,16 @@ Status: Not started
 
 ## Milestone 7 — Localization and documentation
 
-Status: Not started
+Status: In Progress
 
-- Turkish translation
-- User guide
-- Administrator guide
-- Installation guide
-- Upgrade guide
-- Final UX review
-- Final acceptance review
+- Turkish translation (Not started)
+- User guide (Complete)
+- Administrator guide (Complete)
+- Installation guide (Complete - in README.md)
+- Upgrade guide (Complete - in README.md)
+- Final UX review (Not started)
+- Final acceptance review (Not started)
+
+Progress notes:
+- Created a comprehensive User & Administration Manual covering Setup, Master Data Configuration, Operation Management, Document Tracking, Shipment Entry, and closing validation.
+- Incorporated the manual into the repository `README.md` and created an aesthetic HTML dashboard description in `static/description/index.html`.

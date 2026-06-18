@@ -15,6 +15,7 @@ All notable changes to the Customs Operations module should be documented here.
 - Master-agent repository review and Milestone 1 acceptance criteria
 - Milestone 1 scaffold: technical Odoo 19 module skeleton, models (`customs.stage`, `customs.document.type`, `customs.operation`, `customs.document.requirement`), custom security category and user groups (`User`, `Approver`, `Manager`, `Admin`), global multi-company record rules, XML sequences (`CUS/YYYY/NNNN`), default stages, root/child menus, and security unit tests in `tests/test_customs_security.py`.
 - Milestone 2 Customs Files and product lines: full python models for `customs.operation` (with computed document statistics, relationships to POs/pickings, transport modes, incoterms, and dates) and `customs.operation.line` (with product info, batch details, net/gross weights, and date/weight validations). Built tree/form/kanban/search views, smart buttons linking related records, and automated test cases checking sequence generation, line validation constraints, and computed stats.
+- Added comprehensive User and Administration Manual to `README.md` and created an aesthetic Odoo app description in `static/description/index.html` detailing security setup, master data configuration, Customs File management, compliance document tracking, shipment entry, and file closing.
 
 ### Changed
 
