@@ -32,10 +32,14 @@
                 <field name="supplier_ids"/>
                 <field name="planned_arrival_date"/>
                 <field name="document_completion_percentage"/>
+                <field name="document_missing_count"/>
                 <field name="shipment_ready"/>
                 <field name="priority"/>
                 <field name="stage_id"/>
                 <field name="color"/>
+                <field name="production_status"/>
+                <field name="customs_status"/>
+                <field name="warehouse_received"/>
                 <templates>
                     <t t-name="card">
                         <div t-attf-class="oe_kanban_color_{{record.color.raw_value}} oe_kanban_card oe_kanban_global_click d-flex flex-column h-100 justify-content-between">
@@ -46,8 +50,13 @@
                                     </h4>
                                     <field name="priority" widget="priority"/>
                                 </div>
-                                <div class="text-muted text-truncate mb-2">
+                                <div class="text-muted text-truncate mb-1">
                                     <field name="supplier_ids" widget="many2many_tags"/>
+                                </div>
+                                <div class="d-flex flex-wrap gap-1 mb-2">
+                                    <span t-if="record.production_status.raw_value and record.production_status.raw_value != 'not_started'" class="badge badge-info"><field name="production_status"/></span>
+                                    <span t-if="record.customs_status.raw_value" class="badge badge-secondary"><field name="customs_status"/></span>
+                                    <span t-if="record.warehouse_received.raw_value" class="badge badge-success">Delivered</span>
                                 </div>
                                 <div t-if="record.planned_arrival_date.raw_value" class="d-flex align-items-center text-muted mb-2">
                                     <i class="fa fa-calendar-o mr-1"/>
@@ -59,6 +68,9 @@
                                     <span t-if="record.shipment_ready.raw_value" class="badge badge-success mr-2">Ready</span>
                                     <span t-else="" class="badge badge-warning mr-2">Blocked</span>
                                     <span class="text-muted"><t t-out="Math.round(record.document_completion_percentage.raw_value or 0)"/>%</span>
+                                    <span t-if="record.document_missing_count.raw_value > 0" class="text-danger ml-2 fw-bold" title="Missing Documents">
+                                        <i class="fa fa-exclamation-triangle"/> <t t-out="record.document_missing_count.raw_value"/>
+                                    </span>
                                 </div>
                                 <field name="user_id" widget="many2one_avatar_user"/>
                             </div>
@@ -82,11 +94,15 @@
                 
                 <filter string="My Operations" name="my_operations" domain="[('user_id', '=', uid)]"/>
                 <separator/>
+                <filter string="In Production" name="in_production" domain="[('production_status', '=', 'in_production')]"/>
+                <filter string="In Transit" name="in_transit" domain="[('stage_id.code', '=', 'shipped')]"/>
+                <filter string="In Customs" name="in_customs" domain="[('stage_id.code', '=', 'customs_clearance')]"/>
+                <filter string="Delivered to Warehouse" name="delivered_warehouse" domain="[('warehouse_received', '=', True)]"/>
+                <filter string="Waiting Documents" name="waiting_documents" domain="[('document_missing_count', '>', 0)]"/>
+                <separator/>
                 <filter string="Ready to Ship" name="ready_ship" domain="[('shipment_ready', '=', True)]"/>
                 <filter string="Blocked" name="blocked" domain="[('shipment_ready', '=', False)]"/>
-                <separator/>
-                <filter string="Open Operations" name="open_operations" domain="[('stage_id.is_closed', '=', False), ('stage_id.is_cancelled', '=', False)]"/>
-                <filter string="Arriving Soon" name="arriving_soon" domain="[('planned_arrival_date', '&gt;=', context_today()), ('planned_arrival_date', '&lt;=', (context_today() + datetime.timedelta(days=7)))]"/>
+                <filter string="Arriving Soon" name="arriving_soon" domain="[('planned_arrival_date', '>=', context_today()), ('planned_arrival_date', '<=', (context_today() + datetime.timedelta(days=7)))]"/>
                 <filter string="Correction/Rejection Pending" name="correction_rejected" domain="[('document_requirement_ids.state', 'in', ('correction_required', 'rejected'))]"/>
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
@@ -108,7 +124,7 @@
         <field name="name">customs.operation.form</field>
         <field name="model">customs.operation</field>
         <field name="arch" type="xml">
-            <form string="Customs File">
+            <form string="Import &amp; Customs Operation">
                 <header>
                     <button name="action_override_readiness" 
                             string="Override Readiness" 
@@ -179,6 +195,20 @@
                     <notebook>
                         <page string="Overview" name="overview">
                             <group>
+                                <group string="Where is the order now?">
+                                    <field name="production_status" readonly="1"/>
+                                    <field name="customs_status" readonly="1"/>
+                                    <field name="warehouse_received" readonly="1"/>
+                                    <field name="accounting_status" readonly="1"/>
+                                </group>
+                                <group string="Key Metrics">
+                                    <field name="planned_arrival_date" string="ETA" readonly="1"/>
+                                    <field name="document_missing_count" string="Missing Docs Count" readonly="1"/>
+                                    <field name="damaged_product" readonly="1"/>
+                                    <field name="missing_packages" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
                                 <group string="Parties Involved">
                                     <field name="supplier_ids" widget="many2many_tags" placeholder="Select Suppliers..."/>
                                     <field name="broker_id" placeholder="Select Customs Broker..."/>
@@ -188,6 +218,61 @@
                                 <group string="Integrations">
                                     <field name="purchase_order_ids" widget="many2many_tags" placeholder="Link Purchase Orders..."/>
                                     <field name="picking_ids" widget="many2many_tags" placeholder="Link Incoming Shipments..."/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Purchase &amp; Supplier" name="purchase_supplier">
+                            <group>
+                                <group string="Commercial Details">
+                                    <field name="supplier_ref"/>
+                                    <field name="manufacturer_id"/>
+                                    <field name="payment_term_id"/>
+                                </group>
+                                <group string="Financial Summaries">
+                                    <field name="currency_id"/>
+                                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Production" name="production">
+                            <group>
+                                <group string="Status">
+                                    <field name="production_status"/>
+                                </group>
+                                <group string="Production Dates">
+                                    <field name="production_ready_date"/>
+                                    <field name="goods_prepared_date"/>
+                                    <field name="loading_date"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Logistics" name="logistics">
+                            <group>
+                                <group string="Shipment Transport">
+                                    <field name="transport_mode"/>
+                                    <field name="container_number"/>
+                                    <field name="seal_number"/>
+                                    <field name="bl_number"/>
+                                    <field name="vessel_name"/>
+                                </group>
+                                <group string="Geographics &amp; Links">
+                                    <field name="origin_country_id"/>
+                                    <field name="departure_country_id"/>
+                                    <field name="destination_country_id"/>
+                                    <field name="tracking_link" widget="url" placeholder="https://example.com/track/..."/>
+                                </group>
+                            </group>
+                            <group string="Shipment Dates">
+                                <group>
+                                    <field name="planned_departure_date" string="Planned Departure (ETD)"/>
+                                    <field name="actual_departure_date" string="Actual Departure"/>
+                                </group>
+                                <group>
+                                    <field name="planned_arrival_date" string="Planned Arrival (ETA)"/>
+                                    <field name="actual_arrival_date" string="Actual Arrival (ATA)"/>
                                 </group>
                             </group>
                         </page>
@@ -239,41 +324,14 @@
                             </field>
                         </page>
 
-                        <page string="Shipment Details" name="shipment">
-                            <group>
-                                <group string="Logistics">
-                                    <field name="operation_type"/>
-                                    <field name="transport_mode"/>
-                                    <field name="incoterm_id"/>
-                                    <field name="container_number"/>
-                                    <field name="booking_number"/>
-                                    <field name="transport_document_number"/>
-                                </group>
-                                <group string="Geography &amp; Offices">
-                                    <field name="origin_country_id"/>
-                                    <field name="departure_country_id"/>
-                                    <field name="destination_country_id"/>
-                                    <field name="customs_office"/>
-                                </group>
-                            </group>
-                            <group string="Shipment Dates">
-                                <group>
-                                    <field name="planned_departure_date"/>
-                                    <field name="actual_departure_date"/>
-                                </group>
-                                <group>
-                                    <field name="planned_arrival_date"/>
-                                    <field name="actual_arrival_date"/>
-                                </group>
-                            </group>
-                        </page>
-
                         <page string="Customs &amp; Laboratory" name="customs_lab">
                             <group>
                                 <group string="Customs Entry">
+                                    <field name="customs_status"/>
                                     <field name="customs_declaration_number"/>
                                     <field name="customs_declaration_date"/>
                                     <field name="release_date"/>
+                                    <field name="customs_office"/>
                                 </group>
                                 <group string="Inspections">
                                     <field name="inspection_required"/>
@@ -291,6 +349,54 @@
                                 </group>
                             </group>
                         </page>
+
+                        <page string="Warehouse" name="warehouse">
+                            <group>
+                                <group string="Receiving Status">
+                                    <field name="warehouse_received"/>
+                                    <field name="warehouse_received_date"/>
+                                    <field name="warehouse_delivery_date" readonly="1"/>
+                                </group>
+                                <group string="Discrepancy checks">
+                                    <field name="missing_packages"/>
+                                    <field name="damaged_product"/>
+                                </group>
+                            </group>
+                            <group string="Discrepancy Details" invisible="not damaged_product and not missing_packages">
+                                <field name="damage_description" placeholder="Provide description of damage or missing boxes/items..."/>
+                            </group>
+                            <group>
+                                <group string="Attachments &amp; Photos">
+                                    <field name="warehouse_photo_ids" widget="many2many_binary" string="Attach Photos" class="oe_inline"/>
+                                    <field name="delivery_note_ids" widget="many2many_binary" string="Attach Proofs of Delivery (POD)" class="oe_inline"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Accounting &amp; Costs" name="accounting_costs">
+                            <group>
+                                <group string="Closing Control">
+                                    <field name="accounting_status"/>
+                                </group>
+                                <group string="Summaries">
+                                    <field name="cost_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                            <group string="Cost Breakdown">
+                                <group>
+                                    <field name="cost_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_customs_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_broker_expenses" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_stamp_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <group>
+                                    <field name="cost_storage" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_exchange_diff" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                        </page>
+
                         <page string="Readiness Override" name="override" invisible="not is_overridden">
                             <group>
                                 <group>

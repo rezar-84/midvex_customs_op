@@ -2,12 +2,12 @@
 <odoo>
     <!-- Actions for Operations -->
     <record id="action_customs_operation_all" model="ir.actions.act_window">
-        <field name="name">All Customs Files</field>
+        <field name="name">All Import &amp; Customs Operations</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,calendar,pivot,graph,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Create your first Customs File!
+                Create your first Import &amp; Customs Operation!
             </p>
             <p>
                 Manage import shipments, track required documents, and follow customs clearance progress.
@@ -16,7 +16,7 @@
     </record>
 
     <record id="action_customs_operation_my" model="ir.actions.act_window">
-        <field name="name">My Customs Files</field>
+        <field name="name">My Operations</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">kanban,list,calendar,pivot,graph,form</field>
         <field name="domain">[('user_id', '=', uid)]</field>
@@ -100,12 +100,12 @@
     </record>
 
     <!-- Root Menu -->
-    <menuitem id="menu_customs_root" name="Customs Operations" web_icon="midvex_customs_op,static/description/icon.png" sequence="60"/>
+    <menuitem id="menu_customs_root" name="Import &amp; Customs" web_icon="midvex_customs_op,static/description/icon.png" sequence="60"/>
 
     <!-- Operations Section -->
     <menuitem id="menu_customs_operations" name="Operations" parent="menu_customs_root" sequence="10"/>
-    <menuitem id="menu_customs_operation_all" name="All Customs Files" parent="menu_customs_operations" action="action_customs_operation_all" sequence="10"/>
-    <menuitem id="menu_customs_operation_my" name="My Customs Files" parent="menu_customs_operations" action="action_customs_operation_my" sequence="20"/>
+    <menuitem id="menu_customs_operation_all" name="All Operations" parent="menu_customs_operations" action="action_customs_operation_all" sequence="10"/>
+    <menuitem id="menu_customs_operation_my" name="My Operations" parent="menu_customs_operations" action="action_customs_operation_my" sequence="20"/>
     <menuitem id="menu_customs_operation_waiting_docs" name="Waiting for Documents" parent="menu_customs_operations" action="action_customs_operation_waiting_docs" sequence="30"/>
     <menuitem id="menu_customs_operation_ready_ship" name="Ready to Ship" parent="menu_customs_operations" action="action_customs_operation_ready_ship" sequence="40"/>
     <menuitem id="menu_customs_operation_arriving_soon" name="Arriving Soon" parent="menu_customs_operations" action="action_customs_operation_arriving_soon" sequence="50"/>
@@ -121,7 +121,7 @@
 
     <!-- Actions for Reporting -->
     <record id="action_customs_operation_analysis" model="ir.actions.act_window">
-        <field name="name">Customs Files Analysis</field>
+        <field name="name">Operations Analysis</field>
         <field name="res_model">customs.operation</field>
         <field name="view_mode">pivot,graph,calendar</field>
         <field name="help" type="html">
@@ -144,7 +144,7 @@
 
     <!-- Reporting Section -->
     <menuitem id="menu_customs_reporting" name="Reporting" parent="menu_customs_root" sequence="30"/>
-    <menuitem id="menu_customs_operation_analysis" name="Customs Analysis" parent="menu_customs_reporting" action="action_customs_operation_analysis" sequence="10"/>
+    <menuitem id="menu_customs_operation_analysis" name="Operations Analysis" parent="menu_customs_reporting" action="action_customs_operation_analysis" sequence="10"/>
     <menuitem id="menu_customs_document_analysis" name="Document Analysis" parent="menu_customs_reporting" action="action_customs_document_analysis" sequence="20"/>
 
     <!-- Configuration Section -->
