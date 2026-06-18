@@ -161,7 +161,7 @@ class CustomsOperation(models.Model):
     
     shipment_ready = fields.Boolean(string='Ready to Ship', compute='_compute_readiness', store=True)
     blocking_document_count = fields.Integer(string='Blocking Documents', compute='_compute_readiness', store=True)
-    blocking_reason_text = fields.Text(string='Blocking Reasons', compute='_compute_readiness', store=True)
+    blocking_reason_text = fields.Text(string='Blocking Reasons', compute='_compute_readiness')
 
     # Override Fields
     is_overridden = fields.Boolean(string='Readiness Overridden', default=False, tracking=True)
