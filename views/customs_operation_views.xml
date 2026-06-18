@@ -5,7 +5,7 @@
         <field name="name">customs.operation.tree</field>
         <field name="model">customs.operation</field>
         <field name="arch" type="xml">
-            <list string="Customs Files" sample="1">
+            <tree string="Customs Files" sample="1">
                 <field name="priority" widget="priority" nolabel="1"/>
                 <field name="name" string="Reference"/>
                 <field name="supplier_ids" widget="many2many_tags"/>
@@ -16,7 +16,7 @@
                 <field name="shipment_ready" widget="boolean"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="stage_id" decoration-bf="1"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -174,7 +174,7 @@
 
                         <page string="Product Lines" name="product_lines">
                             <field name="operation_line_ids" mode="tree">
-                                <list editable="bottom">
+                                <tree editable="bottom">
                                     <field name="product_id"/>
                                     <field name="description"/>
                                     <field name="hs_code"/>
@@ -192,13 +192,13 @@
                                     <field name="health_certificate_required" optional="hide"/>
                                     <field name="analysis_required" optional="hide"/>
                                     <field name="import_permit_required" optional="hide"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
 
                         <page string="Required Documents" name="documents">
                             <field name="document_requirement_ids" mode="tree">
-                                <list decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
+                                <tree decoration-info="state == 'under_review'" decoration-danger="state == 'rejected'" decoration-success="state in ('approved', 'accepted')">
                                     <field name="document_type_id"/>
                                     <field name="name"/>
                                     <field name="is_blocking"/>
@@ -207,7 +207,7 @@
                                            decoration-warning="state in ('requested', 'vendor_preparing', 'draft_received', 'correction_required')"
                                            decoration-danger="state in ('rejected', 'expired')"
                                            decoration-muted="state == 'n_a'"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
 
@@ -279,7 +279,7 @@
         <field name="name">customs.operation.line.tree</field>
         <field name="model">customs.operation.line</field>
         <field name="arch" type="xml">
-            <list string="Product Lines">
+            <tree string="Product Lines">
                 <field name="operation_id"/>
                 <field name="product_id"/>
                 <field name="description"/>
@@ -288,7 +288,7 @@
                 <field name="quantity"/>
                 <field name="net_weight"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-            </list>
+            </tree>
         </field>
     </record>
 
