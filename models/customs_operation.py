@@ -168,6 +168,7 @@ class CustomsOperation(models.Model):
     override_reason = fields.Text(string='Override Reason', tracking=True)
     override_user_id = fields.Many2one('res.users', string='Overridden By', readonly=True, tracking=True)
     override_date = fields.Datetime(string='Override Date', readonly=True, tracking=True)
+    is_draft = fields.Boolean(string='Is Draft Stage', compute='_compute_is_draft', store=True)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -182,6 +183,19 @@ class CustomsOperation(models.Model):
         return self.env['customs.stage'].search([
             '|', ('company_id', '=', False), ('company_id', '=', company_id)
         ])
+
+    @api.depends('stage_id')
+    def _compute_is_draft(self):
+        draft_stage = self.env.ref('midvex_customs_op.stage_draft', raise_if_not_found=False)
+        for op in self:
+            if draft_stage and op.stage_id == draft_stage:
+                op.is_draft = True
+            elif op.stage_id and op.stage_id.sequence == 1:
+                op.is_draft = True
+            elif not op.stage_id:
+                op.is_draft = True
+            else:
+                op.is_draft = False
 
     @api.depends('document_requirement_ids', 'document_requirement_ids.state')
     def _compute_document_stats(self):

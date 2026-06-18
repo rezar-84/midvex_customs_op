@@ -163,3 +163,5 @@ Progress notes:
 - Created a comprehensive User & Administration Manual covering Setup, Master Data Configuration, Operation Management, Document Tracking, Shipment Entry, and closing validation.
 - Incorporated the manual into the repository `README.md` and created an aesthetic HTML dashboard description in `static/description/index.html`.
 - Implemented Turkish PO translation mappings inside `i18n/tr.po` localizing stages, models, status selections, field labels, and buttons.
+- Suppressed readiness block ribbons and text on draft Customs Files (where `is_draft` is True) to prevent pre-shipment alerts on fresh forms, and added Turkish translation entries for all dynamic python-computed error messages and status components.
+

@@ -25,7 +25,9 @@
 | 2026-06-18 | Restrict vendor_id to Customs File related parties | Prevents assigning document requirements to unrelated partners while maintaining flexibility | Strictly suppliers only / completely unrestricted | Restrict selection to suppliers, broker, forwarder, carrier, and manufacturer |
 | 2026-06-18 | Expired documents block pre-shipment stages only | Prevents blocking operations post-shipment while ensuring compliance prior to departure | Block all stages / warning only | Expiration blocks readiness only before 'Shipped' stage; warnings in chatter after |
 | 2026-06-18 | Non-mandatory customs/delivery fields on closing | Retains user flexibility while ensuring validation notifications | Strictly database-mandatory | Fields are not database-mandatory; log warnings in chatter if closing with empty fields |
+| 2026-06-18 | Hide readiness blocking list and ribbons in Draft stage | Brand new or draft files are expected to be incomplete initially, so showing loud warnings/ribbons adds unnecessary visual noise | Show warnings at all stages | Hide ribbons and blocking reasons in the form view when is_draft is true |
 
 ## Pending decisions
 
 None. All pending architectural decisions for the initial phase have been resolved.
+

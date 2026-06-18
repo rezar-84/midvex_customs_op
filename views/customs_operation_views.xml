@@ -145,9 +145,9 @@
                         </button>
                     </div>
 
-                    <widget name="web_ribbon" title="Ready to Ship" bg_color="bg-success" invisible="not shipment_ready or is_overridden"/>
-                    <widget name="web_ribbon" title="Ready Blocked" bg_color="bg-danger" invisible="shipment_ready"/>
-                    <widget name="web_ribbon" title="Overridden" bg_color="bg-warning" invisible="not is_overridden"/>
+                    <widget name="web_ribbon" title="Ready to Ship" bg_color="bg-success" invisible="not shipment_ready or is_overridden or is_draft"/>
+                    <widget name="web_ribbon" title="Ready Blocked" bg_color="bg-danger" invisible="shipment_ready or is_draft"/>
+                    <widget name="web_ribbon" title="Overridden" bg_color="bg-warning" invisible="not is_overridden or is_draft"/>
 
                     <div class="oe_title">
                         <span class="o_form_label">Customs Reference</span>
@@ -162,11 +162,12 @@
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="active" invisible="1"/>
                             <field name="is_overridden" invisible="1"/>
+                            <field name="is_draft" invisible="1"/>
                         </group>
                         <group>
                             <field name="priority" widget="priority"/>
                             <field name="shipment_ready" readonly="1"/>
-                            <field name="blocking_reason_text" invisible="shipment_ready" class="text-danger font-weight-bold"/>
+                            <field name="blocking_reason_text" invisible="shipment_ready or is_draft" class="text-danger font-weight-bold"/>
                         </group>
                     </group>
 

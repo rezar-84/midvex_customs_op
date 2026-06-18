@@ -233,3 +233,168 @@ msgstr "Beklemede"
 #: selection:customs.stage,name:0
 msgid "Cancelled"
 msgstr "İptal Edildi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "incomplete"
+msgstr "eksik"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "expired"
+msgstr "süresi dolmuş"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "original not issued"
+msgstr "orijinal nüsha düzenlenmemiş"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Document '%s': %s"
+msgstr "Belge '%s': %s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Transport Mode"
+msgstr "Taşıma Şekli"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Country of Origin"
+msgstr "Menşe Ülke"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Country of Departure"
+msgstr "Çıkış Ülkesi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Country of Destination"
+msgstr "Varış Ülkesi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Incoterm"
+msgstr "Teslim Şekli (Incoterm)"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Missing fields: %s"
+msgstr "Eksik alanlar: %s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Customs Declaration Number"
+msgstr "Gümrük Beyanname Numarası"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Declaration Date"
+msgstr "Beyanname Tarihi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Customs Release Date"
+msgstr "Gümrük Serbest Bırakma Tarihi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Warehouse Delivery Date"
+msgstr "Depo Teslim Tarihi"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "<strong>Warning:</strong> The Customs File was closed, but the following operational details are missing: %s"
+msgstr "<strong>Uyarı:</strong> Gümrük Dosyası kapatıldı, ancak şu operasyonel detaylar eksik: %s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Purchase Orders"
+msgstr "Satınalma Siparişleri"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Incoming Shipments"
+msgstr "Gelen Teslimatlar"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Document Requirements"
+msgstr "Belge Gereksinimleri"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Missing Documents"
+msgstr "Eksik Belgeler"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_document_requirement.py:0
+msgid "The selected vendor/partner (%s) must be one of the related parties on the Customs File (Suppliers, Broker, Forwarder, Carrier, or Manufacturers)."
+msgstr "Seçilen satıcı/ortak (%s) Gümrük Dosyasındaki ilgili taraflardan biri olmalıdır (Tedarikçiler, Müşavir, Nakliyeci, Taşıyıcı veya Üreticiler)."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_document_requirement.py:0
+msgid "A rejection reason is required when the document state is set to '%s'."
+msgstr "Belge durumu '%s' olarak ayarlandığında bir reddetme nedeni gereklidir."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_document_requirement.py:0
+msgid "You cannot delete a document requirement (%s) that has uploaded attachments. Please remove the attachments or mark the status as 'Not Applicable' instead."
+msgstr "Yüklenmiş eki olan bir belge gereksinimini (%s) silemezsiniz. Lütfen önce ekleri kaldırın veya durumu 'Geçersiz' olarak işaretleyin."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_document_requirement.py:0
+msgid "You cannot delete a document requirement (%s) when the Customs File is past the 'Waiting for Documents' stage. Please mark the status as 'Not Applicable' instead."
+msgstr "Gümrük Dosyası 'Belgeler Bekleniyor' aşamasını geçtiğinde bir belge gereksinimini (%s) silemezsiniz. Lütfen durumu 'Geçersiz' olarak işaretleyin."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Only Customs Managers can override readiness controls."
+msgstr "Hazırlık kontrollerini yalnızca Gümrük Yöneticileri geçersiz kılabilir."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Override Readiness Check"
+msgstr "Hazırlık Kontrolünü Geçersiz Kıl"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Only Customs Managers can reset override settings."
+msgstr "Geçersiz kılma ayarlarını yalnızca Gümrük Yöneticileri sıfırlayabilir."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "Readiness check override reset by %s."
+msgstr "Hazırlık kontrolü geçersiz kılması %s tarafından sıfırlandı."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "You cannot close Customs File %s because the following mandatory documents are incomplete:\n%s"
+msgstr "Gümrük Dosyasını (%s) kapatamazsınız çünkü aşağıdaki zorunlu belgeler eksik:\n%s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
+msgid "You cannot close Customs File %s because there are open critical activities:\n%s"
+msgstr "Gümrük Dosyasını (%s) kapatamazsınız çünkü açık kritik aktiviteler var:\n%s"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation_line.py:0
+msgid "The expiry date must be after the production date for product %s."
+msgstr "Ürün (%s) için son kullanma tarihi üretim tarihinden sonra olmalıdır."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation_line.py:0
+msgid "Weights cannot be negative values."
+msgstr "Ağırlıklar negatif değer olamaz."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/customs_operation_line.py:0
+msgid "Net weight cannot exceed gross weight."
+msgstr "Net ağırlık brüt ağırlığı aşamaz."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/wizard/customs_operation_override.py:0
+msgid "<strong>Readiness check overridden</strong><br/><strong>User:</strong> %s<br/><strong>Reason:</strong> %s"
+msgstr "<strong>Hazırlık kontrolü geçersiz kılındı</strong><br/><strong>Kullanıcı:</strong> %s<br/><strong>Neden:</strong> %s"

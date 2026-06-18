@@ -23,7 +23,10 @@ All notable changes to the Customs Operations module should be documented here.
 
 - Aligned documented technical module name with repository name: `midvex_customs_op`
 - Resolved initial pending architecture decisions (global/company-specific stages and document types, Odoo Documents scope, approved states, critical activities, versioning, licensing, and validation method) and detailed specific requirements (security inheritance, yearly sequence reset, product line locking, document requirement deletion, vendor restriction, expiration blocking, and non-mandatory closing warnings) in `docs/10_DECISIONS.md` after the `grill-me` design review interview.
+- Suppressed readiness "Ready Blocked" ribbon and blocking reasons list on draft records (when `is_draft` is True) to reduce visual clutter on new forms.
 
 ### Fixed
 
 - Fixed Odoo search view parse error in `customs.document.requirement` by replacing tuple syntax with standard list syntax in `state` domain filters in `views/customs_document_requirement_views.xml` and `views/customs_menus.xml`.
+- Added missing Turkish translation mappings in `i18n/tr.po` for all dynamic computed messages, warning text fragments, smart button names, and Python validation/error messages.
+
