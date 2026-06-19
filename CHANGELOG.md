@@ -6,6 +6,17 @@ All notable changes to the Customs Operations module should be documented here.
 
 ### Added
 
+- **Integration Phase (Purchase, Inventory, Accounting, Sales Sync)**:
+  - Extended `product.template` with default customs compliance profile settings (HS Code, country of origin, manufacturer, and compliance certificate toggles).
+  - Extended `purchase.order` and `purchase.order.line` with sync actions, automatic creation hooks on confirmation, and status indicators.
+  - Implemented dynamic line synchronization propagating PO line quantity/product edits to `customs.operation.line` until lines are locked.
+  - Overrode `stock.picking` validation to check linked Customs File stage sequence, warning or blocking warehouse receipts prior to clearance depending on configuration.
+  - Added new configuration model `res.config.settings` and settings view to control strict receipt validation blocking.
+  - Associated PO-generated vendor bills (`account.move`) to Customs Files and supported manual external expense bill linkage with cross-navigation.
+  - Implemented Sales Order tracing for MTO-procured shipments using origin field, stock move destinations, and procurement groups.
+  - Added `tests/test_customs_integration.py` to cover all sync behaviors, warnings, and lock states.
+  - Translated all new fields and options to Turkish in `tr.po`.
+
 - **Integration Phase (Purchase, Inventory, Accounting, Sales Sync) Planning**:
   - Created feature branch `feature/purchase-inventory-sales-sync`.
   - Added [docs/17_PO_INTEGRATION_REVIEW.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/17_PO_INTEGRATION_REVIEW.md) documenting initial PM review findings and technical gaps before coding.
