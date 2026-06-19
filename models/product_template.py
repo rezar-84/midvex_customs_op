@@ -10,6 +10,10 @@ class ProductTemplate(models.Model):
         default=False, 
         help='Check this if this product requires import and customs compliance tracking.'
     )
+    hs_code = fields.Char(
+        string='HS/GTİP Code',
+        help='Harmonized System Code used for customs declaration.'
+    )
     country_of_origin_id = fields.Many2one(
         'res.country', 
         string='Default Country of Origin',
