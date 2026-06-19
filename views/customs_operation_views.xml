@@ -102,7 +102,7 @@
                 <separator/>
                 <filter string="Ready to Ship" name="ready_ship" domain="[('shipment_ready', '=', True)]"/>
                 <filter string="Blocked" name="blocked" domain="[('shipment_ready', '=', False)]"/>
-                <filter string="Arriving Soon" name="arriving_soon" domain="[('planned_arrival_date', '>=', context_today()), ('planned_arrival_date', '<=', (context_today() + datetime.timedelta(days=7)))]"/>
+                <filter string="Arriving Soon" name="arriving_soon" domain="[('planned_arrival_date', '&gt;=', context_today()), ('planned_arrival_date', '&lt;=', (context_today() + datetime.timedelta(days=7)))]"/>
                 <filter string="Correction/Rejection Pending" name="correction_rejected" domain="[('document_requirement_ids.state', 'in', ('correction_required', 'rejected'))]"/>
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
