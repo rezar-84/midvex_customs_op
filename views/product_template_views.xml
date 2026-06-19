@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_customs_form_view" model="ir.ui.view">
+        <field name="name">product.template.customs.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Import &amp; Customs" name="import_customs">
+                    <group>
+                        <group string="Customs Profile">
+                            <field name="customs_required"/>
+                            <!-- Standard hs_code exists in product template if stock/account is installed -->
+                            <field name="hs_code" invisible="not customs_required"/>
+                            <field name="country_of_origin_id" invisible="not customs_required" options="{'no_create': True}"/>
+                            <field name="manufacturer_id" invisible="not customs_required" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Compliance Document Defaults" invisible="not customs_required">
+                            <field name="health_certificate_required"/>
+                            <field name="analysis_required"/>
+                            <field name="import_permit_required"/>
+                            <field name="original_documents_required"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

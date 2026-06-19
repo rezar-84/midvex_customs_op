@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_customs_form_view" model="ir.ui.view">
+        <field name="name">purchase.order.customs.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Header buttons for action -->
+            <button name="button_confirm" position="after">
+                <button name="action_create_customs_operation" 
+                        type="object" 
+                        string="Create Import Operation" 
+                        class="oe_highlight" 
+                        invisible="customs_operation_count &gt; 0 or not customs_required or state != 'purchase'"/>
+                <button name="action_view_customs_operations" 
+                        type="object" 
+                        string="Open Import Operation" 
+                        class="oe_highlight" 
+                        invisible="customs_operation_count == 0"/>
+                <button name="action_sync_customs_lines" 
+                        type="object" 
+                        string="Sync Import Lines" 
+                        class="btn-secondary" 
+                        invisible="customs_operation_count == 0"/>
+            </button>
+
+            <!-- Smart button box -->
+            <div name="button_box" position="inside">
+                <button name="action_view_customs_operations" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-folder-open-o" 
+                        invisible="customs_operation_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="customs_operation_count"/></span>
+                        <span class="o_stat_text">Import Files</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Tab showing summaries -->
+            <notebook position="inside">
+                <page string="Import &amp; Customs" name="import_customs">
+                    <group>
+                        <group string="Tracking Indicators">
+                            <field name="customs_required"/>
+                            <field name="is_import_purchase" readonly="1"/>
+                            <field name="customs_operation_state" readonly="1"/>
+                        </group>
+                        <group string="Readiness &amp; Compliance" invisible="customs_operation_count == 0">
+                            <field name="customs_document_completion_percentage" widget="progressbar"/>
+                            <field name="customs_shipment_ready" readonly="1"/>
+                            <field name="customs_blocking_reason_text" readonly="1" invisible="customs_shipment_ready" class="text-danger fw-bold"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

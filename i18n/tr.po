@@ -863,4 +863,54 @@ msgstr "ETA Yakınında Eksik Belge Uyarısı"
 msgid "The shipment is arriving soon on %s, but there are %s missing documents."
 msgstr "Sevkiyat yakında (%s tarihinde) varacak ancak %s eksik belge bulunuyor."
 
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/stock_picking.py:0
+msgid "Validation blocked! The linked Customs File(s) [%s] must be cleared/released before validating this receipt."
+msgstr "Doğrulama engellendi! Bu makbuzu doğrulamadan önce ilişkili Gümrük Dosyaları [%s] serbest bırakılmalı/gümrükten çekilmelidir."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/stock_picking.py:0
+msgid "<strong>Warning:</strong> Receipt validated prior to customs clearance of linked Customs File(s): %s."
+msgstr "<strong>Uyarı:</strong> Makbuz, ilişkili Gümrük Dosyalarının gümrüklemesinden önce doğrulandı: %s."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/stock_picking.py:0
+msgid "<strong>Warning:</strong> Linked incoming shipment %s was validated before customs clearance was completed."
+msgstr "<strong>Uyarı:</strong> İlişkili gelen teslimat %s, gümrükleme tamamlanmadan önce doğrulandı."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/purchase_order.py:0
+msgid "You cannot sync lines to operation %s because it is past the 'Waiting for Documents' stage."
+msgstr "'Belgeler Bekleniyor' aşamasını geçtiği için %s operasyonuna satır senkronizasyonu yapamazsınız."
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/purchase_order.py:0
+msgid "Sync Completed"
+msgstr "Senkronizasyon Tamamlandı"
+
+#. module: midvex_customs_op
+#: code:addons/midvex_customs_op/models/purchase_order.py:0
+msgid "Product lines have been successfully synchronized from the linked Purchase Orders."
+msgstr "Ürün satırları ilişkili Satınalma Siparişlerinden başarıyla senkronize edildi."
+
+#. module: midvex_customs_op
+#: field:res.config.settings,customs_block_receipt_before_clearance:0
+msgid "Block Warehouse Receipt Before Customs Clearance"
+msgstr "Gümrüklemeden Önce Depo Makbuzunu Engelle"
+
+#. module: midvex_customs_op
+#: field:account.move,customs_operation_id:0
+msgid "Customs File"
+msgstr "Gümrük Dosyası"
+
+#. module: midvex_customs_op
+#: field:customs.operation,vendor_bill_ids:0
+msgid "Vendor Bills"
+msgstr "Satıcı Faturaları"
+
+#. module: midvex_customs_op
+#: field:customs.operation,sale_order_ids:0
+msgid "Sales Orders"
+msgstr "Satış Siparişleri"
+
 

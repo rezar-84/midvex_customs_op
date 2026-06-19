@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.customs</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Import &amp; Customs" string_id="midvex_customs_op" name="midvex_customs_op">
+                    <block title="Warehouse Control" name="warehouse_control">
+                        <setting string="Block Warehouse Receipt" 
+                                 help="If checked, block stock picking receipt validation if the customs clearance of the linked Customs File is not complete. Otherwise, a warning will be logged."
+                                 company_dependent="1">
+                            <field name="customs_block_receipt_before_clearance"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_customs_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'midvex_customs_op'}</field>
+    </record>
+</odoo>

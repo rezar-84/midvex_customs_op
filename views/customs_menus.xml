@@ -151,4 +151,5 @@
     <menuitem id="menu_customs_configuration" name="Configuration" parent="menu_customs_root" groups="group_customs_admin" sequence="90"/>
     <menuitem id="menu_customs_stage" name="Stages" parent="menu_customs_configuration" action="action_customs_stage" sequence="10"/>
     <menuitem id="menu_customs_document_type" name="Document Types" parent="menu_customs_configuration" action="action_customs_document_type" sequence="20"/>
+    <menuitem id="menu_customs_config_settings" name="Settings" parent="menu_customs_configuration" action="action_customs_config_settings" sequence="30"/>
 </odoo>

@@ -280,6 +280,28 @@ class CustomsOperation(models.Model):
 
     is_draft = fields.Boolean(string='Is Draft Stage', compute='_compute_is_draft', store=True)
 
+    vendor_bill_ids = fields.One2many(
+        'account.move',
+        'customs_operation_id',
+        string='Vendor Bills',
+        domain=[('move_type', '=', 'in_invoice')]
+    )
+    vendor_bill_count = fields.Integer(
+        string='Vendor Bills Count',
+        compute='_compute_vendor_bill_count'
+    )
+    sale_order_ids = fields.Many2many(
+        'sale.order',
+        string='Sales Orders',
+        compute='_compute_sale_orders',
+        store=True,
+        help="Sales orders linked to the purchase orders via procurement group or origin tracing."
+    )
+    sale_order_count = fields.Integer(
+        string='Sales Orders Count',
+        compute='_compute_sale_order_count'
+    )
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -348,6 +370,45 @@ class CustomsOperation(models.Model):
     def _compute_is_draft(self):
         for op in self:
             op.is_draft = not op.stage_id or op.stage_id.code == 'draft'
+
+    @api.depends('vendor_bill_ids')
+    def _compute_vendor_bill_count(self):
+        for op in self:
+            op.vendor_bill_count = len(op.vendor_bill_ids)
+
+    @api.depends('purchase_order_ids')
+    def _compute_sale_orders(self):
+        for op in self:
+            sale_orders = self.env['sale.order']
+            if op.purchase_order_ids:
+                po_origins = op.purchase_order_ids.mapped('origin')
+                so_names = []
+                for origin in po_origins:
+                    if origin:
+                        names = [x.strip() for x in origin.split(',')]
+                        so_names.extend(names)
+                if so_names:
+                    sale_orders |= self.env['sale.order'].search([
+                        ('name', 'in', so_names),
+                        ('company_id', '=', op.company_id.id)
+                    ])
+
+                po_lines = op.purchase_order_ids.mapped('order_line')
+                move_dest_ids = po_lines.mapped('move_ids.move_dest_ids')
+                if move_dest_ids:
+                    sale_orders |= move_dest_ids.mapped('sale_line_id.order_id')
+                
+                group_ids = po_lines.mapped('procurement_group_id')
+                if group_ids:
+                    moves = self.env['stock.move'].search([('group_id', 'in', group_ids.ids)])
+                    sale_orders |= moves.mapped('sale_line_id.order_id')
+
+            op.sale_order_ids = sale_orders
+
+    @api.depends('sale_order_ids')
+    def _compute_sale_order_count(self):
+        for op in self:
+            op.sale_order_count = len(op.sale_order_ids)
 
     @api.depends('purchase_order_ids', 'purchase_order_ids.amount_total', 'purchase_order_ids.currency_id')
     def _compute_commercial_defaults(self):
@@ -658,6 +719,100 @@ class CustomsOperation(models.Model):
                 )
         return super(CustomsOperation, self).unlink()
 
+    def action_view_vendor_bills(self):
+        self.ensure_one()
+        return {
+            'name': _('Vendor Bills & Expenses'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.move',
+            'view_mode': 'list,form',
+            'domain': [('id', 'in', self.vendor_bill_ids.ids)],
+            'context': {
+                'default_move_type': 'in_invoice',
+                'default_customs_operation_id': self.id,
+            },
+            'target': 'current',
+        }
+
+    def action_view_sales_orders(self):
+        self.ensure_one()
+        return {
+            'name': _('Linked Sales Orders (MTO)'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'view_mode': 'list,form',
+            'domain': [('id', 'in', self.sale_order_ids.ids)],
+            'target': 'current',
+        }
+
+    def action_sync_purchase_lines(self):
+        self.ensure_one()
+        waiting_docs_stage = self.env.ref('midvex_customs_op.stage_waiting_docs', raise_if_not_found=False)
+        waiting_docs_seq = waiting_docs_stage.sequence if waiting_docs_stage else 2
+        if self.stage_id and self.stage_id.sequence > waiting_docs_seq:
+            raise ValidationError(
+                _("You cannot sync product lines because this Customs File is past the 'Waiting for Documents' stage (locked).")
+            )
+        
+        for po in self.purchase_order_ids:
+            self._sync_lines_from_po(po)
+            
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Sync Completed'),
+                'message': _('Product lines have been successfully synchronized from the linked Purchase Orders.'),
+                'type': 'success',
+                'sticky': False,
+            }
+        }
+
+    def _sync_lines_from_po(self, po):
+        self.ensure_one()
+        existing_lines = self.operation_line_ids.filtered(lambda l: l.purchase_order_line_id)
+        existing_po_line_ids = existing_lines.mapped('purchase_order_line_id.id')
+        
+        po_lines = po.order_line.filtered(lambda l: not l.display_type)
+        po_line_ids = po_lines.ids
+        
+        # 1. Delete lines that are no longer in the PO
+        lines_to_delete = existing_lines.filtered(lambda l: l.purchase_order_line_id.id not in po_line_ids)
+        if lines_to_delete:
+            lines_to_delete.unlink()
+            
+        # 2. Update existing lines or create new ones
+        for line in po_lines:
+            existing_line = existing_lines.filtered(lambda l: l.purchase_order_line_id.id == line.id)
+            if existing_line:
+                if existing_line.quantity != line.product_qty:
+                    existing_line.write({'quantity': line.product_qty})
+            else:
+                line_vals = {
+                    'operation_id': self.id,
+                    'purchase_order_line_id': line.id,
+                    'product_id': line.product_id.id,
+                    'description': line.name,
+                    'quantity': line.product_qty,
+                    'uom_id': line.product_uom.id,
+                }
+                
+                tmpl = line.product_id.product_tmpl_id
+                if tmpl:
+                    line_vals.update({
+                        'country_of_origin_id': tmpl.country_of_origin_id.id or self.origin_country_id.id,
+                        'manufacturer_id': tmpl.manufacturer_id.id,
+                        'health_certificate_required': tmpl.health_certificate_required,
+                        'analysis_required': tmpl.analysis_required,
+                        'import_permit_required': tmpl.import_permit_required,
+                    })
+                    if hasattr(line.product_id, 'hs_code'):
+                        line_vals['hs_code'] = line.product_id.hs_code
+                    elif hasattr(tmpl, 'hs_code'):
+                        line_vals['hs_code'] = tmpl.hs_code
+                
+                self.env['customs.operation.line'].create(line_vals)
+
     def action_view_purchase_orders(self):
         self.ensure_one()
         return {
@@ -704,3 +859,72 @@ class CustomsOperation(models.Model):
             'context': {'default_operation_id': self.id},
             'target': 'current',
         }
+
+    def _generate_default_document_requirements(self):
+        self.ensure_one()
+        doc_types = self.env['customs.document.type'].search([])
+        types_by_code = {t.code: t for t in doc_types}
+        
+        req_vals = []
+        
+        # Standard Global Documents
+        global_codes = ['INV', 'PKL', 'COO']
+        for code in global_codes:
+            if code in types_by_code:
+                t = types_by_code[code]
+                req_vals.append({
+                    'operation_id': self.id,
+                    'document_type_id': t.id,
+                    'name': t.name,
+                    'responsible_party': t.default_responsible_party,
+                    'requirement_level': t.default_requirement_level,
+                    'original_required': t.original_normally_required,
+                    'state': 'not_requested',
+                })
+                
+        # Transport Document (BL/AWB/CMR)
+        t_code = 'BL'
+        if self.transport_mode == 'air':
+            t_code = 'AWB'
+        elif self.transport_mode == 'road':
+            t_code = 'CMR'
+            
+        if t_code in types_by_code:
+            t = types_by_code[t_code]
+            req_vals.append({
+                'operation_id': self.id,
+                'document_type_id': t.id,
+                'name': t.name,
+                'responsible_party': t.default_responsible_party,
+                'requirement_level': t.default_requirement_level,
+                'original_required': t.original_normally_required,
+                'state': 'not_requested',
+            })
+            
+        # Line Specific Documents (COA, HC, IP)
+        for line in self.operation_line_ids:
+            line_requirements = []
+            if line.health_certificate_required:
+                line_requirements.append('HC')
+            if line.analysis_required:
+                line_requirements.append('COA')
+            if line.import_permit_required:
+                line_requirements.append('IP')
+                
+            for code in line_requirements:
+                if code in types_by_code:
+                    t = types_by_code[code]
+                    req_vals.append({
+                        'operation_id': self.id,
+                        'operation_line_id': line.id,
+                        'document_type_id': t.id,
+                        'name': "%s - %s" % (t.name, line.product_id.name),
+                        'responsible_party': t.default_responsible_party,
+                        'requirement_level': t.default_requirement_level,
+                        'original_required': t.original_normally_required,
+                        'state': 'not_requested',
+                    })
+                    
+        if req_vals:
+            self.env['customs.document.requirement'].create(req_vals)
+

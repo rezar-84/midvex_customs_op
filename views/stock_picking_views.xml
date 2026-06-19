@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_customs_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.customs.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Warning banner for receiving before clearance -->
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning mb-0 text-center fw-bold" role="alert" invisible="not customs_not_cleared">
+                    <i class="fa fa-exclamation-triangle mr-1"/>
+                    Goods are being received before the linked Customs Operation is cleared.
+                </div>
+            </xpath>
+
+            <!-- Smart button box extension -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_customs_operations" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-folder-open-o" 
+                        invisible="customs_operation_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="customs_operation_count"/></span>
+                        <span class="o_stat_text">Customs Files</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Stage status read-only display in form -->
+            <xpath expr="//group" position="after">
+                <group string="Import &amp; Customs Integration" invisible="customs_operation_count == 0">
+                    <group>
+                        <field name="customs_operation_state" readonly="1" string="Customs Status"/>
+                        <field name="customs_not_cleared" invisible="1"/>
+                        <field name="customs_operation_count" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

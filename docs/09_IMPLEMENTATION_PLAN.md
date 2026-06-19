@@ -229,28 +229,28 @@ Status: Complete
 
 ## Integration Phase — Purchase, Inventory, Accounting, and Sales Sync
 
-Status: Planning (on branch `feature/purchase-inventory-sales-sync`)
+Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
 
-- **Milestone 1: Purchase Order & Product Profile Integration**
-  - Extend `product.template` with default customs compliance profile settings (hs_code, origin country, cert requirements).
-  - Extend `purchase.order` with sync indicators, smart buttons, manual creation button, and stage summaries.
-  - Implement python hooks on PO confirmation to automatically trigger Customs Operation creation when conditions are met.
-  - Implement single-operation duplicate prevention validations.
-- **Milestone 2: Lines & Quantities Synchronization**
-  - Sync PO line details and quantities into `customs.operation.line` records linked to `purchase.order.line`.
-  - Filter out note and section lines during sync.
-  - Implement a manual "Sync Purchase Lines" button to re-run line updates without losing manual line edits.
-- **Milestone 3: Inventory Receipt Linkage & Control**
-  - Automatically link generated stock pickings (incoming receipts) to the Customs Operation.
-  - Implement stock picking validation hooks to show a soft warning/chatter note if receipt occurs prior to customs clearance.
-  - Add configuration setting `customs_block_receipt_before_clearance` to support strict blocking.
-- **Milestone 4: Accounting & Sales Linkage**
-  - Automatically associate PO-generated vendor bills (`account.move`) with the Customs Operation.
-  - Enable manual linkages for external customs expense bills (freight, stamp duty, broker fees).
-  - Implement Sales Order reference tracing for MTO-procured shipments.
-  - Build UI cross-navigation smart buttons.
-- **Milestone 5: Localization & Automated Tests Integration**
-  - Translate all new UI elements, fields, wizard actions, and warning banners in `i18n/tr.po`.
-  - Build integration tests asserting PO confirmation auto-creation, duplicate prevention, stock picking sync/warnings, vendor bill linkages, and company consistency constraints.
-  - Final PM and UX checklist review.
+- **Milestone 1: Purchase Order & Product Profile Integration** (Completed)
+  - Extended `product.template` with default customs compliance profile settings (hs_code, country of origin, manufacturer, and compliance certificates requirements).
+  - Extended `purchase.order` with sync indicators, smart buttons, manual creation action, and status/compliance stage summaries.
+  - Implemented automatic hook in `button_confirm()` of `purchase.order` to trigger Customs Operation creation when importing from foreign vendors or if customs compliance flags are set.
+  - Implemented single-operation constraints and redirection actions to prevent duplicate creation.
+- **Milestone 2: Lines & Quantities Synchronization** (Completed)
+  - Synced PO line products and quantities into `customs.operation.line` linked records, omitting note/section lines.
+  - Provided automatic synchronization hooks on `purchase.order.line` create, write, and unlink methods that propagate to Customs Files prior to the locked stages.
+  - Created a manual "Sync Purchase Lines" button on both PO and Customs File views to manually re-run line syncs.
+  - Enforced a product line read-only lock in python and XML once the Customs File moves past the 'Waiting for Documents' stage.
+- **Milestone 3: Inventory Receipt Linkage & Control** (Completed)
+  - Added dynamic hooks to auto-link incoming shipments (`stock.picking`) to the corresponding Customs File when created.
+  - Intercepted stock picking validation (`button_validate`) to perform compliance checks.
+  - Added a configuration setting `customs_block_receipt_before_clearance` via `res.config.settings` to toggle between soft warnings and strict receipt validation blocking before customs release.
+- **Milestone 4: Accounting & Sales Linkage** (Completed)
+  - Automatically linked PO-generated vendor bills (`account.move`) to the linked Customs Operation on creation/updates.
+  - Enabled manual vendor bill lookup fields on the Bill form view to link external expense invoices (duties, storage, freight, agent fees).
+  - Implemented Sales Order reference tracking on `customs.operation` via origin text tracing, procurement groups, and stock move destination chains for MTO-procured shipments.
+  - Designed smart navigation buttons for Sales Orders and Vendor Bills.
+- **Milestone 5: Localization & Automated Tests Integration** (Completed)
+  - Added complete Turkish translations in `i18n/tr.po` for all new fields, buttons, alerts, and settings.
+  - Wrote robust integration unit tests in `tests/test_customs_integration.py` covering PO auto-creation, line synchronization/lock rules, picking receipt validation blocks/warnings, and vendor bill linkages.
 

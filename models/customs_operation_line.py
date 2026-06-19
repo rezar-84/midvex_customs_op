@@ -94,6 +94,32 @@ class CustomsOperationLine(models.Model):
             if line.package_count <= 0:
                 raise ValidationError(_("Package count must be a positive value."))
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('operation_id'):
+                op = self.env['customs.operation'].browse(vals['operation_id'])
+                waiting_docs_stage = self.env.ref('midvex_customs_op.stage_waiting_docs', raise_if_not_found=False)
+                waiting_docs_seq = waiting_docs_stage.sequence if waiting_docs_stage else 2
+                if op.stage_id and op.stage_id.sequence > waiting_docs_seq:
+                    raise ValidationError(
+                        _("You cannot add product lines when the Customs File is past the 'Waiting for Documents' stage.")
+                    )
+        return super(CustomsOperationLine, self).create(vals_list)
+
+    def write(self, vals):
+        business_fields = {'product_id', 'description', 'hs_code', 'country_of_origin_id', 'manufacturer_id', 'quantity', 'net_weight', 'gross_weight'}
+        if any(f in vals for f in business_fields):
+            for line in self:
+                op = line.operation_id
+                waiting_docs_stage = self.env.ref('midvex_customs_op.stage_waiting_docs', raise_if_not_found=False)
+                waiting_docs_seq = waiting_docs_stage.sequence if waiting_docs_stage else 2
+                if op.stage_id and op.stage_id.sequence > waiting_docs_seq:
+                    raise ValidationError(
+                        _("You cannot modify product lines when the Customs File is past the 'Waiting for Documents' stage.")
+                    )
+        return super(CustomsOperationLine, self).write(vals)
+
     def unlink(self):
         for line in self:
             op = line.operation_id

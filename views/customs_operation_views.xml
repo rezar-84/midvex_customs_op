@@ -138,6 +138,11 @@
                             class="btn-secondary" 
                             invisible="not is_overridden"
                             groups="midvex_customs_op.group_customs_manager"/>
+                    <button name="action_sync_purchase_lines" 
+                            string="Sync Purchase Lines" 
+                            type="object" 
+                            class="btn-secondary" 
+                            invisible="not purchase_order_ids"/>
                     <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
                 </header>
                 <sheet>
@@ -150,6 +155,18 @@
                         <button name="action_view_incoming_shipments" type="object" class="oe_stat_button" icon="fa-truck">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Stock Receipts</span>
+                            </div>
+                        </button>
+                        <button name="action_view_sales_orders" type="object" class="oe_stat_button" icon="fa-usd" invisible="sale_order_count == 0">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="sale_order_count"/></span>
+                                <span class="o_stat_text">Sales Orders</span>
+                            </div>
+                        </button>
+                        <button name="action_view_vendor_bills" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="vendor_bill_count == 0">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="vendor_bill_count"/></span>
+                                <span class="o_stat_text">Bills &amp; Expenses</span>
                             </div>
                         </button>
                         <button name="action_view_document_requirements" type="object" class="oe_stat_button" icon="fa-file-text-o">
@@ -184,6 +201,8 @@
                             <field name="active" invisible="1"/>
                             <field name="is_overridden" invisible="1"/>
                             <field name="is_draft" invisible="1"/>
+                            <field name="sale_order_count" invisible="1"/>
+                            <field name="vendor_bill_count" invisible="1"/>
                         </group>
                         <group>
                             <field name="priority" widget="priority"/>
@@ -218,6 +237,7 @@
                                 <group string="Integrations">
                                     <field name="purchase_order_ids" widget="many2many_tags" placeholder="Link Purchase Orders..."/>
                                     <field name="picking_ids" widget="many2many_tags" placeholder="Link Incoming Shipments..."/>
+                                    <field name="sale_order_ids" widget="many2many_tags" readonly="1" invisible="sale_order_count == 0"/>
                                 </group>
                             </group>
                         </page>
@@ -382,7 +402,7 @@
                                     <field name="cost_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
                             </group>
-                            <group string="Cost Breakdown">
+                             <group string="Cost Breakdown">
                                 <group>
                                     <field name="cost_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_customs_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
@@ -394,6 +414,17 @@
                                     <field name="cost_exchange_diff" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
+                            </group>
+                            <group string="Linked Vendor Bills &amp; Expenses" invisible="vendor_bill_count == 0">
+                                <field name="vendor_bill_ids" readonly="1" colspan="2">
+                                    <list>
+                                        <field name="name" string="Bill Reference"/>
+                                        <field name="partner_id" string="Vendor"/>
+                                        <field name="invoice_date" string="Bill Date"/>
+                                        <field name="amount_total" string="Total Amount" widget="monetary"/>
+                                        <field name="state" widget="badge"/>
+                                    </list>
+                                </field>
                             </group>
                         </page>
 
