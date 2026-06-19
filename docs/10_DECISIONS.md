@@ -37,7 +37,13 @@
 | 2026-06-19 | Expose warehouse photo and delivery note attachments | Helps users easily view and upload proof of delivery and photos of damaged packages directly in the Warehouse tab. | Rely only on standard chatter attachments | Added `Many2many` fields linking to `ir.attachment` for specific categories |
 | 2026-06-19 | Add customs sub-status Selection field | Allows tracking customs process details (e.g. tax paid, declaration opened) without modifying the main staging sequence. | Add new workflow stages | Added `customs_status` selection field on the main operation model |
 | 2026-06-19 | Python activity triggers for logistics notifications | Automates task creation for logistics and accounting users on key events (ETA approaching, BL upload, warehouse delivery) without heavy external mail/SMS server integration dependencies. | Manual activities only | Added automated activity triggers in Python `write` and creation methods |
+| 2026-06-19 | Configurable Auto-Creation Criteria for Import Operations | Prevents false positives by triggering auto-creation on PO confirmation only if vendor country differs from company, `customs_required` is True, or template/category flags require it. | Unconditional auto-creation / strictly manual | Checked during PO confirm method hook. |
+| 2026-06-19 | Single Customs Operation per PO Constraint | Avoids duplicate operations by default and provides manual creation/open actions that redirect to the existing operation if one exists. | Multiple operations allowed by default | One-to-one default linkage with redirect logic. |
+| 2026-06-19 | Real-time PO Lines Import with Quantity Sync | Automatically creates operation lines mapped to purchase order lines, and allows manual "Sync Purchase Lines" trigger to update quantities or add lines without losing manually reviewed customs line edits. | Standard manual data entry | Line sync methods mapping `customs.operation.line` to `purchase.order.line`. |
+| 2026-06-19 | Soft Warning on Uncleared Receipts | Warns warehouse team in stock picking validation if validating receipts of uncleared operations, and supports a strict block option `customs_block_receipt_before_clearance` in settings. | Block all receipts before clearance / silent sync | Log a warning in chatter by default; raise block validation if strict setting is True. |
+| 2026-06-19 | Tracing Sales Orders from Procurement Groups | Links Sales Orders to Customs Operations for MTO flows using the standard PO line's procurement group stock rules. | Manual SO field entry / no sales trace | Automated MTO search mapping PO to stock moves to Sales Orders. |
 
 ## Pending decisions
 
 None. All pending architectural decisions have been resolved.
+
