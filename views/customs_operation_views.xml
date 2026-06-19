@@ -496,16 +496,6 @@
                 <field name="hs_code" string="HS Code"/>
                 <field name="batch_number" string="Batch Number"/>
                 <field name="manufacturer_id" string="Manufacturer"/>
-                <filter string="Health Certificate Required" name="hc_required" domain="[('health_certificate_required', '=', True)]"/>
-                <filter string="Analysis Required" name="analysis_required" domain="[('analysis_required', '=', True)]"/>
-                <filter string="Import Permit Required" name="permit_required" domain="[('import_permit_required', '=', True)]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Customs File" name="group_operation" context="{'group_by': 'operation_id'}"/>
-                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
-                    <filter string="Manufacturer" name="group_manufacturer" context="{'group_by': 'manufacturer_id'}"/>
-                    <filter string="Country of Origin" name="group_origin" context="{'group_by': 'country_of_origin_id'}"/>
-                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
-                </group>
             </search>
         </field>
     </record>
