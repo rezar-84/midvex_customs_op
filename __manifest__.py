@@ -17,6 +17,8 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'base',
         'mail',
         'purchase_stock',
+        'account',
+        'sale',
     ],
     'data': [
         'security/customs_security.xml',
