@@ -17,6 +17,7 @@
                 <filter string="Under Review" name="under_review" domain="[('state', '=', 'under_review')]"/>
                 <filter string="Correction Required" name="correction_required" domain="[('state', '=', 'correction_required')]"/>
                 <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
                 <filter string="Approved" name="approved" domain="[('state', 'in', ['approved', 'accepted'])]"/>
                 <separator/>
                 <filter string="Original Required" name="original_required" domain="[('original_required', '=', True)]"/>

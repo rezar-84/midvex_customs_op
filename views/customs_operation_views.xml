@@ -97,6 +97,8 @@
                 <filter string="In Production" name="in_production" domain="[('production_status', '=', 'in_production')]"/>
                 <filter string="In Transit" name="in_transit" domain="[('stage_id.code', '=', 'shipped')]"/>
                 <filter string="In Customs" name="in_customs" domain="[('stage_id.code', '=', 'customs_clearance')]"/>
+                <filter string="Stage: Waiting for Documents" name="stage_waiting_docs" domain="[('stage_id.code', '=', 'waiting_docs')]"/>
+                <filter string="Stage: Ready to Ship" name="stage_ready_ship" domain="[('stage_id.code', '=', 'ready_ship')]"/>
                 <filter string="Delivered to Warehouse" name="delivered_warehouse" domain="[('warehouse_received', '=', True)]"/>
                 <filter string="Waiting Documents" name="waiting_documents" domain="[('document_missing_count', '>', 0)]"/>
                 <separator/>
