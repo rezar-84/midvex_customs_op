@@ -256,4 +256,5 @@ Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
 
 ## Post-Integration Remediation
 - **Fix KeyError on group_id**: Removed the deprecated `group_id` lookup on `purchase.order` inside `_compute_sale_orders` (which caused traceback on Odoo 19), relying instead on PO origin name parsing and stock move destination tracing.
+- **Fix AttributeError on res.groups**: Replaced direct references to `group.users` (which caused AttributeError tracebacks depending on security scopes/database configuration) with explicit `res.users` queries matching `groups_id` relation inside `models/customs_operation.py`.
 

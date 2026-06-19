@@ -72,4 +72,5 @@ All notable changes to the Customs Operations module should be documented here.
 - Fixed Odoo search view parse error in `customs.document.requirement` by replacing tuple syntax with standard list syntax in `state` domain filters in `views/customs_document_requirement_views.xml` and `views/customs_menus.xml`.
 - Added missing Turkish translation mappings in `i18n/tr.po` for all dynamic computed messages, warning text fragments, smart button names, and Python validation/error messages.
 - Fixed `KeyError: 'group_id'` traceback on Purchase Order integration by removing the deprecated `group_id` mapped lookup on `purchase.order` in `_compute_sale_orders`, relying instead on origin string parsing and stock move destination chains.
+- Fixed `AttributeError: 'res.groups' object has no attribute 'users'` traceback during activity creation by replacing direct group users references with explicit search queries on `res.users` using `groups_id` relation.
 

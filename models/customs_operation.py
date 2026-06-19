@@ -330,7 +330,7 @@ class CustomsOperation(models.Model):
                 )
             if op.damaged_product or op.missing_packages:
                 manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
-                manager_users = manager_group.users if manager_group else self.env['res.users']
+                manager_users = self.env['res.users'].search([('groups_id', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
                 notify_user = manager_users[0].id if manager_users else op.user_id.id
                 op._create_operation_activity(
                     'mail.mail_activity_data_todo',
@@ -672,7 +672,7 @@ class CustomsOperation(models.Model):
             if ('damaged_product' in vals and vals['damaged_product'] and not old.get('damaged_product')) or \
                ('missing_packages' in vals and vals['missing_packages'] and not old.get('missing_packages')):
                 manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
-                manager_users = manager_group.users if manager_group else self.env['res.users']
+                manager_users = self.env['res.users'].search([('groups_id', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
                 notify_user = manager_users[0].id if manager_users else op.user_id.id
                 op._create_operation_activity(
                     'mail.mail_activity_data_todo',
