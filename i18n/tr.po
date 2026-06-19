@@ -914,3 +914,677 @@ msgid "Sales Orders"
 msgstr "Satış Siparişleri"
 
 
+
+# Additional Integration Translations
+#. module: midvex_customs_op
+msgid "Accounting &amp; Costs"
+msgstr "Muhasebe ve Maliyetler"
+
+#. module: midvex_customs_op
+msgid "Active"
+msgstr "Etkin"
+
+#. module: midvex_customs_op
+msgid "Actual Arrival (ATA)"
+msgstr "Fiili Varış (ATA)"
+
+#. module: midvex_customs_op
+msgid "Actual Departure"
+msgstr "Fiili Kalkış"
+
+#. module: midvex_customs_op
+msgid "Additional line notes..."
+msgstr "Ek satır notları..."
+
+#. module: midvex_customs_op
+msgid "Analyze import operations metrics, weights, and stage progress."
+msgstr "İthalat işlemleri metriklerini, ağırlıklarını ve aşama ilerlemesini analiz edin."
+
+#. module: midvex_customs_op
+msgid "Analyze supplier compliance document submission progress and versions."
+msgstr "Tedarikçi uyum belgesi sunma ilerlemesini ve sürümlerini analiz edin."
+
+#. module: midvex_customs_op
+msgid "Approved"
+msgstr "Onaylandı"
+
+#. module: midvex_customs_op
+msgid "Archived"
+msgstr "Arşivlendi"
+
+#. module: midvex_customs_op
+msgid "Assignment &amp; Level"
+msgstr "Atama ve Seviye"
+
+#. module: midvex_customs_op
+msgid "Attach Photos"
+msgstr "Fotoğrafları Ekle"
+
+#. module: midvex_customs_op
+msgid "Attach Proofs of Delivery (POD)"
+msgstr "Teslimat Kanıtlarını (POD) Ekle"
+
+#. module: midvex_customs_op
+msgid "Attachments &amp; Photos"
+msgstr "Ekler ve Fotoğraflar"
+
+#. module: midvex_customs_op
+msgid "Audit Log"
+msgstr "Denetim Günlüğü"
+
+#. module: midvex_customs_op
+msgid "Batch Information"
+msgstr "Parti Bilgileri"
+
+#. module: midvex_customs_op
+msgid "Batch Number"
+msgstr "Parti Numarası"
+
+#. module: midvex_customs_op
+msgid "Bill Date"
+msgstr "Fatura Tarihi"
+
+#. module: midvex_customs_op
+msgid "Bill Reference"
+msgstr "Fatura Referansı"
+
+#. module: midvex_customs_op
+msgid "Bills &amp; Expenses"
+msgstr "Faturalar ve Masraflar"
+
+#. module: midvex_customs_op
+msgid "Block Warehouse Receipt"
+msgstr "Depo Girişini Engelle"
+
+#. module: midvex_customs_op
+msgid "Blocked"
+msgstr "Engellendi"
+
+#. module: midvex_customs_op
+msgid "Blocking"
+msgstr "Engelliyor"
+
+#. module: midvex_customs_op
+msgid "Broker"
+msgstr "Müşavir"
+
+#. module: midvex_customs_op
+msgid "CUS/YYYY/NNNN"
+msgstr "CUS/YYYY/NNNN"
+
+#. module: midvex_customs_op
+msgid "Cancel"
+msgstr "İptal Et"
+
+#. module: midvex_customs_op
+msgid "Certificate of Analysis (COA) Required"
+msgstr "Analiz Sertifikası (COA) Gerekli"
+
+#. module: midvex_customs_op
+msgid "Closing Control"
+msgstr "Kapanış Kontrolü"
+
+#. module: midvex_customs_op
+msgid "Commercial Details"
+msgstr "Ticari Detaylar"
+
+#. module: midvex_customs_op
+msgid "Company"
+msgstr "Şirket"
+
+#. module: midvex_customs_op
+msgid "Compliance Document Defaults"
+msgstr "Uyum Belgesi Varsayılanları"
+
+#. module: midvex_customs_op
+msgid "Confirm Override"
+msgstr "Geçersiz Kılmayı Onayla"
+
+#. module: midvex_customs_op
+msgid "Cost Breakdown"
+msgstr "Maliyet Detayları"
+
+#. module: midvex_customs_op
+msgid "Courier &amp; Shipment Info"
+msgstr "Kurye ve Sevkiyat Bilgileri"
+
+#. module: midvex_customs_op
+msgid "Create Import Operation"
+msgstr "İthalat Operasyonu Oluştur"
+
+#. module: midvex_customs_op
+msgid "Create your first Import &amp; Customs Operation!"
+msgstr "İlk İthalat & Gümrük Operasyonunuzu Oluşturun!"
+
+#. module: midvex_customs_op
+msgid "Customs &amp; Laboratory"
+msgstr "Gümrük ve Laboratuvar"
+
+#. module: midvex_customs_op
+msgid "Customs Blocking Reasons"
+msgstr "Gümrük Engel Nedenleri"
+
+#. module: midvex_customs_op
+msgid "Customs Doc Completion %"
+msgstr "Gümrük Belge Tamamlanma %"
+
+#. module: midvex_customs_op
+msgid "Customs Entry"
+msgstr "Gümrük Girişi"
+
+#. module: midvex_customs_op
+msgid "Customs File Count"
+msgstr "Gümrük Dosya Sayısı"
+
+#. module: midvex_customs_op
+msgid "Customs File Info"
+msgstr "Gümrük Dosya Bilgileri"
+
+#. module: midvex_customs_op
+msgid "Customs File Status"
+msgstr "Gümrük Dosya Durumu"
+
+#. module: midvex_customs_op
+msgid "Customs Files"
+msgstr "Gümrük Dosyaları"
+
+#. module: midvex_customs_op
+msgid "Customs Not Cleared"
+msgstr "Gümrükten Çekilmedi"
+
+#. module: midvex_customs_op
+msgid "Customs Profile"
+msgstr "Gümrük Profili"
+
+#. module: midvex_customs_op
+msgid "Customs Reference"
+msgstr "Gümrük Referansı"
+
+#. module: midvex_customs_op
+msgid "Customs Shipment Ready"
+msgstr "Gümrük Sevkiyatı Hazır"
+
+#. module: midvex_customs_op
+msgid "Customs Status"
+msgstr "Gümrük Durumu"
+
+#. module: midvex_customs_op
+msgid "Dates"
+msgstr "Tarihler"
+
+#. module: midvex_customs_op
+msgid "Default Country of Origin"
+msgstr "Varsayılan Menşe Ülke"
+
+#. module: midvex_customs_op
+msgid "Default Manufacturer"
+msgstr "Varsayılan Üretici"
+
+#. module: midvex_customs_op
+msgid "Delivered"
+msgstr "Teslim Edildi"
+
+#. module: midvex_customs_op
+msgid "Describe the document purpose, standard guidelines, etc..."
+msgstr "Belgenin amacını, standart yönergelerini vb. açıklayın..."
+
+#. module: midvex_customs_op
+msgid "Description"
+msgstr "Açıklama"
+
+#. module: midvex_customs_op
+msgid "Description e.g. Invoice copy..."
+msgstr "Açıklama örn. Fatura kopyası..."
+
+#. module: midvex_customs_op
+msgid "Discrepancy Details"
+msgstr "Uyuşmazlık Detayları"
+
+#. module: midvex_customs_op
+msgid "Discrepancy checks"
+msgstr "Uyuşmazlık kontrolleri"
+
+#. module: midvex_customs_op
+msgid "Document Code"
+msgstr "Belge Kodu"
+
+#. module: midvex_customs_op
+msgid "Document Requirement"
+msgstr "Belge Gereksinimi"
+
+#. module: midvex_customs_op
+msgid "Document Requirements Analysis"
+msgstr "Belge Gereksinimleri Analizi"
+
+#. module: midvex_customs_op
+msgid "Document Type"
+msgstr "Belge Türü"
+
+#. module: midvex_customs_op
+msgid "Document Types"
+msgstr "Belge Türleri"
+
+#. module: midvex_customs_op
+msgid "ETA"
+msgstr "ETA (Tahmini Varış)"
+
+#. module: midvex_customs_op
+msgid "English Name"
+msgstr "İngilizce İsim"
+
+#. module: midvex_customs_op
+msgid "Files &amp; Attachments"
+msgstr "Dosyalar ve Ekler"
+
+#. module: midvex_customs_op
+msgid "Financial Summaries"
+msgstr "Finansal Özetler"
+
+#. module: midvex_customs_op
+msgid "Geographics &amp; Links"
+msgstr "Coğrafi Bilgiler ve Bağlantılar"
+
+#. module: midvex_customs_op
+msgid "HS Code"
+msgstr "HS/GTİP Kodu"
+
+#. module: midvex_customs_op
+msgid "Handover &amp; Final Dates"
+msgstr "Teslim ve Son Tarihler"
+
+#. module: midvex_customs_op
+msgid "Health Certificate Required"
+msgstr "Sağlık Sertifikası Gerekli"
+
+#. module: midvex_customs_op
+msgid "If checked, block stock picking receipt validation if the customs clearance of the linked Customs File is not complete. Otherwise, a warning will be logged."
+msgstr "İşaretlenirse, ilişkili Gümrük Dosyasının gümrüklemesi tamamlanmadığında depo teslimat doğrulaması engellenir. Aksi takdirde, bir uyarı kaydedilir."
+
+#. module: midvex_customs_op
+msgid "Import & Customs Operation"
+msgstr "İthalat & Gümrük Operasyonu"
+
+#. module: midvex_customs_op
+msgid "Import &amp; Customs"
+msgstr "İthalat ve Gümrük"
+
+#. module: midvex_customs_op
+msgid "Import &amp; Customs Integration"
+msgstr "İthalat ve Gümrük Entegrasyonu"
+
+#. module: midvex_customs_op
+msgid "Import &amp; Customs Operation"
+msgstr "İthalat ve Gümrük Operasyonu"
+
+#. module: midvex_customs_op
+msgid "Import Customs Required"
+msgstr "İthalat Gümrüğü Gerekli"
+
+#. module: midvex_customs_op
+msgid "Import Files"
+msgstr "İthalat Dosyaları"
+
+#. module: midvex_customs_op
+msgid "Import Operations Count"
+msgstr "İthalat Operasyon Sayısı"
+
+#. module: midvex_customs_op
+msgid "Import Permit Required"
+msgstr "İthalat İzni Gerekli"
+
+#. module: midvex_customs_op
+msgid "In Customs"
+msgstr "Gümrükte"
+
+#. module: midvex_customs_op
+msgid "In Transit"
+msgstr "Transit Halinde"
+
+#. module: midvex_customs_op
+msgid "Inspections"
+msgstr "Muayeneler"
+
+#. module: midvex_customs_op
+msgid "Integrations"
+msgstr "Entegrasyonlar"
+
+#. module: midvex_customs_op
+msgid "Internal review notes..."
+msgstr "İç inceleme notları..."
+
+#. module: midvex_customs_op
+msgid "Is Import Purchase"
+msgstr "İthalat Satınalması mı"
+
+#. module: midvex_customs_op
+msgid "Key Metrics"
+msgstr "Anahtar Metrikler"
+
+#. module: midvex_customs_op
+msgid "Link Incoming Shipments..."
+msgstr "Gelen Teslimatları Bağla..."
+
+#. module: midvex_customs_op
+msgid "Link Purchase Orders..."
+msgstr "Satınalma Siparişlerini Bağla..."
+
+#. module: midvex_customs_op
+msgid "Linked Sales Orders (MTO)"
+msgstr "İlişkili Satış Siparişleri (MTO)"
+
+#. module: midvex_customs_op
+msgid "Linked Vendor Bills &amp; Expenses"
+msgstr "İlişkili Satıcı Faturaları ve Giderler"
+
+#. module: midvex_customs_op
+msgid "Linked to auto-created Import & Customs Operation: <a href=# data-oe-model=customs.operation data-oe-id=%d>%s</a>"
+msgstr "Otomatik oluşturulan İthalat & Gümrük İşlemi ile ilişkilendirildi: <a href=# data-oe-model=customs.operation data-oe-id=%d>%s</a>"
+
+#. module: midvex_customs_op
+msgid "Manage import shipments, track required documents, and follow customs clearance progress."
+msgstr "İthalat sevkiyatlarını yönetin, gerekli belgeleri takip edin ve gümrükleme sürecini izleyin."
+
+#. module: midvex_customs_op
+msgid "Manage, review, and approve document copies and track physical originals."
+msgstr "Belge kopyalarını yönetin, inceleyin ve onaylayın ve fiziksel orijinalleri takip edin."
+
+#. module: midvex_customs_op
+msgid "Manufacturer"
+msgstr "Üretici"
+
+#. module: midvex_customs_op
+msgid "Missing"
+msgstr "Eksik"
+
+#. module: midvex_customs_op
+msgid "Missing Docs"
+msgstr "Eksik Belgeler"
+
+#. module: midvex_customs_op
+msgid "Missing Docs Count"
+msgstr "Eksik Belge Sayısı"
+
+#. module: midvex_customs_op
+msgid "My Operations"
+msgstr "Operasyonlarım"
+
+#. module: midvex_customs_op
+msgid "My Requirements"
+msgstr "Gereksinimlerim"
+
+#. module: midvex_customs_op
+msgid "New"
+msgstr "Yeni"
+
+#. module: midvex_customs_op
+msgid "No Link"
+msgstr "Bağlantı Yok"
+
+#. module: midvex_customs_op
+msgid "Not Created"
+msgstr "Oluşturulmadı"
+
+#. module: midvex_customs_op
+msgid "Notes"
+msgstr "Notlar"
+
+#. module: midvex_customs_op
+msgid "Open Import Operation"
+msgstr "İthalat Operasyonunu Aç"
+
+#. module: midvex_customs_op
+msgid "Origin &amp; Manufacturer"
+msgstr "Menşe ve Üretici"
+
+#. module: midvex_customs_op
+msgid "Original Document Tracking"
+msgstr "Orijinal Belge Takibi"
+
+#. module: midvex_customs_op
+msgid "Original Documents Required"
+msgstr "Orijinal Belgeler Gerekli"
+
+#. module: midvex_customs_op
+msgid "Original Missing"
+msgstr "Orijinal Eksik"
+
+#. module: midvex_customs_op
+msgid "Original Required"
+msgstr "Orijinal Gerekli"
+
+#. module: midvex_customs_op
+msgid "Overridden"
+msgstr "Geçersiz Kılındı"
+
+#. module: midvex_customs_op
+msgid "Override Readiness Block"
+msgstr "Hazırlık Engelini Geçersiz Kıl"
+
+#. module: midvex_customs_op
+msgid "Parties Involved"
+msgstr "İlgili Taraflar"
+
+#. module: midvex_customs_op
+msgid "Planned Arrival (ETA)"
+msgstr "Tahmini Varış (ETA)"
+
+#. module: midvex_customs_op
+msgid "Planned Departure (ETD)"
+msgstr "Tahmini Kalkış (ETD)"
+
+#. module: midvex_customs_op
+msgid "Product"
+msgstr "Ürün"
+
+#. module: midvex_customs_op
+msgid "Product Line"
+msgstr "Ürün Satırı"
+
+#. module: midvex_customs_op
+msgid "Production Dates"
+msgstr "Üretim Tarihleri"
+
+#. module: midvex_customs_op
+msgid "Provide description of damage or missing boxes/items..."
+msgstr "Hasarlı veya eksik kutuların/öğelerin açıklamasını girin..."
+
+#. module: midvex_customs_op
+msgid "Provide detailed description of why the document is rejected or correction is required..."
+msgstr "Belgenin neden reddedildiğine veya neden düzeltme gerektiğine dair ayrıntılı açıklama girin..."
+
+#. module: midvex_customs_op
+msgid "Provide the business justification for overriding the readiness controls..."
+msgstr "Hazırlık kontrollerini geçersiz kılmak için ticari gerekçe belirtin..."
+
+#. module: midvex_customs_op
+msgid "Purchase &amp; Supplier"
+msgstr "Satınalma ve Tedarikçi"
+
+#. module: midvex_customs_op
+msgid "Purchase Order"
+msgstr "Satınalma Siparişi"
+
+#. module: midvex_customs_op
+msgid "Readiness &amp; Compliance"
+msgstr "Hazırlık ve Uyum"
+
+#. module: midvex_customs_op
+msgid "Ready Blocked"
+msgstr "Hazırlık Engellendi"
+
+#. module: midvex_customs_op
+msgid "Receiving Status"
+msgstr "Teslim Alma Durumu"
+
+#. module: midvex_customs_op
+msgid "Rejected"
+msgstr "Reddedildi"
+
+#. module: midvex_customs_op
+msgid "Rejection &amp; Notes"
+msgstr "Red ve Notlar"
+
+#. module: midvex_customs_op
+msgid "Required Docs"
+msgstr "Gerekli Belgeler"
+
+#. module: midvex_customs_op
+msgid "Responsible"
+msgstr "Sorumlu"
+
+#. module: midvex_customs_op
+msgid "Responsible Party"
+msgstr "Sorumlu Taraf"
+
+#. module: midvex_customs_op
+msgid "Search Customs Files"
+msgstr "Gümrük Dosyalarını Ara"
+
+#. module: midvex_customs_op
+msgid "Search Document Requirements"
+msgstr "Belge Gereksinimlerini Ara"
+
+#. module: midvex_customs_op
+msgid "Search Document Types"
+msgstr "Belge Türlerini Ara"
+
+#. module: midvex_customs_op
+msgid "Search Product Lines"
+msgstr "Ürün Satırlarını Ara"
+
+#. module: midvex_customs_op
+msgid "Search Stages"
+msgstr "Aşamaları Ara"
+
+#. module: midvex_customs_op
+msgid "Select Carrier..."
+msgstr "Taşıyıcı Seçin..."
+
+#. module: midvex_customs_op
+msgid "Select Customs Broker..."
+msgstr "Gümrük Müşaviri Seçin..."
+
+#. module: midvex_customs_op
+msgid "Select Document Type..."
+msgstr "Belge Türü Seçin..."
+
+#. module: midvex_customs_op
+msgid "Select Freight Forwarder..."
+msgstr "Nakliyeci Seçin..."
+
+#. module: midvex_customs_op
+msgid "Select Suppliers..."
+msgstr "Tedarikçileri Seçin..."
+
+#. module: midvex_customs_op
+msgid "Shipment Dates"
+msgstr "Sevkiyat Tarihleri"
+
+#. module: midvex_customs_op
+msgid "Shipment Transport"
+msgstr "Sevkiyat Taşımacılığı"
+
+#. module: midvex_customs_op
+msgid "Stage"
+msgstr "Aşama"
+
+#. module: midvex_customs_op
+msgid "Stages"
+msgstr "Aşamalar"
+
+#. module: midvex_customs_op
+msgid "Status"
+msgstr "Durum"
+
+#. module: midvex_customs_op
+msgid "Statuses"
+msgstr "Durumlar"
+
+#. module: midvex_customs_op
+msgid "Stock Receipts"
+msgstr "Stok Makbuzları"
+
+#. module: midvex_customs_op
+msgid "Summaries"
+msgstr "Özetler"
+
+#. module: midvex_customs_op
+msgid "Supplier"
+msgstr "Tedarikçi"
+
+#. module: midvex_customs_op
+msgid "Sync Import Lines"
+msgstr "İthalat Satırlarını Senkronize Et"
+
+#. module: midvex_customs_op
+msgid "Sync Purchase Lines"
+msgstr "Satınalma Satırlarını Senkronize Et"
+
+#. module: midvex_customs_op
+msgid "Track compliance documents here."
+msgstr "Uyum belgelerini buradan takip edin."
+
+#. module: midvex_customs_op
+msgid "Tracking Indicators"
+msgstr "Takip Göstergeleri"
+
+#. module: midvex_customs_op
+msgid "Turkish Name"
+msgstr "Türkçe İsim"
+
+#. module: midvex_customs_op
+msgid "Under Review"
+msgstr "İncelemede"
+
+#. module: midvex_customs_op
+msgid "Upload Document Versions"
+msgstr "Belge Sürümlerini Yükle"
+
+#. module: midvex_customs_op
+msgid "Vendor"
+msgstr "Satıcı"
+
+#. module: midvex_customs_op
+msgid "Vendor Bills & Expenses"
+msgstr "Satıcı Faturaları & Masraflar"
+
+#. module: midvex_customs_op
+msgid "Verification &amp; Review"
+msgstr "Doğrulama ve İnceleme"
+
+#. module: midvex_customs_op
+msgid "Verification Requirements"
+msgstr "Doğrulama Gereksinimleri"
+
+#. module: midvex_customs_op
+msgid "Waiting Documents"
+msgstr "Belgeler Bekleniyor"
+
+#. module: midvex_customs_op
+msgid "Warehouse Control"
+msgstr "Depo Kontrolü"
+
+#. module: midvex_customs_op
+msgid "Where is the order now?"
+msgstr "Sipariş şu an nerede?"
+
+#. module: midvex_customs_op
+msgid "You cannot add product lines when the Customs File is past the 'Waiting for Documents' stage."
+msgstr "Gümrük Dosyası 'Belgeler Bekleniyor' aşamasını geçtiğinde ürün satırlarını ekleyemezsiniz."
+
+#. module: midvex_customs_op
+msgid "You cannot modify product lines when the Customs File is past the 'Waiting for Documents' stage."
+msgstr "Gümrük Dosyası 'Belgeler Bekleniyor' aşamasını geçtiğinde ürün satırlarını değiştiremezsiniz."
+
+#. module: midvex_customs_op
+msgid "You cannot sync product lines because this Customs File is past the 'Waiting for Documents' stage (locked)."
+msgstr "Bu Gümrük Dosyası 'Belgeler Bekleniyor' aşamasını geçtiği için (kilitli) ürün satırlarını senkronize edemezsiniz."
+
+#. module: midvex_customs_op
+msgid "e.g. COA, HC, COO"
+msgstr "örn. COA, HC, COO"
+
+#. module: midvex_customs_op
+msgid "https://example.com/track/..."
+msgstr "https://example.com/track/..."
+
