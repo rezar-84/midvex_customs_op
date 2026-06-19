@@ -6,6 +6,21 @@ All notable changes to the Customs Operations module should be documented here.
 
 ### Added
 
+- **Integration Phase (Purchase, Inventory, Accounting, Sales Sync) Planning**:
+  - Created feature branch `feature/purchase-inventory-sales-sync`.
+  - Added [docs/17_PO_INTEGRATION_REVIEW.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/17_PO_INTEGRATION_REVIEW.md) documenting initial PM review findings and technical gaps before coding.
+  - Updated [docs/01_PRD.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/01_PRD.md) to add functional requirements (FR-020 through FR-026) for auto-creation triggers, PO data sync, stock warning alerts, vendor bill linkage, product profiles, and duplicate prevention.
+  - Updated [docs/02_USER_FLOWS.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/02_USER_FLOWS.md) to layout confirmed PO automatic creation paths, manual button action, warning logic, and cost tracking.
+  - Updated [docs/03_DATA_MODEL.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/03_DATA_MODEL.md) defining standard Odoo models extensions (`purchase.order`, `purchase.order.line`, `stock.picking`, `account.move`, `product.template`).
+  - Updated [docs/04_UI_UX_SPEC.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/04_UI_UX_SPEC.md) outlining smart buttons, clearance banners, and financial tabs.
+  - Updated [docs/05_SECURITY_ACCESS.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/05_SECURITY_ACCESS.md) specifying company consistency check rules and linear security boundaries.
+  - Updated [docs/06_AUTOMATION_RULES.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/06_AUTOMATION_RULES.md) with PO hooks, sync rules, receipt sub-status warnings, and document requirement template triggers.
+  - Updated [docs/07_ACCEPTANCE_CRITERIA.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/07_ACCEPTANCE_CRITERIA.md) and [docs/08_TEST_PLAN.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/08_TEST_PLAN.md) defining criteria and test cases for integration.
+  - Updated [docs/09_IMPLEMENTATION_PLAN.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/09_IMPLEMENTATION_PLAN.md) with 5 new milestones for the integration phase.
+  - Updated [docs/10_DECISIONS.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/10_DECISIONS.md) to record five new architecture decisions for Odoo standard syncs.
+  - Updated [docs/11_USER_GUIDE.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/11_USER_GUIDE.md) detailing how to use integrated flows.
+  - Updated [docs/14_RISK_REGISTER.md](file:///home/rubuntu/Projects/midvex_customs_op/docs/14_RISK_REGISTER.md) adding integration risk scenarios.
+
 - Extended the main Customs File (`customs.operation`) model with 30+ fields for comprehensive import tracking: production tracking (status, ready date, loading date), logistics (vessel, tracking link, container/seal info, BL number), customs sub-status, simple cost accounting (freight, tax, storage, stamp, broker, exchange diff, other, total computed cost), and warehouse receiving checklist.
 - Added dedicated relational photo attachments (`warehouse_photo_ids`) and delivery notes/POD (`delivery_note_ids`) to the Warehouse tab.
 - Programmed automatic python mail activity triggers for key import milestones: Bill of Lading uploaded, warehouse delivery completed, discrepancies/damaged cargo recorded, and ETA approaching (under 3 days).
