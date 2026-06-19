@@ -248,9 +248,12 @@ Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
 - **Milestone 4: Accounting & Sales Linkage** (Completed)
   - Automatically linked PO-generated vendor bills (`account.move`) to the linked Customs Operation on creation/updates.
   - Enabled manual vendor bill lookup fields on the Bill form view to link external expense invoices (duties, storage, freight, agent fees).
-  - Implemented Sales Order reference tracking on `customs.operation` via origin text tracing, procurement groups, and stock move destination chains for MTO-procured shipments.
+  - Implemented Sales Order reference tracking on `customs.operation` via origin text tracing and stock move destination chains for MTO-procured shipments.
   - Designed smart navigation buttons for Sales Orders and Vendor Bills.
 - **Milestone 5: Localization & Automated Tests Integration** (Completed)
   - Added complete Turkish translations in `i18n/tr.po` for all new fields, buttons, alerts, and settings.
   - Wrote robust integration unit tests in `tests/test_customs_integration.py` covering PO auto-creation, line synchronization/lock rules, picking receipt validation blocks/warnings, and vendor bill linkages.
+
+## Post-Integration Remediation
+- **Fix KeyError on group_id**: Removed the deprecated `group_id` lookup on `purchase.order` inside `_compute_sale_orders` (which caused traceback on Odoo 19), relying instead on PO origin name parsing and stock move destination tracing.
 

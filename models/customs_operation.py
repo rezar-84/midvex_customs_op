@@ -397,11 +397,6 @@ class CustomsOperation(models.Model):
                 move_dest_ids = po_lines.mapped('move_ids.move_dest_ids')
                 if move_dest_ids:
                     sale_orders |= move_dest_ids.mapped('sale_line_id.order_id')
-                
-                group_ids = op.purchase_order_ids.mapped('group_id')
-                if group_ids:
-                    moves = self.env['stock.move'].search([('group_id', 'in', group_ids.ids)])
-                    sale_orders |= moves.mapped('sale_line_id.order_id')
 
             op.sale_order_ids = sale_orders
 
