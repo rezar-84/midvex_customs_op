@@ -1,69 +1,76 @@
 # User Flows
 
-## 1. Create a Customs File
+## 1. Purchase Order Confirmation & Customs File Creation
 
-1. Purchasing or logistics user opens Customs Operations.
-2. User creates a Customs File.
-3. Odoo assigns a unique reference.
-4. User selects company and responsible employee.
-5. User links one or more purchase orders.
-6. User adds or imports product lines.
-7. User assigns supplier, broker, forwarder, and shipment details.
-8. User saves the file.
-9. Odoo records the creation in chatter.
+### Path A: Automatic Creation
+1. Purchasing employee creates an import Purchase Order (PO).
+2. The user confirms the PO.
+3. Odoo automatically checks creation rules (vendor country, is_import_purchase flag, or product template settings).
+4. If eligible, Odoo creates a Customs File:
+   * Assigns a unique reference (`CUS/YYYY/NNNN`).
+   * Automatically copies header information: vendor, company, currency, incoterm, expected arrival.
+   * Automatically imports PO lines as Customs Operation Lines (mapping products, quantities, UoMs, HS codes, weights).
+   * Automatically links all generated stock receipts (incoming pickings) to the Customs File.
+   * Triggers the Document Requirement Template Engine, auto-generating required documents (Commercial Invoice, Packing List, Certificate of Origin, and product-specific certificates like COAs or Health Certificates based on product customs profiles).
+5. Odoo records the auto-creation in the PO chatter.
+
+### Path B: Manual Creation / Trigger
+1. Purchasing employee views a draft or confirmed PO.
+2. The user clicks **Create Import Operation**.
+3. Odoo checks if a Customs File already exists.
+   * If yes: Opens the existing Customs File (prevents duplication).
+   * If no: Creates a new Customs File, syncs all headers and lines, and opens the new record.
 
 ## 2. Add and request documents
 
-1. User opens the Documents tab.
-2. User adds required document records.
-3. User assigns requirement level, responsible party, vendor, and deadline.
-4. User marks documents as requested.
-5. Chatter records the request status and date.
-6. An activity may be scheduled for follow-up.
+1. User opens the Customs File's **Documents** tab or clicks the smart button.
+2. Odoo has already generated default document records based on the product customs profiles.
+3. User adds any additional required document records.
+4. User assigns deadlines, vendors, and responsible employees.
+5. User marks documents as requested.
+6. Chatter logs the request status and date.
+7. Odoo schedules follow-up activities.
 
 ## 3. Receive and review a document
 
 1. User uploads one or more attachments.
-2. Document status changes to Draft Received.
-3. Approver marks it Under Review.
-4. Approver either:
-   - Approves it
-   - Requests correction
-   - Rejects it
-5. Correction or rejection requires a reason.
-6. Chatter records the action and responsible approver.
+2. Document status changes to **Draft Received**, and Odoo automatically increments the document version number.
+3. Approver marks the document as **Under Review**.
+4. Approver reviews and either:
+   * Approves it (marks as **Approved** / **Accepted**).
+   * Requests correction or rejects it (requires a rejection reason, logged in the notes).
+5. Chatter records the action, approver name, and timestamp.
 
 ## 4. Track original documents
 
-1. User marks whether an original is required.
-2. When issued, user records issue date.
-3. When dispatched, user records courier, tracking number, and dispatch date.
-4. When received, user records receipt.
-5. Shipment-readiness calculation uses the original status.
+1. User flags whether a physical original document is required.
+2. When original is issued by the supplier, user records the issue date.
+3. When dispatched, user records the courier name, tracking number, and dispatch date.
+4. When physical copy is received, user marks it as received.
+5. Odoo recalculates shipment readiness using the original document status.
 
 ## 5. Approve shipment readiness
 
-1. Odoo calculates readiness.
-2. Odoo lists blocking reasons.
-3. Users resolve missing or rejected documents.
-4. Readiness becomes true automatically when requirements are satisfied.
-5. Managers may override only with a reason.
-6. Override is logged.
+1. Odoo dynamically calculates shipment readiness.
+2. If blocking requirements are missing, expired, or rejected, readiness remains blocked.
+3. Odoo displays human-readable blocking reasons directly on the form.
+4. Once all compliance rules are met, readiness becomes `True` automatically.
+5. Managers may bypass blocking with a mandatory override reason, which is permanently logged in chatter.
 
-## 6. Track departure and arrival
+## 6. Track departure, arrival, and inventory sync
 
-1. Logistics records planned departure and arrival.
-2. Logistics records actual departure.
-3. Operation moves to Shipped.
-4. Logistics records actual arrival.
-5. Operation moves to Arrived.
+1. Logistics records departure country, destination country, transport mode, and planned dates.
+2. Operation stage transitions to **Shipped** upon departure.
+3. Operation stage transitions to **Arrived** upon planned or actual arrival.
+4. Odoo keeps the linked stock pickings synchronized with the Customs File (visible from stock receipts).
+5. **Warning Control on Receipt:** If warehouse staff attempts to receive an incoming picking whose Customs Operation is not cleared, Odoo shows a warning or log in chatter stating: *"Goods are being received before Customs Operation is cleared."*
+6. Once cleared and received, Odoo updates the actual warehouse delivery date.
 
-## 7. Customs clearance
+## 7. Customs clearance & final costs
 
-1. Customs declaration number and date are recorded.
-2. Inspection or laboratory requirement is recorded.
-3. Relevant documents are uploaded.
-4. Release date and customs-cleared status are recorded.
-5. Goods are delivered to the warehouse.
-6. Warehouse delivery date is recorded.
-7. Manager closes the Customs File after validations pass.
+1. Customs declaration number, date, and customs release date are recorded.
+2. If inspections or laboratory analyses are required, progress and dates are logged.
+3. **Billing Integration:** When vendor bills are generated from the PO, they are automatically linked to the Customs File.
+4. User manually associates customs-related expense bills (freight invoices, broker fees, taxes).
+5. Manager reviews final compliance, documents, and costs.
+6. Manager moves the Customs File to the **Closed** stage.
