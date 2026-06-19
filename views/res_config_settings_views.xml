@@ -15,6 +15,21 @@
                             <field name="customs_block_receipt_before_clearance"/>
                         </setting>
                     </block>
+                    <block title="Sample Data Management" name="sample_data_management">
+                        <setting string="Generate or Clean Up Sample Data" 
+                                 help="Quickly populate the database with sample Import Operations at various stages (Transit, Customs, Delivered) or remove them completely.">
+                            <div class="mt16">
+                                <button name="action_generate_sample_data" 
+                                        type="object" 
+                                        string="Generate Demo Data" 
+                                        class="btn-primary me-2"/>
+                                <button name="action_cleanup_sample_data" 
+                                        type="object" 
+                                        string="Clean Up Demo Data" 
+                                        class="btn-secondary"/>
+                            </div>
+                        </setting>
+                    </block>
                 </app>
             </xpath>
         </field>

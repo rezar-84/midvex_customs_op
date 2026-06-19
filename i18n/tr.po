@@ -1588,3 +1588,35 @@ msgstr "örn. COA, HC, COO"
 msgid "https://example.com/track/..."
 msgstr "https://example.com/track/..."
 
+#. module: midvex_customs_op
+msgid "Correction Pending Documents"
+msgstr "Düzeltme Bekleyen Belgeler"
+
+#. module: midvex_customs_op
+msgid "Is Sample Data"
+msgstr "Örnek Veri mi"
+
+#. module: midvex_customs_op
+msgid "Sample Data Management"
+msgstr "Örnek Veri Yönetimi"
+
+#. module: midvex_customs_op
+msgid "Generate or Clean Up Sample Data"
+msgstr "Örnek Veri Üret veya Temizle"
+
+#. module: midvex_customs_op
+msgid "Generate Demo Data"
+msgstr "Demo Veri Üret"
+
+#. module: midvex_customs_op
+msgid "Clean Up Demo Data"
+msgstr "Demo Veriyi Temizle"
+
+#. module: midvex_customs_op
+msgid "Sample data generated successfully."
+msgstr "Örnek veri başarıyla üretildi."
+
+#. module: midvex_customs_op
+msgid "Sample data cleaned up successfully."
+msgstr "Örnek veri başarıyla temizlendi."
+

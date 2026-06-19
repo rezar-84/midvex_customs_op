@@ -258,3 +258,93 @@ Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
 - **Fix KeyError on group_id**: Removed the deprecated `group_id` lookup on `purchase.order` inside `_compute_sale_orders` (which caused traceback on Odoo 19), relying instead on PO origin name parsing and stock move destination tracing.
 - **Fix AttributeError on res.groups**: Replaced direct references to `group.users` (which caused AttributeError tracebacks depending on security scopes/database configuration) with explicit `res.users` queries matching `groups_id` relation inside `models/customs_operation.py`.
 
+
+## Future Development Roadmap Planning (Phases 2 — 5)
+
+This roadmap outlines the implementation strategy for the next phases of `midvex_customs_op` to expand automation, portal access, landed-cost calculations, and external integrations.
+
+### Phase 2: Email Reminders to Vendors, Expiry Activities, & Auto-Stage Transitions
+
+**Goal**: Automate vendor follow-ups and stage changes to reduce manual tracking overhead.
+
+#### Milestone 1: Automated Vendor Email Reminders
+- **Mechanism**: Implement a daily cron job that searches for open document requirements in `requested` or `vendor_preparing` states that are approaching their deadline (e.g., 3 days left) or are overdue.
+- **Email Templates**: Create Odoo mail templates with dynamic placeholders for operation reference, missing document name, deadline, and a direct mail reply link.
+- **Configuration**: Add settings `customs_enable_vendor_reminders` (Boolean) and `customs_reminder_lead_days` (Integer) in the Import & Customs configuration interface.
+
+#### Milestone 2: Expiry Activities and Notifications
+- **Mechanism**: For approved documents that have an expiration date (e.g., Health Certificates, Import Permits), create automated checks:
+  - If a document is within 15 days of expiring, generate a critical Odoo activity for the responsible buyer to request a renewal.
+  - If a document expires, write a loud warning block in the operation chatter and update the readiness state to blocked.
+
+#### Milestone 3: Automatic Stage Transitions
+- **Triggers**:
+  - Automatically transition the Customs File from `Draft` to `Waiting for Documents` once a Purchase Order is confirmed and product lines are synced.
+  - Automatically transition from `Waiting for Documents` to `Document Review` when all mandatory documents have been uploaded (i.e. zero missing documents).
+  - Automatically transition from `Document Review` to `Shipped` when a valid BL number and shipping tracking details are entered, and all mandatory requirements are approved.
+
+---
+
+### Phase 3: Vendor & Broker Upload Portals
+
+**Goal**: Provide secure external interfaces for suppliers and customs brokers to upload documents and update progress directly.
+
+#### Milestone 1: Supplier Document Portal
+- **Mechanism**: Extend Odoo's standard Portal controller to expose a "My Customs Operations" section for logged-in Portal users (vendors).
+- **Interface**:
+  - Vendors can view their open Import Operations.
+  - Vendors can see the list of required documents, upload attachments directly to each `customs.document.requirement`, and mark them as "Submitted for Review" (state: `under_review`).
+- **Security**: Strict record rules restricting Portal users to only see operations where they are listed in `supplier_ids`.
+
+#### Milestone 2: Broker Collaboration Portal
+- **Interface**:
+  - Access portal for customs brokers showing shipments assigned to them (`broker_id = portal_user.partner_id`).
+  - Brokers can download approved document packages (single-click ZIP generation).
+  - Brokers can upload final Customs Declarations (attach declaration PDF and input declaration number/date).
+  - Brokers can update the `customs_status` selection (e.g. "Tax Paid", "Inspection Scheduled").
+
+---
+
+### Phase 4: Landed-Cost Apportionment & Valuation (stock.landed.cost)
+
+**Goal**: Automatically allocate shipping, customs, and broker expenses directly to product inventory valuations.
+
+#### Milestone 1: Automated Landed Cost Creation
+- **Mechanism**: Integrate with Odoo's native `stock.landed.cost` module.
+- **Sync Trigger**: Upon transitioning a Customs File to `Closed`, automatically create a `stock.landed.cost` record.
+- **Linkage**: Auto-link the Landed Cost record to the operation's synced incoming shipments (`picking_ids`).
+
+#### Milestone 2: Cost Line Mapping & Apportionment
+- **Cost Import**: Pull costs recorded in the "Accounting & Costs" tab of the Import Operation (Freight, Broker Fees, Duties, Storage, etc.).
+- **Apportionment Rules**:
+  - Freight expenses allocated by **Weight** or **Volume** (using `customs.operation.line` weights).
+  - Customs Taxes and Duties allocated by **Current Value** (commercial value of lines).
+- **Automation**: Provide a "Distribute & Validate Landed Costs" button on the operation that computes and validates the valuation changes, updating the Odoo product cost history.
+
+---
+
+### Phase 5: Courier Tracking APIs, WhatsApp Bridges, & AI OCR Checking
+
+**Goal**: Connect to external APIs and leverage artificial intelligence to automate tracking and verification.
+
+#### Milestone 1: Courier Tracking Integrations
+- **Mechanism**: Integrate with tracking APIs (DHL, FedEx, UPS) using carrier endpoints.
+- **Automation**: Periodically poll tracking numbers entered in `courier_tracking_number` on original document records.
+- **Updates**: Automatically transition document requirement state to `original_received` when the courier API reports "Delivered".
+
+#### Milestone 2: WhatsApp Notification Bridge
+- **Mechanism**: Link with Odoo's WhatsApp integration or external WhatsApp Business API gateway.
+- **Triggers**:
+  - Send message to the Supplier when a critical document is missing or rejected (with correction reason).
+  - Send message to the Broker when documents are ready.
+  - Send message to the Internal Manager when an ETA is delayed or package damage is reported.
+
+#### Milestone 3: AI OCR Document Verification
+- **Mechanism**: Integrate with Odoo's AI OCR engine or a custom document extraction model.
+- **Verification Routine**: When a document attachment is uploaded by the vendor:
+  - Extract text and verify the BL number matches the operation's BL.
+  - Verify the Supplier Name, Invoice Number, and Total Amount match the purchase order values.
+  - Scan Certificate of Analysis (COA) PDFs to verify batch numbers and signatures exist.
+  - Automatically flag mismatches to the quality reviewer before human review.
+
+

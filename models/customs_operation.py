@@ -165,7 +165,9 @@ class CustomsOperation(models.Model):
     document_approved_count = fields.Integer(string='Approved Documents', compute='_compute_document_stats', store=True)
     document_missing_count = fields.Integer(string='Missing Documents', compute='_compute_document_stats', store=True)
     document_rejected_count = fields.Integer(string='Rejected Documents', compute='_compute_document_stats', store=True)
+    document_correction_count = fields.Integer(string='Correction Pending Documents', compute='_compute_document_stats', store=True)
     document_completion_percentage = fields.Float(string='Document Completion %', compute='_compute_document_stats', store=True)
+    is_sample_data = fields.Boolean(string='Is Sample Data', default=False, index=True)
     
     shipment_ready = fields.Boolean(string='Ready to Ship', compute='_compute_readiness', store=True)
     blocking_document_count = fields.Integer(string='Blocking Documents', compute='_compute_readiness', store=True)
@@ -432,11 +434,13 @@ class CustomsOperation(models.Model):
             approved = sum(1 for doc in op.document_requirement_ids if doc.state in approved_states)
             missing = sum(1 for doc in op.document_requirement_ids if doc.state in missing_states)
             rejected = sum(1 for doc in op.document_requirement_ids if doc.state == 'rejected')
+            correction = sum(1 for doc in op.document_requirement_ids if doc.state == 'correction_required')
             
             op.document_total = total
             op.document_approved_count = approved
             op.document_missing_count = missing
             op.document_rejected_count = rejected
+            op.document_correction_count = correction
             op.document_completion_percentage = (approved / total * 100.0) if total > 0 else 0.0
 
     @api.depends(
@@ -706,6 +710,8 @@ class CustomsOperation(models.Model):
  
     def unlink(self):
         for op in self:
+            if op.is_sample_data:
+                continue
             is_draft = not op.stage_id or op.stage_id.code == 'draft'
             if not is_draft:
                 raise ValidationError(

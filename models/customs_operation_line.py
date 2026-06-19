@@ -123,6 +123,8 @@ class CustomsOperationLine(models.Model):
     def unlink(self):
         for line in self:
             op = line.operation_id
+            if op and op.is_sample_data:
+                continue
             waiting_docs_stage = self.env.ref('midvex_customs_op.stage_waiting_docs', raise_if_not_found=False)
             waiting_docs_seq = waiting_docs_stage.sequence if waiting_docs_stage else 2
             if op.stage_id and op.stage_id.sequence > waiting_docs_seq:

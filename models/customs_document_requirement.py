@@ -261,6 +261,8 @@ class CustomsDocumentRequirement(models.Model):
 
     def unlink(self):
         for rec in self:
+            if rec.operation_id and rec.operation_id.is_sample_data:
+                continue
             if rec.attachment_ids:
                 raise ValidationError(
                     _("You cannot delete a document requirement (%s) that has uploaded attachments. Please remove the attachments or mark the status as 'Not Applicable' instead.") % rec.name
