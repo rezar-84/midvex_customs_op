@@ -226,3 +226,31 @@ Status: Complete
 - Milestone 5: Demo Seed Data & Documentation (Completed)
   - Seeded representative operation records showing various workflow stages (Production, Shipped, Customs Clearance with missing docs, Delivered with damages) in `demo/customs_demo_data.xml`.
   - Added safe cleanup instructions and Odoo shell script to `README.md`.
+
+## Integration Phase — Purchase, Inventory, Accounting, and Sales Sync
+
+Status: Planning (on branch `feature/purchase-inventory-sales-sync`)
+
+- **Milestone 1: Purchase Order & Product Profile Integration**
+  - Extend `product.template` with default customs compliance profile settings (hs_code, origin country, cert requirements).
+  - Extend `purchase.order` with sync indicators, smart buttons, manual creation button, and stage summaries.
+  - Implement python hooks on PO confirmation to automatically trigger Customs Operation creation when conditions are met.
+  - Implement single-operation duplicate prevention validations.
+- **Milestone 2: Lines & Quantities Synchronization**
+  - Sync PO line details and quantities into `customs.operation.line` records linked to `purchase.order.line`.
+  - Filter out note and section lines during sync.
+  - Implement a manual "Sync Purchase Lines" button to re-run line updates without losing manual line edits.
+- **Milestone 3: Inventory Receipt Linkage & Control**
+  - Automatically link generated stock pickings (incoming receipts) to the Customs Operation.
+  - Implement stock picking validation hooks to show a soft warning/chatter note if receipt occurs prior to customs clearance.
+  - Add configuration setting `customs_block_receipt_before_clearance` to support strict blocking.
+- **Milestone 4: Accounting & Sales Linkage**
+  - Automatically associate PO-generated vendor bills (`account.move`) with the Customs Operation.
+  - Enable manual linkages for external customs expense bills (freight, stamp duty, broker fees).
+  - Implement Sales Order reference tracing for MTO-procured shipments.
+  - Build UI cross-navigation smart buttons.
+- **Milestone 5: Localization & Automated Tests Integration**
+  - Translate all new UI elements, fields, wizard actions, and warning banners in `i18n/tr.po`.
+  - Build integration tests asserting PO confirmation auto-creation, duplicate prevention, stock picking sync/warnings, vendor bill linkages, and company consistency constraints.
+  - Final PM and UX checklist review.
+
