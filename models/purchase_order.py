@@ -182,7 +182,7 @@ class PurchaseOrder(models.Model):
                 'product_id': line.product_id.id,
                 'description': line.name,
                 'quantity': line.product_qty,
-                'uom_id': line.product_uom.id,
+                'uom_id': line.product_uom_id.id,
             }
             
             tmpl = line.product_id.product_tmpl_id
@@ -237,7 +237,7 @@ class PurchaseOrderLine(models.Model):
                             'product_id': line.product_id.id,
                             'description': line.name,
                             'quantity': line.product_qty,
-                            'uom_id': line.product_uom.id,
+                            'uom_id': line.product_uom_id.id,
                         }
                         tmpl = line.product_id.product_tmpl_id
                         if tmpl:
