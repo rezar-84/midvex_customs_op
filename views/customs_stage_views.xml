@@ -49,12 +49,6 @@
             <search string="Search Stages">
                 <field name="name"/>
                 <field name="code"/>
-                <filter string="Folded" name="folded" domain="[('fold', '=', True)]"/>
-                <filter string="Closed" name="closed" domain="[('is_closed', '=', True)]"/>
-                <filter string="Cancelled" name="cancelled" domain="[('is_cancelled', '=', True)]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
-                </group>
             </search>
         </field>
     </record>
