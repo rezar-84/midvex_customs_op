@@ -41,9 +41,9 @@
 | 2026-06-19 | Single Customs Operation per PO Constraint | Avoids duplicate operations by default and provides manual creation/open actions that redirect to the existing operation if one exists. | Multiple operations allowed by default | One-to-one default linkage with redirect logic. |
 | 2026-06-19 | Real-time PO Lines Import with Quantity Sync | Automatically creates operation lines mapped to purchase order lines, and allows manual "Sync Purchase Lines" trigger to update quantities or add lines without losing manually reviewed customs line edits. | Standard manual data entry | Line sync methods mapping `customs.operation.line` to `purchase.order.line`. |
 | 2026-06-19 | Soft Warning on Uncleared Receipts | Warns warehouse team in stock picking validation if validating receipts of uncleared operations, and supports a strict block option `customs_block_receipt_before_clearance` in settings. | Block all receipts before clearance / silent sync | Log a warning in chatter by default; raise block validation if strict setting is True. |
-| 2026-06-19 | Tracing Sales Orders from Procurement Groups | Links Sales Orders to Customs Operations for MTO flows using the standard PO line's procurement group stock rules. | Manual SO field entry / no sales trace | Automated MTO search mapping PO to stock moves to Sales Orders. |
+| 2026-06-19 | Vendor Bills and Expense Invoices Linkage | Allows accountants to link the bill during entry using a Many2one lookup on the Bill form, while also providing a 'Vendor Bills' smart button/M2M list on the Customs Operation. | Strict lookup on bill only / wizard only | Combined Many2one on Vendor Bill and smart button/list on Customs Operation. |
+| 2026-06-19 | Document Requirements Split Strategy | Standard documents (Invoice, Packing List, etc.) apply globally to the entire shipment, while compliance records like COAs or Health Certificates are product-specific and must be managed per product line. | Create all documents globally / create all per line | Standard documents created globally; product-specific compliance documents generated per product line. |
 
 ## Pending decisions
 
 None. All pending architectural decisions have been resolved.
-
