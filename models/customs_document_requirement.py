@@ -195,7 +195,7 @@ class CustomsDocumentRequirement(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         approver_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted', 'rejected', 'correction_required'}
-        is_approver = self.env.user.has_group('midvex_customs_op.group_customs_approver')
+        is_approver = self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_approver')
         
         for vals in vals_list:
             state = vals.get('state', 'not_requested')
@@ -221,8 +221,8 @@ class CustomsDocumentRequirement(models.Model):
         if 'state' in vals:
             new_state = vals['state']
             approver_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted', 'rejected', 'correction_required'}
-            is_approver = self.env.user.has_group('midvex_customs_op.group_customs_approver')
-            is_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
+            is_approver = self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_approver')
+            is_manager = self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_manager')
             
             for rec in self:
                 # 1. Permission Check: basic Customs User cannot set an approver/manager state directly

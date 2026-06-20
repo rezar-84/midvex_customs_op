@@ -11,3 +11,4 @@ from . import mail_activity_type
 from . import res_config_settings
 from . import account_move
 from . import stock_picking
+from . import customs_office

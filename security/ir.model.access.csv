@@ -21,3 +21,7 @@ access_customs_document_requirement_manager,customs.document.requirement.manager
 access_customs_document_requirement_admin,customs.document.requirement.admin,model_customs_document_requirement,group_customs_admin,1,1,1,1
 access_customs_operation_override_wizard_manager,customs.operation.override.wizard.manager,model_customs_operation_override_wizard,group_customs_manager,1,1,1,1
 access_customs_operation_override_wizard_admin,customs.operation.override.wizard.admin,model_customs_operation_override_wizard,group_customs_admin,1,1,1,1
+access_customs_office_user,customs.office.user,model_customs_office,group_customs_user,1,0,0,0
+access_customs_office_approver,customs.office.approver,model_customs_office,group_customs_approver,1,0,0,0
+access_customs_office_manager,customs.office.manager,model_customs_office,group_customs_manager,1,0,0,0
+access_customs_office_admin,customs.office.admin,model_customs_office,group_customs_admin,1,1,1,1

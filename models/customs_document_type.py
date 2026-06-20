@@ -35,6 +35,4 @@ class CustomsDocumentType(models.Model):
         help="If set, this document type is specific to the company. Otherwise, it is shared globally."
     )
 
-    _sql_constraints = [
-        ('code_unique', 'unique(code, company_id)', 'The code of the document type must be unique per company (or global).')
-    ]
+    _code_uniq = models.Constraint('unique(code, company_id)', 'The code of the document type must be unique per company (or global).')

@@ -353,7 +353,8 @@
                                     <field name="customs_declaration_number"/>
                                     <field name="customs_declaration_date"/>
                                     <field name="release_date"/>
-                                    <field name="customs_office"/>
+                                    <field name="customs_office_id" options="{'no_create': True}"/>
+                                    <field name="customs_line_channel"/>
                                 </group>
                                 <group string="Inspections">
                                     <field name="inspection_required"/>
@@ -408,13 +409,18 @@
                                 <group>
                                     <field name="cost_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_customs_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_kdv" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_kkdf" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_broker_expenses" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_stamp_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
                                 <group>
-                                    <field name="cost_storage" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_delivery_order" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_demurrage" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_storage_warehouse" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_exchange_diff" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="cost_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cost_storage" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="cost_storage == 0.0" readonly="1"/>
                                 </group>
                             </group>
                             <group string="Linked Vendor Bills &amp; Expenses" invisible="vendor_bill_count == 0">

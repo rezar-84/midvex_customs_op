@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="office_ambarli" model="customs.office">
+            <field name="name">Ambarlı Gümrük Müdürlüğü</field>
+            <field name="code">341600</field>
+        </record>
+        <record id="office_erenkoy" model="customs.office">
+            <field name="name">Erenköy Gümrük Müdürlüğü</field>
+            <field name="code">341800</field>
+        </record>
+        <record id="office_gemlik" model="customs.office">
+            <field name="name">Gemlik Gümrük Müdürlüğü</field>
+            <field name="code">160300</field>
+        </record>
+        <record id="office_dilovasi" model="customs.office">
+            <field name="name">Dilovası Gümrük Müdürlüğü</field>
+            <field name="code">410600</field>
+        </record>
+        <record id="office_muratbey" model="customs.office">
+            <field name="name">Muratbey Gümrük Müdürlüğü</field>
+            <field name="code">340500</field>
+        </record>
+        <record id="office_alsancak" model="customs.office">
+            <field name="name">Alsancak Gümrük Müdürlüğü</field>
+            <field name="code">350100</field>
+        </record>
+        <record id="office_mersin" model="customs.office">
+            <field name="name">Mersin Gümrük Müdürlüğü</field>
+            <field name="code">330100</field>
+        </record>
+    </data>
+</odoo>

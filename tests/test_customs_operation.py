@@ -220,7 +220,7 @@ class TestCustomsOperation(TransactionCase):
             'is_critical': True,
         })
         self.env['mail.activity'].create({
-            'res_model': 'customs.operation',
+            'res_model_id': self.env['ir.model']._get('customs.operation').id,
             'res_id': operation.id,
             'activity_type_id': act_type_critical.id,
             'user_id': self.env.user.id,

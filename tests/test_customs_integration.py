@@ -14,6 +14,12 @@ class TestCustomsIntegration(TransactionCase):
         cls.company_main = cls.env.company
         cls.company_other = cls.env['res.company'].create({'name': 'Other Company'})
 
+        # Ensure company main country is set to Turkey (not US) to differentiate import purchases
+        cls.country_tr = cls.env.ref('base.tr', raise_if_not_found=False)
+        if not cls.country_tr:
+            cls.country_tr = cls.env['res.country'].create({'name': 'Turkey', 'code': 'TR'})
+        cls.company_main.partner_id.write({'country_id': cls.country_tr.id})
+
         # Partners
         cls.vendor_domestic = cls.env['res.partner'].create({
             'name': 'Domestic Vendor',
@@ -158,7 +164,9 @@ class TestCustomsIntegration(TransactionCase):
         self.assertEqual(col_new.quantity, 8)
 
         # 3. Delete a PO line
+        po.state = 'draft'
         new_po_line.unlink()
+        po.state = 'purchase'
         self.assertEqual(len(op.operation_line_ids), 1, "Deleting PO line should sync to customs operation")
 
         # 4. Lock lines (move past Waiting for Docs)

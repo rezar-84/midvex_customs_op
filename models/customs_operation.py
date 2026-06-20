@@ -10,9 +10,7 @@ class CustomsOperation(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    _sql_constraints = [
-        ('name_unique', 'unique(name, company_id)', 'The Customs File reference must be unique per company!')
-    ]
+    _name_uniq = models.Constraint('unique(name, company_id)', 'The Customs File reference must be unique per company!')
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default='New', tracking=True)
     active = fields.Boolean(string='Active', default=True, tracking=True, index=True)
@@ -82,8 +80,7 @@ class CustomsOperation(models.Model):
         'operation_id', 
         'purchase_id', 
         string='Purchase Orders',
-        domain="[('company_id', '=', company_id)]",
-        tracking=True
+        domain="[('company_id', '=', company_id)]"
     )
     picking_ids = fields.Many2many(
         'stock.picking', 
@@ -91,8 +88,7 @@ class CustomsOperation(models.Model):
         'operation_id', 
         'picking_id', 
         string='Incoming Shipments',
-        domain="[('company_id', '=', company_id)]",
-        tracking=True
+        domain="[('company_id', '=', company_id)]"
     )
     operation_line_ids = fields.One2many(
         'customs.operation.line', 
@@ -137,7 +133,13 @@ class CustomsOperation(models.Model):
         string='Country of Destination',
         tracking=True
     )
-    customs_office = fields.Char(string='Customs Office', tracking=True)
+    customs_office = fields.Char(string='Customs Office (Legacy)', tracking=True)
+    customs_office_id = fields.Many2one(
+        'customs.office', 
+        string='Customs Office',
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        tracking=True
+    )
     container_number = fields.Char(string='Container Number', tracking=True)
     booking_number = fields.Char(string='Booking Number', tracking=True)
     transport_document_number = fields.Char(string='Transport Document No.', help="Bill of Lading, AWB, CMR, etc.", tracking=True)
@@ -155,6 +157,12 @@ class CustomsOperation(models.Model):
     # Customs Information
     customs_declaration_number = fields.Char(string='Customs Declaration No.', tracking=True)
     customs_declaration_date = fields.Date(string='Declaration Date', tracking=True)
+    customs_line_channel = fields.Selection([
+        ('red', 'Red Channel (Fiziki Muayene)'),
+        ('yellow', 'Yellow Channel (Belge Kontrolü)'),
+        ('blue', 'Blue Channel (Sonradan Kontrol)'),
+        ('green', 'Green Channel (Muayene Yok)'),
+    ], string='Customs Inspection Channel', tracking=True)
     inspection_required = fields.Boolean(string='Inspection Required', default=False, tracking=True)
     laboratory_required = fields.Boolean(string='Laboratory Required', default=False, tracking=True)
     inspection_date = fields.Date(string='Inspection Date', tracking=True)
@@ -243,7 +251,12 @@ class CustomsOperation(models.Model):
     cost_customs_tax = fields.Monetary(string='Customs Tax', currency_field='currency_id', tracking=True)
     cost_broker_expenses = fields.Monetary(string='Customs Broker Expenses', currency_field='currency_id', tracking=True)
     cost_stamp_tax = fields.Monetary(string='Stamp Tax', currency_field='currency_id', tracking=True)
-    cost_storage = fields.Monetary(string='Storage / Demurrage', currency_field='currency_id', tracking=True)
+    cost_storage = fields.Monetary(string='Storage / Demurrage (Legacy)', currency_field='currency_id', tracking=True)
+    cost_demurrage = fields.Monetary(string='Demurrage Cost', currency_field='currency_id', tracking=True, help="Demurrage fees paid at port.")
+    cost_storage_warehouse = fields.Monetary(string='Storage Cost', currency_field='currency_id', tracking=True, help="Storage/warehouse fees paid at antrepo.")
+    cost_kkdf = fields.Monetary(string='KKDF Cost', currency_field='currency_id', tracking=True)
+    cost_kdv = fields.Monetary(string='Customs KDV (VAT)', currency_field='currency_id', tracking=True, help="VAT paid at customs, typically deductible.")
+    cost_delivery_order = fields.Monetary(string='Delivery Order (Ordino) Cost', currency_field='currency_id', tracking=True)
     cost_exchange_diff = fields.Monetary(string='Exchange-Rate Difference', currency_field='currency_id', tracking=True)
     cost_other = fields.Monetary(string='Other Costs', currency_field='currency_id', tracking=True)
     cost_total = fields.Monetary(
@@ -332,7 +345,7 @@ class CustomsOperation(models.Model):
                 )
             if op.damaged_product or op.missing_packages:
                 manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
-                manager_users = self.env['res.users'].search([('groups_id', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
+                manager_users = self.env['res.users'].search([('group_ids', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
                 notify_user = manager_users[0].id if manager_users else op.user_id.id
                 op._create_operation_activity(
                     'mail.mail_activity_data_todo',
@@ -417,12 +430,16 @@ class CustomsOperation(models.Model):
                 if not op.currency_id:
                     op.currency_id = op.company_id.currency_id or self.env.company.currency_id
 
-    @api.depends('cost_freight', 'cost_customs_tax', 'cost_broker_expenses', 'cost_stamp_tax', 'cost_storage', 'cost_exchange_diff', 'cost_other')
+    @api.depends('cost_freight', 'cost_customs_tax', 'cost_broker_expenses', 'cost_stamp_tax', 
+                 'cost_storage', 'cost_demurrage', 'cost_storage_warehouse', 
+                 'cost_kkdf', 'cost_delivery_order', 'cost_exchange_diff', 'cost_other')
     def _compute_cost_total(self):
         for op in self:
             op.cost_total = (
                 op.cost_freight + op.cost_customs_tax + op.cost_broker_expenses +
-                op.cost_stamp_tax + op.cost_storage + op.cost_exchange_diff + op.cost_other
+                op.cost_stamp_tax + op.cost_storage + op.cost_demurrage + 
+                op.cost_storage_warehouse + op.cost_kkdf + op.cost_delivery_order + 
+                op.cost_exchange_diff + op.cost_other
             )
 
     @api.depends('document_requirement_ids', 'document_requirement_ids.state')
@@ -518,7 +535,7 @@ class CustomsOperation(models.Model):
 
     def action_override_readiness(self):
         self.ensure_one()
-        if not self.env.user.has_group('midvex_customs_op.group_customs_manager'):
+        if not (self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_manager')):
             raise AccessError(_("Only Customs Managers can override readiness controls."))
             
         return {
@@ -532,7 +549,7 @@ class CustomsOperation(models.Model):
 
     def action_reset_override(self):
         self.ensure_one()
-        if not self.env.user.has_group('midvex_customs_op.group_customs_manager'):
+        if not (self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_manager')):
             raise AccessError(_("Only Customs Managers can reset override settings."))
         self.write({
             'is_overridden': False,
@@ -565,7 +582,7 @@ class CustomsOperation(models.Model):
         })
 
     def write(self, vals):
-        is_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
+        is_manager = self.env.su or self.env.user.has_group('midvex_customs_op.group_customs_manager')
         
         # Capture old values before write for trigger conditions
         old_values = {}
@@ -604,8 +621,9 @@ class CustomsOperation(models.Model):
                                 (old_stage.name, new_stage.name)
                             )
             
-            # 2. Existing closing stage validations
             if new_stage.is_closed:
+                if not is_manager:
+                    raise ValidationError(_("Only Customs Managers or Administrators can close a Customs File."))
                 approved_states = {'approved', 'original_issued', 'original_dispatched', 'original_received', 'submitted_to_customs', 'accepted'}
                 for op in self:
                     # Verify all mandatory document requirements are complete
@@ -627,7 +645,7 @@ class CustomsOperation(models.Model):
                     if open_critical_activities:
                         raise ValidationError(
                             _("You cannot close Customs File %s because there are open critical activities:\n%s") %
-                            (op.name, "\n".join(("- %s" % (a.summary or a.activity_type_id.name, a.activity_type_id.name) for a in open_critical_activities)))
+                            (op.name, "\n".join(("- %s" % (a.summary or a.activity_type_id.name) for a in open_critical_activities)))
                         )
                     
                     # Warning checks for missing optional fields:
@@ -676,7 +694,7 @@ class CustomsOperation(models.Model):
             if ('damaged_product' in vals and vals['damaged_product'] and not old.get('damaged_product')) or \
                ('missing_packages' in vals and vals['missing_packages'] and not old.get('missing_packages')):
                 manager_group = self.env.ref('midvex_customs_op.group_customs_manager', raise_if_not_found=False)
-                manager_users = self.env['res.users'].search([('groups_id', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
+                manager_users = self.env['res.users'].search([('group_ids', 'in', manager_group.ids)]) if manager_group else self.env['res.users']
                 notify_user = manager_users[0].id if manager_users else op.user_id.id
                 op._create_operation_activity(
                     'mail.mail_activity_data_todo',
@@ -707,7 +725,20 @@ class CustomsOperation(models.Model):
                         )
 
         return res
- 
+    @api.constrains('customs_declaration_number', 'destination_country_id')
+    def _check_declaration_number_format(self):
+        import re
+        for op in self:
+            dest_country = op.destination_country_id
+            if dest_country and dest_country.code == 'TR' and op.customs_declaration_number:
+                pattern = r'^\d{8}[A-Z]{2}\d{6}$'
+                if not re.match(pattern, op.customs_declaration_number):
+                    raise ValidationError(_(
+                        "Turkish Customs Declaration Number must consist of exactly 16 characters in standard format: "
+                        "2-digit year, 6-digit office code, 2-letter regime (e.g. IM), and 6-digit registration number. "
+                        "Example: 26340500IM012345"
+                    ))
+
     def unlink(self):
         for op in self:
             if op.is_sample_data:

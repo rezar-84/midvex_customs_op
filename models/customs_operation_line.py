@@ -78,6 +78,16 @@ class CustomsOperationLine(models.Model):
             if line.production_date and line.expiry_date and line.production_date > line.expiry_date:
                 raise ValidationError(_("The expiry date must be after the production date for product %s.", line.product_id.name))
 
+    @api.constrains('hs_code', 'operation_id')
+    def _check_gtip_format(self):
+        import re
+        for line in self:
+            dest_country = line.operation_id.destination_country_id
+            if dest_country and dest_country.code == 'TR' and line.hs_code:
+                clean_hs = re.sub(r'[\s\.]', '', line.hs_code)
+                if not clean_hs.isdigit() or len(clean_hs) != 12:
+                    raise ValidationError(_("GTİP Code must consist of exactly 12 digits for Turkey imports. Product: %s") % line.product_id.name)
+
     @api.constrains('net_weight', 'gross_weight')
     def _check_weights(self):
         for line in self:

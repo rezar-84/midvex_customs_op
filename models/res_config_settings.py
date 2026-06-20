@@ -45,7 +45,7 @@ class ResConfigSettings(models.TransientModel):
         # 2. Create Sample Product
         product = self.env['product.product'].create({
             'name': 'SAMPLE: Aquaculture Starter Feed EX-10',
-            'detailed_type': 'product',
+            'type': 'consu',
         })
 
         # 3. Create Sample Operations
@@ -62,7 +62,6 @@ class ResConfigSettings(models.TransientModel):
         # A. Shipped Operation
         op_shipped = op_obj.create({
             'company_id': self.env.company.id,
-            'stage_id': stage_shipped.id if stage_shipped else False,
             'production_status': 'loaded',
             'loading_date': fields.Date.today() - datetime.timedelta(days=5),
             'planned_departure_date': fields.Date.today() - datetime.timedelta(days=3),
@@ -86,19 +85,20 @@ class ResConfigSettings(models.TransientModel):
         line_obj.create({
             'operation_id': op_shipped.id,
             'product_id': product.id,
-            'qty_ordered': 12000.0,
+            'quantity': 12000.0,
             'health_certificate_required': True,
             'analysis_required': True,
             'import_permit_required': False,
         })
         op_shipped._generate_default_document_requirements()
+        if stage_shipped:
+            op_shipped.write({'stage_id': stage_shipped.id})
 
         # B. Customs Clearance Operation with Correction Required
         op_customs = op_obj.create({
             'company_id': self.env.company.id,
-            'stage_id': stage_customs.id if stage_customs else False,
             'customs_status': 'opened',
-            'customs_declaration_number': '190000-SAMPLE-2026',
+            'customs_declaration_number': '26340500IM012345',
             'customs_declaration_date': fields.Date.today(),
             'planned_arrival_date': fields.Date.today() - datetime.timedelta(days=3),
             'actual_arrival_date': fields.Date.today() - datetime.timedelta(days=3),
@@ -114,7 +114,7 @@ class ResConfigSettings(models.TransientModel):
         line_obj.create({
             'operation_id': op_customs.id,
             'product_id': product.id,
-            'qty_ordered': 15000.0,
+            'quantity': 15000.0,
             'health_certificate_required': True,
             'analysis_required': True,
         })
@@ -129,11 +129,12 @@ class ResConfigSettings(models.TransientModel):
                     'state': 'correction_required',
                     'rejection_reason': 'Health certificate signature is missing on page 2.'
                 })
+        if stage_customs:
+            op_customs.write({'stage_id': stage_customs.id})
 
         # C. Delivered Operation with Damages
         op_delivered = op_obj.create({
             'company_id': self.env.company.id,
-            'stage_id': stage_delivered.id if stage_delivered else False,
             'warehouse_received': True,
             'warehouse_received_date': fields.Date.today(),
             'missing_packages': True,
@@ -158,11 +159,13 @@ class ResConfigSettings(models.TransientModel):
         line_obj.create({
             'operation_id': op_delivered.id,
             'product_id': product.id,
-            'qty_ordered': 10000.0,
+            'quantity': 10000.0,
             'health_certificate_required': False,
             'analysis_required': False,
         })
         op_delivered._generate_default_document_requirements()
+        if stage_delivered:
+            op_delivered.write({'stage_id': stage_delivered.id})
         
         return {
             'type': 'ir.actions.client',

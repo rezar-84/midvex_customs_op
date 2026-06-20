@@ -19,6 +19,7 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'purchase_stock',
         'account',
         'sale',
+        'sale_stock',
     ],
     'data': [
         'security/customs_security.xml',
@@ -26,8 +27,10 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'data/customs_sequence.xml',
         'data/customs_stage_data.xml',
         'data/customs_document_type_data.xml',
+        'data/customs_office_data.xml',
         'wizard/customs_operation_override_views.xml',
         'views/customs_operation_views.xml',
+        'views/customs_office_views.xml',
         'views/customs_stage_views.xml',
         'views/customs_document_type_views.xml',
         'views/customs_document_requirement_views.xml',

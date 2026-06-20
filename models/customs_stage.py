@@ -8,9 +8,7 @@ class CustomsStage(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence, id'
 
-    _sql_constraints = [
-        ('code_unique', 'unique(code, company_id)', 'The stage code must be unique per company!')
-    ]
+    _code_uniq = models.Constraint('unique(code, company_id)', 'The stage code must be unique per company!')
 
     name = fields.Char(string='Stage Name', required=True, translate=True, tracking=True)
     code = fields.Char(string='Stage Code', copy=False, index=True)
