@@ -40,6 +40,52 @@ class TestCustomsDemoInterface(TransactionCase):
         """Test the sample data generation and cleanup config actions."""
         config = self.env['res.config.settings'].create({})
         
+        # Locate sample partners and products
+        sample_partners = self.env['res.partner'].search([('name', '=like', 'SAMPLE:%')])
+        sample_products = self.env['product.product'].search([('name', '=like', 'SAMPLE:%')])
+        
+        # Locate and delete any referencing purchase orders, stock pickings, or vendor bills
+        if sample_partners or sample_products:
+            pos = self.env['purchase.order'].search([
+                '|', 
+                ('partner_id', 'in', sample_partners.ids),
+                ('order_line.product_id', 'in', sample_products.ids)
+            ])
+            if pos:
+                # Cancel and delete pickings first
+                pickings = self.env['stock.picking'].search([('purchase_id', 'in', pos.ids)])
+                for picking in pickings:
+                    if picking.state not in ('done', 'cancel'):
+                        try:
+                            picking.action_cancel()
+                        except Exception:
+                            pass
+                    try:
+                        picking.unlink()
+                    except Exception:
+                        pass
+                
+                # Cancel and delete vendor bills
+                invoices = self.env['account.move'].search([
+                    '|',
+                    ('partner_id', 'in', sample_partners.ids),
+                    ('invoice_line_ids.product_id', 'in', sample_products.ids)
+                ])
+                for inv in invoices:
+                    if inv.state != 'draft':
+                        try:
+                            inv.button_draft()
+                        except Exception:
+                            pass
+                    try:
+                        inv.unlink()
+                    except Exception:
+                        pass
+                
+                # Cancel and delete POs
+                pos.write({'state': 'cancel'})
+                pos.unlink()
+        
         # Clean up any pre-existing sample data to ensure clean state
         config.action_cleanup_sample_data()
         
