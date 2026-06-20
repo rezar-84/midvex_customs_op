@@ -183,15 +183,31 @@ class ResConfigSettings(models.TransientModel):
         sample_ops = self.env['customs.operation'].search([('is_sample_data', '=', True)])
         sample_ops.unlink()
 
-        # Delete sample partners
+        # Delete sample partners (using savepoints to handle foreign key violations gracefully)
         sample_partners = self.env['res.partner'].search([('name', '=like', 'SAMPLE:%')])
-        sample_partners.unlink()
+        for partner in sample_partners:
+            try:
+                with self.env.cr.savepoint():
+                    partner.unlink()
+            except Exception:
+                pass
 
-        # Delete sample product
+        # Delete sample product and templates
         sample_products = self.env['product.product'].search([('name', '=like', 'SAMPLE:%')])
+        for product in sample_products:
+            try:
+                with self.env.cr.savepoint():
+                    product.unlink()
+            except Exception:
+                pass
+
         sample_templates = self.env['product.template'].search([('name', '=like', 'SAMPLE:%')])
-        sample_products.unlink()
-        sample_templates.unlink()
+        for template in sample_templates:
+            try:
+                with self.env.cr.savepoint():
+                    template.unlink()
+            except Exception:
+                pass
 
         return {
             'type': 'ir.actions.client',
