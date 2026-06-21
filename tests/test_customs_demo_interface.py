@@ -40,6 +40,9 @@ class TestCustomsDemoInterface(TransactionCase):
         """Test the sample data generation and cleanup config actions."""
         config = self.env['res.config.settings'].create({})
         
+        # Clean up any pre-existing unreferenced sample data to establish a clean baseline
+        config.action_cleanup_sample_data()
+        
         # Count initial matching sample records in the database
         sample_ops_before = self.env['customs.operation'].search_count([('is_sample_data', '=', True)])
         sample_partners_before = self.env['res.partner'].search_count([('name', '=like', 'SAMPLE:%')])
