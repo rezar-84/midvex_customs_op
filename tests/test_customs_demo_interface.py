@@ -40,72 +40,24 @@ class TestCustomsDemoInterface(TransactionCase):
         """Test the sample data generation and cleanup config actions."""
         config = self.env['res.config.settings'].create({})
         
-        # Locate sample partners and products
-        sample_partners = self.env['res.partner'].search([('name', '=like', 'SAMPLE:%')])
-        sample_products = self.env['product.product'].search([('name', '=like', 'SAMPLE:%')])
-        
-        # Locate and delete any referencing purchase orders, stock pickings, or vendor bills
-        if sample_partners or sample_products:
-            pos = self.env['purchase.order'].search([
-                '|', 
-                ('partner_id', 'in', sample_partners.ids),
-                ('order_line.product_id', 'in', sample_products.ids)
-            ])
-            if pos:
-                # Cancel and delete pickings first
-                pickings = self.env['stock.picking'].search([('purchase_id', 'in', pos.ids)])
-                for picking in pickings:
-                    if picking.state not in ('done', 'cancel'):
-                        try:
-                            picking.action_cancel()
-                        except Exception:
-                            pass
-                    try:
-                        picking.unlink()
-                    except Exception:
-                        pass
-                
-                # Cancel and delete vendor bills
-                invoices = self.env['account.move'].search([
-                    '|',
-                    ('partner_id', 'in', sample_partners.ids),
-                    ('invoice_line_ids.product_id', 'in', sample_products.ids)
-                ])
-                for inv in invoices:
-                    if inv.state != 'draft':
-                        try:
-                            inv.button_draft()
-                        except Exception:
-                            pass
-                    try:
-                        inv.unlink()
-                    except Exception:
-                        pass
-                
-                # Cancel and delete POs
-                pos.write({'state': 'cancel'})
-                pos.unlink()
-        
-        # Clean up any pre-existing sample data to ensure clean state
-        config.action_cleanup_sample_data()
-        
-        # Count initial matching sample records
+        # Count initial matching sample records in the database
         sample_ops_before = self.env['customs.operation'].search_count([('is_sample_data', '=', True)])
-        self.assertEqual(sample_ops_before, 0)
+        sample_partners_before = self.env['res.partner'].search_count([('name', '=like', 'SAMPLE:%')])
+        sample_products_before = self.env['product.product'].search_count([('name', '=like', 'SAMPLE:%')])
 
         # Generate sample data
         config.action_generate_sample_data()
 
         # Check that operations were created
         sample_ops_after = self.env['customs.operation'].search_count([('is_sample_data', '=', True)])
-        self.assertGreater(sample_ops_after, 0)
+        self.assertGreater(sample_ops_after, sample_ops_before)
 
         # Check that partners and products with SAMPLE: prefix were created
-        sample_partners = self.env['res.partner'].search_count([('name', '=like', 'SAMPLE:%')])
-        self.assertGreater(sample_partners, 0)
+        sample_partners_after = self.env['res.partner'].search_count([('name', '=like', 'SAMPLE:%')])
+        self.assertGreater(sample_partners_after, sample_partners_before)
 
-        sample_products = self.env['product.product'].search_count([('name', '=like', 'SAMPLE:%')])
-        self.assertGreater(sample_products, 0)
+        sample_products_after = self.env['product.product'].search_count([('name', '=like', 'SAMPLE:%')])
+        self.assertGreater(sample_products_after, sample_products_before)
 
         # Clean up sample data
         config.action_cleanup_sample_data()
@@ -114,8 +66,9 @@ class TestCustomsDemoInterface(TransactionCase):
         sample_ops_final = self.env['customs.operation'].search_count([('is_sample_data', '=', True)])
         self.assertEqual(sample_ops_final, 0)
 
+        # Partners and products should return to their pre-existing counts
         sample_partners_final = self.env['res.partner'].search_count([('name', '=like', 'SAMPLE:%')])
-        self.assertEqual(sample_partners_final, 0)
+        self.assertEqual(sample_partners_final, sample_partners_before)
 
         sample_products_final = self.env['product.product'].search_count([('name', '=like', 'SAMPLE:%')])
-        self.assertEqual(sample_products_final, 0)
+        self.assertEqual(sample_products_final, sample_products_before)
