@@ -6,30 +6,65 @@
             <field name="name">Nippon Aqua Feed Corp.</field>
             <field name="is_company">True</field>
             <field name="company_id" ref="base.main_company"/>
+            <field name="country_id" ref="base.jp"/>
+            <field name="street">1-1-1 Minato-ku, Shibaura</field>
+            <field name="city">Tokyo</field>
+            <field name="zip">108-0023</field>
+            <field name="phone">+81-3-5555-0192</field>
+            <field name="email">supplier@nipponaquafeed.co.jp</field>
+            <field name="website">https://www.nipponaquafeed.co.jp</field>
         </record>
 
         <record id="partner_demo_broker" model="res.partner">
             <field name="name">Gümrükçü Ahmet ve Ortakları Müşavirlik</field>
             <field name="is_company">True</field>
             <field name="company_id" ref="base.main_company"/>
+            <field name="country_id" ref="base.tr"/>
+            <field name="street">Atatürk Caddesi, No: 45, Daire: 12, Alsancak</field>
+            <field name="city">İzmir</field>
+            <field name="zip">35220</field>
+            <field name="phone">+90-232-444-0123</field>
+            <field name="email">ahmet@ahmetgumruk.com.tr</field>
+            <field name="website">https://www.ahmetgumruk.com.tr</field>
         </record>
 
         <record id="partner_demo_forwarder" model="res.partner">
             <field name="name">Global Logistics Solutions LLC</field>
             <field name="is_company">True</field>
             <field name="company_id" ref="base.main_company"/>
+            <field name="country_id" ref="base.us"/>
+            <field name="street">500 Fifth Avenue, Suite 1200</field>
+            <field name="city">New York</field>
+            <field name="zip">10110</field>
+            <field name="phone">+1-212-555-0145</field>
+            <field name="email">contact@globallogistics.com</field>
+            <field name="website">https://www.globallogistics.com</field>
         </record>
 
         <record id="partner_demo_carrier" model="res.partner">
             <field name="name">Mediterranean Shipping Line</field>
             <field name="is_company">True</field>
             <field name="company_id" ref="base.main_company"/>
+            <field name="country_id" ref="base.ch"/>
+            <field name="street">Chemin Rieu 12-14</field>
+            <field name="city">Geneva</field>
+            <field name="zip">1208</field>
+            <field name="phone">+41-22-703-8888</field>
+            <field name="email">info@msc.com</field>
+            <field name="website">https://www.msc.com</field>
         </record>
 
         <record id="partner_demo_manufacturer" model="res.partner">
             <field name="name">Hokkaido Bio Production Factory</field>
             <field name="is_company">True</field>
             <field name="company_id" ref="base.main_company"/>
+            <field name="country_id" ref="base.jp"/>
+            <field name="street">2-3 Kita 9-jo Nishi, Kita-ku</field>
+            <field name="city">Sapporo</field>
+            <field name="zip">060-0809</field>
+            <field name="phone">+81-11-777-0155</field>
+            <field name="email">hokkaido-bio@factory.co.jp</field>
+            <field name="website">https://www.hokkaido-bio.co.jp</field>
         </record>
 
         <!-- Demo Products -->

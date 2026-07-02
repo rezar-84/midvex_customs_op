@@ -48,112 +48,112 @@ msgstr "Gümrük Dosyası Hazırlığını Geçersiz Kıl"
 
 # Field labels
 #. module: midvex_customs_op
-#: field:customs.operation,name:0
+#. legacy occurrence: field:customs.operation,name:0
 msgid "Reference"
 msgstr "Referans"
 
 #. module: midvex_customs_op
-#: field:customs.operation,supplier_ids:0
+#. legacy occurrence: field:customs.operation,supplier_ids:0
 msgid "Suppliers"
 msgstr "Tedarikçiler"
 
 #. module: midvex_customs_op
-#: field:customs.operation,broker_id:0
+#. legacy occurrence: field:customs.operation,broker_id:0
 msgid "Customs Broker"
 msgstr "Gümrük Müşaviri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,forwarder_id:0
+#. legacy occurrence: field:customs.operation,forwarder_id:0
 msgid "Freight Forwarder"
 msgstr "Nakliyeci/Forwarder"
 
 #. module: midvex_customs_op
-#: field:customs.operation,carrier_id:0
+#. legacy occurrence: field:customs.operation,carrier_id:0
 msgid "Carrier"
 msgstr "Taşıyıcı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,purchase_order_ids:0
+#. legacy occurrence: field:customs.operation,purchase_order_ids:0
 msgid "Purchase Orders"
 msgstr "Satınalma Siparişleri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,picking_ids:0
+#. legacy occurrence: field:customs.operation,picking_ids:0
 msgid "Incoming Shipments"
 msgstr "Gelen Teslimatlar"
 
 #. module: midvex_customs_op
-#: field:customs.operation,operation_line_ids:0
+#. legacy occurrence: field:customs.operation,operation_line_ids:0
 msgid "Product Lines"
 msgstr "Ürün Satırları"
 
 #. module: midvex_customs_op
-#: field:customs.operation,document_requirement_ids:0
+#. legacy occurrence: field:customs.operation,document_requirement_ids:0
 msgid "Document Requirements"
 msgstr "Belge Gereksinimleri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,transport_mode:0
+#. legacy occurrence: field:customs.operation,transport_mode:0
 msgid "Transport Mode"
 msgstr "Taşıma Şekli"
 
 #. module: midvex_customs_op
-#: field:customs.operation,incoterm_id:0
+#. legacy occurrence: field:customs.operation,incoterm_id:0
 msgid "Incoterm"
 msgstr "Teslim Şekli (Incoterm)"
 
 #. module: midvex_customs_op
-#: field:customs.operation,origin_country_id:0
+#. legacy occurrence: field:customs.operation,origin_country_id:0
 msgid "Country of Origin"
 msgstr "Menşe Ülke"
 
 #. module: midvex_customs_op
-#: field:customs.operation,departure_country_id:0
+#. legacy occurrence: field:customs.operation,departure_country_id:0
 msgid "Country of Departure"
 msgstr "Çıkış Ülkesi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,destination_country_id:0
+#. legacy occurrence: field:customs.operation,destination_country_id:0
 msgid "Country of Destination"
 msgstr "Varış Ülkesi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,customs_office:0
+#. legacy occurrence: field:customs.operation,customs_office:0
 msgid "Customs Office"
 msgstr "Gümrük Müdürlüğü"
 
 #. module: midvex_customs_op
-#: field:customs.operation,container_number:0
+#. legacy occurrence: field:customs.operation,container_number:0
 msgid "Container Number"
 msgstr "Konteyner Numarası"
 
 #. module: midvex_customs_op
-#: field:customs.operation,booking_number:0
+#. legacy occurrence: field:customs.operation,booking_number:0
 msgid "Booking Number"
 msgstr "Rezervasyon No (Booking)"
 
 #. module: midvex_customs_op
-#: field:customs.operation,transport_document_number:0
+#. legacy occurrence: field:customs.operation,transport_document_number:0
 msgid "Transport Document No."
 msgstr "Taşıma Belge No."
 
 #. module: midvex_customs_op
-#: field:customs.operation,shipment_ready:0
+#. legacy occurrence: field:customs.operation,shipment_ready:0
 msgid "Ready to Ship"
 msgstr "Sevkıyata Hazır"
 
 #. module: midvex_customs_op
-#: field:customs.operation,blocking_reason_text:0
+#. legacy occurrence: field:customs.operation,blocking_reason_text:0
 msgid "Blocking Reasons"
 msgstr "Engelleme Nedenleri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,is_overridden:0
+#. legacy occurrence: field:customs.operation,is_overridden:0
 msgid "Readiness Overridden"
 msgstr "Hazırlık Geçersiz Kılındı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,override_reason:0
+#. legacy occurrence: field:customs.operation,override_reason:0
 msgid "Override Reason"
 msgstr "Geçersiz Kılma Nedeni"
 
@@ -170,67 +170,67 @@ msgstr "Geçersiz Kılmayı Sıfırla"
 
 # Default Stage Names (From data/customs_stage_data.xml)
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Draft"
 msgstr "Taslak"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Waiting for Documents"
 msgstr "Belgeler Bekleniyor"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Document Review"
 msgstr "Belge İnceleme"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Correction Required"
 msgstr "Düzeltme Gerekli"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Shipped"
 msgstr "Sevk Edildi"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Arrived"
 msgstr "Vardı"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Customs Clearance"
 msgstr "Gümrük İşlemleri"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Inspection / Laboratory"
 msgstr "Muayene / Laboratuvar"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Customs Cleared"
 msgstr "Gümrükten Çekildi"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Delivered to Warehouse"
 msgstr "Depoya Teslim Edildi"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Closed"
 msgstr "Kapandı"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "On Hold"
 msgstr "Beklemede"
 
 #. module: midvex_customs_op
-#: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.stage,name:0
 msgid "Cancelled"
 msgstr "İptal Edildi"
 
@@ -400,37 +400,37 @@ msgid "<strong>Readiness check overridden</strong><br/><strong>User:</strong> %s
 msgstr "<strong>Hazırlık kontrolü geçersiz kılındı</strong><br/><strong>Kullanıcı:</strong> %s<br/><strong>Neden:</strong> %s"
 
 #. module: midvex_customs_op
-#: menuitem:menu_customs_reporting:0
+#. legacy occurrence: menuitem:menu_customs_reporting:0
 msgid "Reporting"
 msgstr "Raporlama"
 
 #. module: midvex_customs_op
-#: menuitem:menu_customs_operation_analysis:0
+#. legacy occurrence: menuitem:menu_customs_operation_analysis:0
 msgid "Customs Analysis"
 msgstr "Gümrük Analizi"
 
 #. module: midvex_customs_op
-#: menuitem:menu_customs_document_analysis:0
+#. legacy occurrence: menuitem:menu_customs_document_analysis:0
 msgid "Document Analysis"
 msgstr "Belge Analizi"
 
 #. module: midvex_customs_op
-#: action:action_customs_operation_analysis:0
+#. legacy occurrence: action:action_customs_operation_analysis:0
 msgid "Customs Files Analysis"
 msgstr "Gümrük Dosyası Analizi"
 
 #. module: midvex_customs_op
-#: filter:customs.operation,arriving_soon:0
+#. legacy occurrence: filter:customs.operation,arriving_soon:0
 msgid "Arriving Soon"
 msgstr "Yakında Varacaklar"
 
 #. module: midvex_customs_op
-#: filter:customs.operation,correction_rejected:0
+#. legacy occurrence: filter:customs.operation,correction_rejected:0
 msgid "Correction/Rejection Pending"
 msgstr "Düzeltme/Red Bekleyenler"
 
 #. module: midvex_customs_op
-#: filter:customs.operation,open_operations:0
+#. legacy occurrence: filter:customs.operation,open_operations:0
 msgid "Open Operations"
 msgstr "Açık İşlemler"
 
@@ -490,320 +490,320 @@ msgid "You can only delete a Customs File when it is in the 'Draft' stage. Opera
 msgstr "Bir Gümrük Dosyasını yalnızca 'Taslak' aşamasındayken silebilirsiniz. İşlem %s şu anda '%s' aşamasında."
 
 #. module: midvex_customs_op
-#: field:customs.stage,code:0
+#. legacy occurrence: field:customs.stage,code:0
 msgid "Stage Code"
 msgstr "Aşama Kodu"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_request:0
+#. legacy occurrence: button:customs.document.requirement,action_request:0
 msgid "Request Document"
 msgstr "Belge Talep Et"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_prepare:0
+#. legacy occurrence: button:customs.document.requirement,action_prepare:0
 msgid "Mark as Preparing"
 msgstr "Hazırlanıyor Olarak İşaretle"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_submit:0
+#. legacy occurrence: button:customs.document.requirement,action_submit:0
 msgid "Submit for Review"
 msgstr "İncelemeye Gönder"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_approve:0
+#. legacy occurrence: button:customs.document.requirement,action_approve:0
 msgid "Approve"
 msgstr "Onayla"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_require_correction:0
+#. legacy occurrence: button:customs.document.requirement,action_require_correction:0
 msgid "Require Correction"
 msgstr "Düzeltme Talep Et"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_reject:0
+#. legacy occurrence: button:customs.document.requirement,action_reject:0
 msgid "Reject"
 msgstr "Reddet"
 
 #. module: midvex_customs_op
-#: button:customs.document.requirement,action_reset_to_draft:0
+#. legacy occurrence: button:customs.document.requirement,action_reset_to_draft:0
 msgid "Reset to Draft"
 msgstr "Taslağa Geri Al"
 
 # Nevzat Bey Feedback Fields & Tabs Translations
 #. module: midvex_customs_op
-#: field:customs.operation,production_status:0
+#. legacy occurrence: field:customs.operation,production_status:0
 msgid "Production Status"
 msgstr "Üretim Durumu"
 
 #. module: midvex_customs_op
-#: field:customs.operation,production_ready_date:0
+#. legacy occurrence: field:customs.operation,production_ready_date:0
 msgid "Production Ready Date"
 msgstr "Üretim Hazır Tarihi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,goods_prepared_date:0
+#. legacy occurrence: field:customs.operation,goods_prepared_date:0
 msgid "Goods Prepared Date"
 msgstr "Mal Hazır Tarihi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,loading_date:0
+#. legacy occurrence: field:customs.operation,loading_date:0
 msgid "Loading Date"
 msgstr "Yükleme Tarihi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,supplier_ref:0
+#. legacy occurrence: field:customs.operation,supplier_ref:0
 msgid "Supplier Order Reference"
 msgstr "Tedarikçi Sipariş Referansı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,manufacturer_id:0
+#. legacy occurrence: field:customs.operation,manufacturer_id:0
 msgid "Manufacturer/Factory"
 msgstr "Üretici / Fabrika"
 
 #. module: midvex_customs_op
-#: field:customs.operation,payment_term_id:0
+#. legacy occurrence: field:customs.operation,payment_term_id:0
 msgid "Payment Term"
 msgstr "Ödeme Koşulu"
 
 #. module: midvex_customs_op
-#: field:customs.operation,currency_id:0
+#. legacy occurrence: field:customs.operation,currency_id:0
 msgid "Currency"
 msgstr "Para Birimi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,total_amount:0
+#. legacy occurrence: field:customs.operation,total_amount:0
 msgid "Total Amount"
 msgstr "Toplam Tutar"
 
 #. module: midvex_customs_op
-#: field:customs.operation,seal_number:0
+#. legacy occurrence: field:customs.operation,seal_number:0
 msgid "Seal Number"
 msgstr "Mühür Numarası"
 
 #. module: midvex_customs_op
-#: field:customs.operation,bl_number:0
+#. legacy occurrence: field:customs.operation,bl_number:0
 msgid "Bill of Lading (B/L) Number"
 msgstr "Konşimento (B/L) Numarası"
 
 #. module: midvex_customs_op
-#: field:customs.operation,vessel_name:0
+#. legacy occurrence: field:customs.operation,vessel_name:0
 msgid "Vessel Name"
 msgstr "Gemi Adı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,tracking_link:0
+#. legacy occurrence: field:customs.operation,tracking_link:0
 msgid "Logistics Tracking Link"
 msgstr "Lojistik Takip Linki"
 
 #. module: midvex_customs_op
-#: field:customs.operation,customs_status:0
+#. legacy occurrence: field:customs.operation,customs_status:0
 msgid "Customs Sub-Status"
 msgstr "Gümrük Alt Durumu"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_freight:0
+#. legacy occurrence: field:customs.operation,cost_freight:0
 msgid "Freight Cost"
 msgstr "Navlun Maliyeti"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_customs_tax:0
+#. legacy occurrence: field:customs.operation,cost_customs_tax:0
 msgid "Customs Tax"
 msgstr "Gümrük Vergisi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_broker_expenses:0
+#. legacy occurrence: field:customs.operation,cost_broker_expenses:0
 msgid "Customs Broker Expenses"
 msgstr "Gümrük Müşavirlik Giderleri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_stamp_tax:0
+#. legacy occurrence: field:customs.operation,cost_stamp_tax:0
 msgid "Stamp Tax"
 msgstr "Damga Vergisi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_storage:0
+#. legacy occurrence: field:customs.operation,cost_storage:0
 msgid "Storage / Demurrage"
 msgstr "Ardiye / Demoraj"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_exchange_diff:0
+#. legacy occurrence: field:customs.operation,cost_exchange_diff:0
 msgid "Exchange-Rate Difference"
 msgstr "Kur Farkı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_other:0
+#. legacy occurrence: field:customs.operation,cost_other:0
 msgid "Other Costs"
 msgstr "Diğer Maliyetler"
 
 #. module: midvex_customs_op
-#: field:customs.operation,cost_total:0
+#. legacy occurrence: field:customs.operation,cost_total:0
 msgid "Total Costs"
 msgstr "Toplam Maliyet"
 
 #. module: midvex_customs_op
-#: field:customs.operation,accounting_status:0
+#. legacy occurrence: field:customs.operation,accounting_status:0
 msgid "Accounting Closing Status"
 msgstr "Muhasebe Kapanış Durumu"
 
 #. module: midvex_customs_op
-#: field:customs.operation,warehouse_received:0
+#. legacy occurrence: field:customs.operation,warehouse_received:0
 msgid "Warehouse Received"
 msgstr "Depo Teslim Alındı"
 
 #. module: midvex_customs_op
-#: field:customs.operation,warehouse_received_date:0
+#. legacy occurrence: field:customs.operation,warehouse_received_date:0
 msgid "Warehouse Received Date"
 msgstr "Depo Teslim Tarihi"
 
 #. module: midvex_customs_op
-#: field:customs.operation,missing_packages:0
+#. legacy occurrence: field:customs.operation,missing_packages:0
 msgid "Missing Packages/Boxes"
 msgstr "Eksik Paket / Koli"
 
 #. module: midvex_customs_op
-#: field:customs.operation,damaged_product:0
+#. legacy occurrence: field:customs.operation,damaged_product:0
 msgid "Damaged Product"
 msgstr "Hasarlı Ürün"
 
 #. module: midvex_customs_op
-#: field:customs.operation,damage_description:0
+#. legacy occurrence: field:customs.operation,damage_description:0
 msgid "Damage / Missing Description"
 msgstr "Hasar / Eksik Açıklaması"
 
 #. module: midvex_customs_op
-#: field:customs.operation,warehouse_photo_ids:0
+#. legacy occurrence: field:customs.operation,warehouse_photo_ids:0
 msgid "Photo Attachments"
 msgstr "Fotoğraf Ekleri"
 
 #. module: midvex_customs_op
-#: field:customs.operation,delivery_note_ids:0
+#. legacy occurrence: field:customs.operation,delivery_note_ids:0
 msgid "Delivery Notes / POD"
 msgstr "Teslimat Notları / POD"
 
 #. module: midvex_customs_op
-#: field:customs.operation,is_draft:0
+#. legacy occurrence: field:customs.operation,is_draft:0
 msgid "Is Draft Stage"
 msgstr "Taslak Aşamasında mı"
 
 # Selection Option Translations
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Not Started"
 msgstr "Başlamadı"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "In Production"
 msgstr "Üretimde"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Ready"
 msgstr "Hazır"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Loaded"
 msgstr "Yüklendi"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Delayed"
 msgstr "Gecikti"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,production_status:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Cancelled"
 msgstr "İptal Edildi"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Documents Waiting"
 msgstr "Belgeler Bekleniyor"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Declaration Opened"
 msgstr "Beyanname Açıldı"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Inspection"
 msgstr "Muayene"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Tax Paid"
 msgstr "Vergi Ödendi"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Released / Clearance Completed"
 msgstr "Serbest Bırakıldı / İşlem Tamamlandı"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,customs_status:0
+#. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Completed"
 msgstr "Tamamlandı"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,accounting_status:0
+#. legacy occurrence: selection:customs.operation,accounting_status:0
 msgid "Waiting Invoice"
 msgstr "Fatura Bekleniyor"
 
 #. module: midvex_customs_op
-#: selection:customs.operation,accounting_status:0
+#. legacy occurrence: selection:customs.operation,accounting_status:0
 msgid "Waiting Payment"
 msgstr "Ödeme Bekleniyor"
 
 # Tab / XML Page Translations
 #. module: midvex_customs_op
-#: page:customs.operation,overview:0
+#. legacy occurrence: page:customs.operation,overview:0
 msgid "Overview"
 msgstr "Genel Bakış"
 
 #. module: midvex_customs_op
-#: page:customs.operation,purchase_supplier:0
+#. legacy occurrence: page:customs.operation,purchase_supplier:0
 msgid "Purchase & Supplier"
 msgstr "Satınalma ve Tedarikçi"
 
 #. module: midvex_customs_op
-#: page:customs.operation,production:0
+#. legacy occurrence: page:customs.operation,production:0
 msgid "Production"
 msgstr "Üretim"
 
 #. module: midvex_customs_op
-#: page:customs.operation,logistics:0
+#. legacy occurrence: page:customs.operation,logistics:0
 msgid "Logistics"
 msgstr "Lojistik"
 
 #. module: midvex_customs_op
-#: page:customs.operation,product_lines:0
+#. legacy occurrence: page:customs.operation,product_lines:0
 msgid "Product Lines"
 msgstr "Ürün Satırları"
 
 #. module: midvex_customs_op
-#: page:customs.operation,documents:0
+#. legacy occurrence: page:customs.operation,documents:0
 msgid "Required Documents"
 msgstr "Zorunlu Belgeler"
 
 #. module: midvex_customs_op
-#: page:customs.operation,customs_lab:0
+#. legacy occurrence: page:customs.operation,customs_lab:0
 msgid "Customs & Laboratory"
 msgstr "Gümrük ve Laboratuvar"
 
 #. module: midvex_customs_op
-#: page:customs.operation,warehouse:0
+#. legacy occurrence: page:customs.operation,warehouse:0
 msgid "Warehouse"
 msgstr "Depo"
 
 #. module: midvex_customs_op
-#: page:customs.operation,accounting_costs:0
+#. legacy occurrence: page:customs.operation,accounting_costs:0
 msgid "Accounting & Costs"
 msgstr "Muhasebe ve Maliyetler"
 
 #. module: midvex_customs_op
-#: page:customs.operation,override:0
+#. legacy occurrence: page:customs.operation,override:0
 msgid "Readiness Override"
 msgstr "Hazırlık Geçersiz Kılma"
 
@@ -894,22 +894,22 @@ msgid "Product lines have been successfully synchronized from the linked Purchas
 msgstr "Ürün satırları ilişkili Satınalma Siparişlerinden başarıyla senkronize edildi."
 
 #. module: midvex_customs_op
-#: field:res.config.settings,customs_block_receipt_before_clearance:0
+#. legacy occurrence: field:res.config.settings,customs_block_receipt_before_clearance:0
 msgid "Block Warehouse Receipt Before Customs Clearance"
 msgstr "Gümrüklemeden Önce Depo Makbuzunu Engelle"
 
 #. module: midvex_customs_op
-#: field:account.move,customs_operation_id:0
+#. legacy occurrence: field:account.move,customs_operation_id:0
 msgid "Customs File"
 msgstr "Gümrük Dosyası"
 
 #. module: midvex_customs_op
-#: field:customs.operation,vendor_bill_ids:0
+#. legacy occurrence: field:customs.operation,vendor_bill_ids:0
 msgid "Vendor Bills"
 msgstr "Satıcı Faturaları"
 
 #. module: midvex_customs_op
-#: field:customs.operation,sale_order_ids:0
+#. legacy occurrence: field:customs.operation,sale_order_ids:0
 msgid "Sales Orders"
 msgstr "Satış Siparişleri"
 

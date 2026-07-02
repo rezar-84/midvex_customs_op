@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_customs" name="Portal layout: customs menu entries" inherit_id="portal.portal_breadcrumbs" priority="35">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name in ('customs_operations', 'customs_operation')" t-attf-class="breadcrumb-item #{'active ' if page_name == 'customs_operations' else ''}">
+                <a t-if="page_name == 'customs_operation'" t-attf-href="/my/customs?{{ keep_query() }}">Customs Operations</a>
+                <t t-else="">Customs Operations</t>
+            </li>
+            <li t-if="page_name == 'customs_operation'" class="breadcrumb-item active">
+                <t t-out="operation.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_customs" name="Customs Operations" inherit_id="portal.portal_my_home" priority="35">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_vendor_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_vendor_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/web/static/img/folder.svg'"/>
+                <t t-set="title">Customs Operations</t>
+                <t t-set="text">Track import documents and customs status</t>
+                <t t-set="url" t-value="'/my/customs'"/>
+                <t t-set="placeholder_count" t-value="'customs_operation_count'"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="portal_my_customs_operations" name="My Customs Operations">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Customs Operations</t>
+            </t>
+            <t t-if="not operations">
+                <p class="alert alert-warning">There are currently no Customs Operations for your account.</p>
+            </t>
+            <t t-if="operations" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th class="d-none d-md-table-cell">Stage</th>
+                        <th class="d-none d-lg-table-cell">ETA</th>
+                        <th class="text-end">Documents</th>
+                    </tr>
+                </thead>
+                <t t-foreach="operations" t-as="operation">
+                    <tr>
+                        <td>
+                            <a t-att-href="'/my/customs/%s' % operation.id">
+                                <t t-out="operation.name"/>
+                            </a>
+                        </td>
+                        <td class="d-none d-md-table-cell">
+                            <span t-field="operation.stage_id"/>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            <span t-if="operation.planned_arrival_date" t-field="operation.planned_arrival_date"/>
+                        </td>
+                        <td class="text-end">
+                            <t t-out="operation.document_approved_count"/>/<t t-out="operation.document_total"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_customs_operation" name="Customs Operation">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                <div>
+                    <h3 class="mb-1" t-out="operation.name"/>
+                    <div class="text-muted">
+                        <span t-field="operation.stage_id"/>
+                        <span t-if="operation.customs_status"> · <span t-field="operation.customs_status"/></span>
+                    </div>
+                </div>
+                <a t-if="is_broker" class="btn btn-outline-primary" t-att-href="'/my/customs/%s/documents.zip' % operation.id">
+                    Download Approved Documents
+                </a>
+            </div>
+
+            <div t-if="success" class="alert alert-success">
+                Update received.
+            </div>
+            <div t-if="error == 'missing_file'" class="alert alert-danger">
+                Select a file before uploading.
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <strong>Supplier</strong>
+                    <div><t t-out="', '.join(operation.supplier_ids.mapped('display_name'))"/></div>
+                </div>
+                <div class="col-md-4">
+                    <strong>Broker</strong>
+                    <div><span t-field="operation.broker_id"/></div>
+                </div>
+                <div class="col-md-4">
+                    <strong>ETA</strong>
+                    <div><span t-if="operation.planned_arrival_date" t-field="operation.planned_arrival_date"/></div>
+                </div>
+                <div class="col-md-4">
+                    <strong>B/L Number</strong>
+                    <div><span t-field="operation.bl_number"/></div>
+                </div>
+                <div class="col-md-4">
+                    <strong>Declaration Number</strong>
+                    <div><span t-field="operation.customs_declaration_number"/></div>
+                </div>
+                <div class="col-md-4">
+                    <strong>Declaration Date</strong>
+                    <div><span t-if="operation.customs_declaration_date" t-field="operation.customs_declaration_date"/></div>
+                </div>
+            </div>
+
+            <div t-if="is_broker" class="border rounded p-3 mb-4">
+                <h5 class="mb-3">Customs Declaration Update</h5>
+                <form t-att-action="'/my/customs/%s/broker/update' % operation.id" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="customs_declaration_number">Declaration Number</label>
+                            <input id="customs_declaration_number" name="customs_declaration_number" class="form-control" t-att-value="operation.customs_declaration_number or ''"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="customs_declaration_date">Declaration Date</label>
+                            <input id="customs_declaration_date" name="customs_declaration_date" type="date" class="form-control" t-att-value="operation.customs_declaration_date or ''"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="customs_status">Customs Status</label>
+                            <select id="customs_status" name="customs_status" class="form-select">
+                                <option value="">No change</option>
+                                <t t-foreach="operation._fields['customs_status'].selection" t-as="status_option">
+                                    <option t-att-value="status_option[0]" t-att-selected="operation.customs_status == status_option[0]">
+                                        <t t-out="status_option[1]"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label" for="declaration_file">Declaration PDF</label>
+                            <input id="declaration_file" name="declaration_file" type="file" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Submit Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <h5 class="mb-3">Required Documents</h5>
+            <t t-if="operation.document_requirement_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th class="d-none d-md-table-cell">Responsible</th>
+                        <th>Status</th>
+                        <th class="d-none d-lg-table-cell">Deadline</th>
+                        <th class="text-end">Files</th>
+                    </tr>
+                </thead>
+                <t t-foreach="operation.document_requirement_ids" t-as="requirement">
+                    <tr>
+                        <td>
+                            <div t-out="requirement.name"/>
+                            <form t-if="is_supplier and requirement.responsible_party in ('supplier', 'manufacturer')" t-att-action="'/my/customs/document/%s/upload' % requirement.id" method="post" enctype="multipart/form-data" class="mt-2">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="input-group input-group-sm">
+                                    <input name="document_file" type="file" class="form-control"/>
+                                    <button type="submit" class="btn btn-outline-primary">Upload</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="d-none d-md-table-cell">
+                            <span t-field="requirement.responsible_party"/>
+                        </td>
+                        <td>
+                            <span t-field="requirement.state"/>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            <span t-if="requirement.deadline" t-field="requirement.deadline"/>
+                        </td>
+                        <td class="text-end">
+                            <t t-out="len(requirement.attachment_ids)"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -2,6 +2,7 @@
 
 from odoo import models, api, fields, _
 from odoo.exceptions import ValidationError
+from markupsafe import Markup, escape
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
@@ -90,9 +91,22 @@ class StockPicking(models.Model):
                         "Validation blocked! The linked Customs File(s) [%s] must be cleared/released before validating this receipt."
                     ) % op_names)
                 else:
-                    msg = _("<strong>Warning:</strong> Receipt validated prior to customs clearance of linked Customs File(s): %s.") % op_names
+                    msg = Markup(_("<strong>Warning:</strong> Receipt validated prior to customs clearance of linked Customs File(s): %s.")) % escape(op_names)
                     picking.message_post(body=msg)
                     for op in uncleared_ops:
-                        op.message_post(body=_("<strong>Warning:</strong> Linked incoming shipment %s was validated before customs clearance was completed.") % picking.name)
+                        op_msg = Markup(_("<strong>Warning:</strong> Linked incoming shipment %s was validated before customs clearance was completed.")) % escape(picking.name)
+                        op.message_post(body=op_msg)
+                        responsible_user_id = op.user_id.id
+                        if op.purchase_order_ids and op.purchase_order_ids[0].user_id:
+                            responsible_user_id = op.purchase_order_ids[0].user_id.id
+                        op._create_operation_activity(
+                            'mail.mail_activity_data_todo',
+                            _("Receipt Before Customs Clearance"),
+                            _("Incoming shipment %s was validated before Customs File %s was cleared. Please review compliance status.") % (
+                                picking.name,
+                                op.name,
+                            ),
+                            responsible_user_id,
+                        )
                         
         return super(StockPicking, self).button_validate()

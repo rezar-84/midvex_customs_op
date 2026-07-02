@@ -14,32 +14,83 @@ class ResConfigSettings(models.TransientModel):
     )
 
     def action_generate_sample_data(self):
+        jp = self.env.ref('base.jp', raise_if_not_found=False) or self.env['res.country'].search([('code', '=', 'JP')], limit=1)
+        if not jp:
+            jp = self.env['res.country'].create({'name': 'Japan', 'code': 'JP'})
+            
+        tr = self.env.ref('base.tr', raise_if_not_found=False) or self.env['res.country'].search([('code', '=', 'TR')], limit=1)
+        if not tr:
+            tr = self.env['res.country'].create({'name': 'Turkey', 'code': 'TR'})
+            
+        us = self.env.ref('base.us', raise_if_not_found=False) or self.env['res.country'].search([('code', '=', 'US')], limit=1)
+        if not us:
+            us = self.env['res.country'].create({'name': 'United States', 'code': 'US'})
+            
+        ch = self.env.ref('base.ch', raise_if_not_found=False) or self.env['res.country'].search([('code', '=', 'CH')], limit=1)
+        if not ch:
+            ch = self.env['res.country'].create({'name': 'Switzerland', 'code': 'CH'})
+
         # 1. Create Sample Partners
         partner_obj = self.env['res.partner']
         supplier = partner_obj.create({
             'name': 'SAMPLE: Nippon Aqua Feed Corp.',
             'is_company': True,
             'company_id': self.env.company.id,
+            'country_id': jp.id if jp else False,
+            'street': '1-1-1 Minato-ku, Shibaura',
+            'city': 'Tokyo',
+            'zip': '108-0023',
+            'phone': '+81-3-5555-0192',
+            'email': 'supplier@nipponaquafeed.co.jp',
+            'website': 'https://www.nipponaquafeed.co.jp',
         })
         broker = partner_obj.create({
             'name': 'SAMPLE: Gümrükçü Ahmet ve Ortakları Müşavirlik',
             'is_company': True,
             'company_id': self.env.company.id,
+            'country_id': tr.id if tr else False,
+            'street': 'Atatürk Caddesi, No: 45, Daire: 12, Alsancak',
+            'city': 'İzmir',
+            'zip': '35220',
+            'phone': '+90-232-444-0123',
+            'email': 'ahmet@ahmetgumruk.com.tr',
+            'website': 'https://www.ahmetgumruk.com.tr',
         })
         forwarder = partner_obj.create({
             'name': 'SAMPLE: Global Logistics Solutions LLC',
             'is_company': True,
             'company_id': self.env.company.id,
+            'country_id': us.id if us else False,
+            'street': '500 Fifth Avenue, Suite 1200',
+            'city': 'New York',
+            'zip': '10110',
+            'phone': '+1-212-555-0145',
+            'email': 'contact@globallogistics.com',
+            'website': 'https://www.globallogistics.com',
         })
         carrier = partner_obj.create({
             'name': 'SAMPLE: Mediterranean Shipping Line',
             'is_company': True,
             'company_id': self.env.company.id,
+            'country_id': ch.id if ch else False,
+            'street': 'Chemin Rieu 12-14',
+            'city': 'Geneva',
+            'zip': '1208',
+            'phone': '+41-22-703-8888',
+            'email': 'info@msc.com',
+            'website': 'https://www.msc.com',
         })
         manufacturer = partner_obj.create({
             'name': 'SAMPLE: Hokkaido Bio Production Factory',
             'is_company': True,
             'company_id': self.env.company.id,
+            'country_id': jp.id if jp else False,
+            'street': '2-3 Kita 9-jo Nishi, Kita-ku',
+            'city': 'Sapporo',
+            'zip': '060-0809',
+            'phone': '+81-11-777-0155',
+            'email': 'hokkaido-bio@factory.co.jp',
+            'website': 'https://www.hokkaido-bio.co.jp',
         })
 
         # 2. Create Sample Product
@@ -55,9 +106,6 @@ class ResConfigSettings(models.TransientModel):
         stage_shipped = self.env.ref('midvex_customs_op.stage_shipped', raise_if_not_found=False)
         stage_customs = self.env.ref('midvex_customs_op.stage_customs_clearance', raise_if_not_found=False)
         stage_delivered = self.env.ref('midvex_customs_op.stage_delivered', raise_if_not_found=False)
-        
-        jp = self.env.ref('base.jp', raise_if_not_found=False)
-        tr = self.env.ref('base.tr', raise_if_not_found=False)
 
         # A. Shipped Operation
         op_shipped = op_obj.create({

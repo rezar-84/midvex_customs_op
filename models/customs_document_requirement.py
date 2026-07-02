@@ -211,6 +211,20 @@ class CustomsDocumentRequirement(models.Model):
         return super(CustomsDocumentRequirement, self).create(vals_list)
 
     def write(self, vals):
+        if self.env.user.has_group('base.group_portal') and not self.env.user.has_group('base.group_user'):
+            allowed_fields = {'state'}
+            allowed_states = {'vendor_preparing', 'draft_received', 'under_review'}
+            partner = self.env.user.partner_id.commercial_partner_id
+            for rec in self:
+                is_supplier = any(supplier.commercial_partner_id == partner for supplier in rec.operation_id.supplier_ids)
+                if (
+                    set(vals) - allowed_fields
+                    or vals.get('state') not in allowed_states
+                    or not is_supplier
+                    or rec.responsible_party not in ('supplier', 'manufacturer')
+                ):
+                    raise AccessError(_("Portal users can only submit supplier documents assigned to their company."))
+
         records_pre_write = {}
         for rec in self:
             records_pre_write[rec.id] = {

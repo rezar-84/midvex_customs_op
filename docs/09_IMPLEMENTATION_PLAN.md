@@ -257,6 +257,14 @@ Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
 ## Post-Integration Remediation
 - **Fix KeyError on group_id**: Removed the deprecated `group_id` lookup on `purchase.order` inside `_compute_sale_orders` (which caused traceback on Odoo 19), relying instead on PO origin name parsing and stock move destination tracing.
 - **Fix AttributeError on res.groups**: Replaced direct references to `group.users` (which caused AttributeError tracebacks depending on security scopes/database configuration) with explicit `res.users` queries matching `groups_id` relation inside `models/customs_operation.py`.
+- **Fix Demo and Sample Partner Contact Information**: Added full contact details (street, city, country, zip, phone, email, and website) to both static XML demo data (`demo/customs_demo_data.xml`) and dynamic Settings sample generator (`models/res_config_settings.py`). Without country data, the purchase sync engine could not identify import transactions.
+- **Fix Multi-Company and Duplicate Link Gaps**: Added server-side constraints preventing duplicate Customs Operations for the same Purchase Order and blocking cross-company Purchase Order, Picking, partner, broker, forwarder, carrier, manufacturer, customs office, and vendor bill links.
+- **Fix Product Category Compliance Defaults**: Added customs compliance defaults on product categories and included category flags in PO auto-creation, PO line sync, document generation, and product change synchronization.
+- **Fix Document Requirement Regeneration**: Made default document requirement generation idempotent and propagated original-document requirements from product and category profiles to operation lines.
+- **Fix Receipt Warning Follow-Up**: Kept soft receipt validation warnings non-blocking, but now creates follow-up activities on linked Customs Operations so early receipts are visible to responsible users.
+- **Implement Supplier and Broker Portal MVP**: Added portal access for assigned suppliers and brokers, supplier document upload/submission, broker customs declaration updates, and broker download of approved document ZIP packages.
+- **Fix Portal/Internal Role Conflict**: Added a `res.users` guard that strips Import & Customs backend groups when a user is assigned Portal access, preventing Odoo's exclusive Role/User and Role/Portal validation conflict for supplier and broker portal users.
+- **Verification**: Re-ran module tests in `odoo19_test_midvex_customs_op`; result was 67 tests with 0 failures and 0 errors.
 
 
 ## Future Development Roadmap Planning (Phases 2 — 5)
@@ -295,6 +303,7 @@ This roadmap outlines the implementation strategy for the next phases of `midvex
   - Vendors can view their open Import Operations.
   - Vendors can see the list of required documents, upload attachments directly to each `customs.document.requirement`, and mark them as "Submitted for Review" (state: `under_review`).
 - **Security**: Strict record rules restricting Portal users to only see operations where they are listed in `supplier_ids`.
+- **Status**: Implemented as portal MVP with assigned-supplier visibility, document upload, and server-side portal write restrictions.
 
 #### Milestone 2: Broker Collaboration Portal
 - **Interface**:
@@ -302,6 +311,7 @@ This roadmap outlines the implementation strategy for the next phases of `midvex
   - Brokers can download approved document packages (single-click ZIP generation).
   - Brokers can upload final Customs Declarations (attach declaration PDF and input declaration number/date).
   - Brokers can update the `customs_status` selection (e.g. "Tax Paid", "Inspection Scheduled").
+- **Status**: Implemented as portal MVP with assigned-broker visibility, approved-document ZIP download, declaration upload, declaration number/date entry, and customs sub-status updates.
 
 ---
 
@@ -346,5 +356,3 @@ This roadmap outlines the implementation strategy for the next phases of `midvex
   - Verify the Supplier Name, Invoice Number, and Total Amount match the purchase order values.
   - Scan Certificate of Analysis (COA) PDFs to verify batch numbers and signatures exist.
   - Automatically flag mismatches to the quality reviewer before human review.
-
-

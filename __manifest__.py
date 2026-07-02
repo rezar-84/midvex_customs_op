@@ -20,6 +20,7 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'account',
         'sale',
         'sale_stock',
+        'portal',
     ],
     'data': [
         'security/customs_security.xml',
@@ -40,6 +41,7 @@ vendor follow-ups, customs-clearance progress, inspections, approvals, and wareh
         'views/account_move_views.xml',
         'views/res_config_settings_views.xml',
         'views/mail_activity_type_views.xml',
+        'views/customs_portal_templates.xml',
         'views/customs_menus.xml',
     ],
     'demo': [

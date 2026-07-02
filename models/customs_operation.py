@@ -179,7 +179,7 @@ class CustomsOperation(models.Model):
     
     shipment_ready = fields.Boolean(string='Ready to Ship', compute='_compute_readiness', store=True)
     blocking_document_count = fields.Integer(string='Blocking Documents', compute='_compute_readiness', store=True)
-    blocking_reason_text = fields.Text(string='Blocking Reasons', compute='_compute_readiness')
+    blocking_reason_text = fields.Text(string='Blocking Reasons', compute='_compute_readiness', store=True)
 
     # Override Fields
     is_overridden = fields.Boolean(string='Readiness Overridden', default=False, tracking=True)
@@ -560,6 +560,67 @@ class CustomsOperation(models.Model):
         body = Markup(_("Readiness check override reset by %s.")) % escape(self.env.user.name)
         self.message_post(body=body)
 
+    def _check_partner_company(self, partner, label):
+        self.ensure_one()
+        if partner and partner.company_id and partner.company_id != self.company_id:
+            raise ValidationError(
+                _("%s '%s' belongs to company '%s' and cannot be linked to Customs File %s for company '%s'.") %
+                (label, partner.display_name, partner.company_id.display_name, self.name, self.company_id.display_name)
+            )
+
+    @api.constrains(
+        'company_id',
+        'purchase_order_ids',
+        'picking_ids',
+        'supplier_ids',
+        'broker_id',
+        'forwarder_id',
+        'carrier_id',
+        'manufacturer_id',
+        'customs_office_id',
+    )
+    def _check_company_consistency(self):
+        for op in self:
+            for po in op.purchase_order_ids:
+                if po.company_id != op.company_id:
+                    raise ValidationError(
+                        _("Purchase Order %s belongs to company '%s' and cannot be linked to Customs File %s for company '%s'.") %
+                        (po.name, po.company_id.display_name, op.name, op.company_id.display_name)
+                    )
+            for picking in op.picking_ids:
+                if picking.company_id != op.company_id:
+                    raise ValidationError(
+                        _("Stock Picking %s belongs to company '%s' and cannot be linked to Customs File %s for company '%s'.") %
+                        (picking.name, picking.company_id.display_name, op.name, op.company_id.display_name)
+                    )
+            for supplier in op.supplier_ids:
+                op._check_partner_company(supplier, _("Supplier"))
+            op._check_partner_company(op.broker_id, _("Customs Broker"))
+            op._check_partner_company(op.forwarder_id, _("Freight Forwarder"))
+            op._check_partner_company(op.carrier_id, _("Carrier"))
+            op._check_partner_company(op.manufacturer_id, _("Manufacturer"))
+            if op.customs_office_id.company_id and op.customs_office_id.company_id != op.company_id:
+                raise ValidationError(
+                    _("Customs Office %s belongs to company '%s' and cannot be linked to Customs File %s for company '%s'.") %
+                    (op.customs_office_id.display_name, op.customs_office_id.company_id.display_name, op.name, op.company_id.display_name)
+                )
+
+    @api.constrains('purchase_order_ids')
+    def _check_single_operation_per_po(self):
+        for op in self:
+            if not op.purchase_order_ids:
+                continue
+            duplicate = self.search([
+                ('id', '!=', op.id),
+                ('purchase_order_ids', 'in', op.purchase_order_ids.ids),
+            ], limit=1)
+            if duplicate:
+                duplicate_pos = op.purchase_order_ids.filtered(lambda po: po in duplicate.purchase_order_ids)
+                raise ValidationError(
+                    _("Purchase Order(s) %s are already linked to Customs File %s. Only one Customs File per Purchase Order is allowed by default.") %
+                    (", ".join(duplicate_pos.mapped('name')), duplicate.name)
+                )
+
     def _create_operation_activity(self, activity_xml_id, summary, note, user_id):
         self.ensure_one()
         activity_type = self.env.ref(activity_xml_id, raise_if_not_found=False)
@@ -804,6 +865,7 @@ class CustomsOperation(models.Model):
         self.ensure_one()
         existing_lines = self.operation_line_ids.filtered(lambda l: l.purchase_order_line_id)
         existing_po_line_ids = existing_lines.mapped('purchase_order_line_id.id')
+        documents_may_need_sync = False
         
         po_lines = po.order_line.filtered(lambda l: not l.display_type)
         po_line_ids = po_lines.ids
@@ -830,13 +892,15 @@ class CustomsOperation(models.Model):
                 }
                 
                 tmpl = line.product_id.product_tmpl_id
+                categ = tmpl.categ_id
                 if tmpl:
                     line_vals.update({
                         'country_of_origin_id': tmpl.country_of_origin_id.id or self.origin_country_id.id,
                         'manufacturer_id': tmpl.manufacturer_id.id,
-                        'health_certificate_required': tmpl.health_certificate_required,
-                        'analysis_required': tmpl.analysis_required,
-                        'import_permit_required': tmpl.import_permit_required,
+                        'health_certificate_required': tmpl.health_certificate_required or categ.health_certificate_required,
+                        'analysis_required': tmpl.analysis_required or categ.analysis_required,
+                        'import_permit_required': tmpl.import_permit_required or categ.import_permit_required,
+                        'original_documents_required': tmpl.original_documents_required or categ.original_documents_required,
                     })
                     if hasattr(line.product_id, 'hs_code'):
                         line_vals['hs_code'] = line.product_id.hs_code
@@ -844,6 +908,10 @@ class CustomsOperation(models.Model):
                         line_vals['hs_code'] = tmpl.hs_code
                 
                 self.env['customs.operation.line'].create(line_vals)
+                documents_may_need_sync = True
+
+        if documents_may_need_sync:
+            self._generate_default_document_requirements()
 
     def action_view_purchase_orders(self):
         self.ensure_one()
@@ -896,13 +964,18 @@ class CustomsOperation(models.Model):
         self.ensure_one()
         doc_types = self.env['customs.document.type'].search([])
         types_by_code = {t.code: t for t in doc_types}
+        existing_keys = set()
+        for req in self.document_requirement_ids:
+            existing_keys.add((req.document_type_id.code, req.operation_line_id.id or False))
         
         req_vals = []
+        new_keys = set()
         
         # Standard Global Documents
         global_codes = ['INV', 'PKL', 'COO']
         for code in global_codes:
-            if code in types_by_code:
+            key = (code, False)
+            if code in types_by_code and key not in existing_keys and key not in new_keys:
                 t = types_by_code[code]
                 req_vals.append({
                     'operation_id': self.id,
@@ -913,6 +986,7 @@ class CustomsOperation(models.Model):
                     'original_required': t.original_normally_required,
                     'state': 'not_requested',
                 })
+                new_keys.add(key)
                 
         # Transport Document (BL/AWB/CMR)
         t_code = 'BL'
@@ -921,7 +995,8 @@ class CustomsOperation(models.Model):
         elif self.transport_mode == 'road':
             t_code = 'CMR'
             
-        if t_code in types_by_code:
+        key = (t_code, False)
+        if t_code in types_by_code and key not in existing_keys and key not in new_keys:
             t = types_by_code[t_code]
             req_vals.append({
                 'operation_id': self.id,
@@ -932,6 +1007,7 @@ class CustomsOperation(models.Model):
                 'original_required': t.original_normally_required,
                 'state': 'not_requested',
             })
+            new_keys.add(key)
             
         # Line Specific Documents (COA, HC, IP)
         for line in self.operation_line_ids:
@@ -944,7 +1020,8 @@ class CustomsOperation(models.Model):
                 line_requirements.append('IP')
                 
             for code in line_requirements:
-                if code in types_by_code:
+                key = (code, line.id)
+                if code in types_by_code and key not in existing_keys and key not in new_keys:
                     t = types_by_code[code]
                     req_vals.append({
                         'operation_id': self.id,
@@ -953,10 +1030,10 @@ class CustomsOperation(models.Model):
                         'name': "%s - %s" % (t.name, line.product_id.name),
                         'responsible_party': t.default_responsible_party,
                         'requirement_level': t.default_requirement_level,
-                        'original_required': t.original_normally_required,
+                        'original_required': t.original_normally_required or line.original_documents_required,
                         'state': 'not_requested',
                     })
+                    new_keys.add(key)
                     
         if req_vals:
             self.env['customs.document.requirement'].create(req_vals)
-

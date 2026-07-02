@@ -26,4 +26,21 @@
             </notebook>
         </field>
     </record>
+
+    <record id="product_category_customs_form_view" model="ir.ui.view">
+        <field name="name">product.category.customs.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="Import &amp; Customs Defaults">
+                    <field name="customs_required"/>
+                    <field name="health_certificate_required" invisible="not customs_required"/>
+                    <field name="analysis_required" invisible="not customs_required"/>
+                    <field name="import_permit_required" invisible="not customs_required"/>
+                    <field name="original_documents_required" invisible="not customs_required"/>
+                </group>
+            </sheet>
+        </field>
+    </record>
 </odoo>

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
@@ -24,6 +25,20 @@ class AccountMove(models.Model):
             'res_id': self.customs_operation_id.id,
             'target': 'current',
         }
+
+    @api.constrains('company_id', 'customs_operation_id')
+    def _check_customs_operation_company(self):
+        for move in self:
+            if move.customs_operation_id and move.customs_operation_id.company_id != move.company_id:
+                raise ValidationError(
+                    _("Customs File %s belongs to company '%s' and cannot be linked to bill %s for company '%s'.") %
+                    (
+                        move.customs_operation_id.name,
+                        move.customs_operation_id.company_id.display_name,
+                        move.display_name,
+                        move.company_id.display_name,
+                    )
+                )
 
     @api.model_create_multi
     def create(self, vals_list):

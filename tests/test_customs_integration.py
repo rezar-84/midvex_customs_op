@@ -49,12 +49,42 @@ class TestCustomsIntegration(TransactionCase):
                 'name': 'Commercial Invoice',
                 'code': 'INV',
             })
+        cls.doc_type_coa = cls.env.ref('midvex_customs_op.doc_type_coa', raise_if_not_found=False)
+        if not cls.doc_type_coa:
+            cls.doc_type_coa = cls.env['customs.document.type'].create({
+                'name': 'Certificate of Analysis',
+                'code': 'COA',
+            })
+        cls.doc_type_hc = cls.env.ref('midvex_customs_op.doc_type_hc', raise_if_not_found=False)
+        if not cls.doc_type_hc:
+            cls.doc_type_hc = cls.env['customs.document.type'].create({
+                'name': 'Health Certificate',
+                'code': 'HC',
+            })
 
         # Product Templates and Products
         cls.product_customs_req = cls.env['product.product'].create({
             'name': 'Imported Feed A',
             'type': 'consu',
             'customs_required': True,
+            'analysis_required': True,
+        })
+        cls.product_health_req = cls.env['product.product'].create({
+            'name': 'Imported Feed With Health Certificate',
+            'type': 'consu',
+            'customs_required': True,
+            'health_certificate_required': True,
+            'original_documents_required': True,
+        })
+        cls.category_customs_req = cls.env['product.category'].create({
+            'name': 'Customs Required Category',
+            'customs_required': True,
+            'analysis_required': True,
+        })
+        cls.product_category_customs_req = cls.env['product.product'].create({
+            'name': 'Category-Flagged Feed',
+            'type': 'consu',
+            'categ_id': cls.category_customs_req.id,
         })
         cls.product_normal = cls.env['product.product'].create({
             'name': 'Local Feed B',
@@ -129,6 +159,80 @@ class TestCustomsIntegration(TransactionCase):
         po.button_confirm()
         self.assertEqual(po.customs_operation_count, 1, "Domestic PO with customs required product should auto-create Customs File")
 
+    def test_po_confirm_domestic_with_customs_category(self):
+        """Test PO confirmation auto-creates Customs Operation for category-level customs flags."""
+        po = self.env['purchase.order'].create({
+            'partner_id': self.vendor_domestic.id,
+            'company_id': self.company_main.id,
+            'order_line': [(0, 0, {
+                'product_id': self.product_category_customs_req.id,
+                'name': self.product_category_customs_req.name,
+                'product_qty': 5,
+                'price_unit': 100,
+            })]
+        })
+
+        self.assertTrue(po.customs_required, "Domestic PO with customs required category should flag customs_required")
+
+        po.button_confirm()
+        op = po.customs_operation_ids
+        self.assertEqual(len(op), 1, "Domestic PO with customs required category should auto-create Customs File")
+        self.assertTrue(op.operation_line_ids.analysis_required)
+        coa_reqs = op.document_requirement_ids.filtered(lambda r: r.document_type_id.code == 'COA')
+        self.assertEqual(len(coa_reqs), 1, "Category analysis flag should generate a COA requirement")
+
+    def test_duplicate_operation_per_po_is_blocked(self):
+        """Test model-level duplicate prevention for the same Purchase Order."""
+        po = self.env['purchase.order'].create({
+            'partner_id': self.vendor_foreign.id,
+            'company_id': self.company_main.id,
+            'order_line': [(0, 0, {
+                'product_id': self.product_normal.id,
+                'name': self.product_normal.name,
+                'product_qty': 10,
+                'price_unit': 100,
+            })]
+        })
+        po.button_confirm()
+        self.assertEqual(po.customs_operation_count, 1)
+
+        with self.assertRaises(ValidationError):
+            self.env['customs.operation'].create({
+                'company_id': self.company_main.id,
+                'purchase_order_ids': [(4, po.id)],
+            })
+
+    def test_company_consistency_constraints(self):
+        """Test cross-company PO, picking, bill, and partner links are blocked server-side."""
+        other_partner = self.env['res.partner'].create({
+            'name': 'Other Company Partner',
+            'company_id': self.company_other.id,
+        })
+        po_other = self.env['purchase.order'].create({
+            'partner_id': self.vendor_foreign.id,
+            'company_id': self.company_other.id,
+        })
+        op = self.env['customs.operation'].create({
+            'company_id': self.company_main.id,
+        })
+
+        with self.assertRaises(ValidationError):
+            op.write({'purchase_order_ids': [(4, po_other.id)]})
+
+        with self.assertRaises(ValidationError):
+            op.write({'supplier_ids': [(4, other_partner.id)]})
+
+        op_other = self.env['customs.operation'].create({
+            'company_id': self.company_other.id,
+        })
+        bill_main = self.env['account.move'].create({
+            'move_type': 'in_invoice',
+            'partner_id': self.vendor_foreign.id,
+            'company_id': self.company_main.id,
+        })
+        with self.assertRaises(ValidationError):
+            bill_main.write({'customs_operation_id': op_other.id})
+
     def test_lines_and_quantities_sync(self):
         """Test PO line creations, updates, and deletes are synced to the Customs File."""
         po = self.env['purchase.order'].create({
@@ -162,6 +266,10 @@ class TestCustomsIntegration(TransactionCase):
         col_new = op.operation_line_ids.filtered(lambda l: l.purchase_order_line_id == new_po_line)
         self.assertTrue(col_new, "New customs line should link to the new PO line")
         self.assertEqual(col_new.quantity, 8)
+        coa_reqs = op.document_requirement_ids.filtered(
+            lambda r: r.document_type_id.code == 'COA' and r.operation_line_id == col_new
+        )
+        self.assertEqual(len(coa_reqs), 1, "Adding flagged PO lines should create matching compliance requirements")
 
         # 3. Delete a PO line
         po.state = 'draft'
@@ -205,8 +313,19 @@ class TestCustomsIntegration(TransactionCase):
         # 1. Test soft warning (block_receipt is False)
         self.env['ir.config_parameter'].sudo().set_param('midvex_customs_op.customs_block_receipt_before_clearance', False)
         
+        activity_count_before = self.env['mail.activity'].search_count([
+            ('res_model', '=', 'customs.operation'),
+            ('res_id', '=', op.id),
+            ('summary', '=', 'Receipt Before Customs Clearance'),
+        ])
         picking.button_validate()
         self.assertEqual(picking.state, 'done', "Picking should be validated with soft warning setting")
+        activity_count_after = self.env['mail.activity'].search_count([
+            ('res_model', '=', 'customs.operation'),
+            ('res_id', '=', op.id),
+            ('summary', '=', 'Receipt Before Customs Clearance'),
+        ])
+        self.assertEqual(activity_count_after, activity_count_before + 1)
 
         # 2. Test strict block (block_receipt is True)
         po_2 = self.env['purchase.order'].create({
@@ -264,3 +383,26 @@ class TestCustomsIntegration(TransactionCase):
         op.flush_recordset()
         self.assertEqual(op.vendor_bill_count, 1, "Customs File should count the linked bill")
         self.assertIn(bill, op.vendor_bill_ids, "Bill should appear in the customs operation's bills list")
+
+    def test_document_generation_is_idempotent_and_original_defaults_propagate(self):
+        """Test repeated default generation does not duplicate requirements."""
+        po = self.env['purchase.order'].create({
+            'partner_id': self.vendor_foreign.id,
+            'company_id': self.company_main.id,
+            'order_line': [(0, 0, {
+                'product_id': self.product_health_req.id,
+                'name': self.product_health_req.name,
+                'product_qty': 10,
+                'price_unit': 100,
+            })]
+        })
+        po.button_confirm()
+        op = po.customs_operation_ids[0]
+        initial_count = len(op.document_requirement_ids)
+
+        op._generate_default_document_requirements()
+        self.assertEqual(len(op.document_requirement_ids), initial_count)
+
+        health_req = op.document_requirement_ids.filtered(lambda r: r.document_type_id.code == 'HC')
+        self.assertEqual(len(health_req), 1)
+        self.assertTrue(health_req.original_required)

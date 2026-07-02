@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from markupsafe import Markup, escape
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
@@ -56,12 +57,20 @@ class PurchaseOrder(models.Model):
             else:
                 order.is_import_purchase = False
 
-    @api.depends('is_import_purchase', 'order_line.product_id', 'order_line.product_id.product_tmpl_id.customs_required')
+    @api.depends(
+        'is_import_purchase',
+        'order_line.product_id',
+        'order_line.product_id.product_tmpl_id.customs_required',
+        'order_line.product_id.product_tmpl_id.categ_id.customs_required',
+    )
     def _compute_customs_required(self):
         for order in self:
             if order.is_import_purchase:
                 order.customs_required = True
-            elif any(line.product_id.product_tmpl_id.customs_required for line in order.order_line if line.product_id):
+            elif any(
+                line.product_id.product_tmpl_id.customs_required or line.product_id.product_tmpl_id.categ_id.customs_required
+                for line in order.order_line if line.product_id
+            ):
                 order.customs_required = True
             else:
                 order.customs_required = False
@@ -186,13 +195,15 @@ class PurchaseOrder(models.Model):
             }
             
             tmpl = line.product_id.product_tmpl_id
+            categ = tmpl.categ_id
             if tmpl:
                 line_vals.update({
                     'country_of_origin_id': tmpl.country_of_origin_id.id or op.origin_country_id.id,
                     'manufacturer_id': tmpl.manufacturer_id.id,
-                    'health_certificate_required': tmpl.health_certificate_required,
-                    'analysis_required': tmpl.analysis_required,
-                    'import_permit_required': tmpl.import_permit_required,
+                    'health_certificate_required': tmpl.health_certificate_required or categ.health_certificate_required,
+                    'analysis_required': tmpl.analysis_required or categ.analysis_required,
+                    'import_permit_required': tmpl.import_permit_required or categ.import_permit_required,
+                    'original_documents_required': tmpl.original_documents_required or categ.original_documents_required,
                 })
                 # Check for Odoo standard hs_code
                 if hasattr(line.product_id, 'hs_code'):
@@ -214,7 +225,11 @@ class PurchaseOrder(models.Model):
         op._generate_default_document_requirements()
         
         # Log to chatter
-        self.message_post(body=_("Linked to auto-created Import & Customs Operation: <a href=# data-oe-model=customs.operation data-oe-id=%d>%s</a>") % (op.id, op.name))
+        body = Markup(_("Linked to auto-created Import & Customs Operation: <a href='#' data-oe-model='customs.operation' data-oe-id='%s'>%s</a>")) % (
+            op.id,
+            escape(op.name),
+        )
+        self.message_post(body=body)
         
         return op
 
@@ -240,19 +255,22 @@ class PurchaseOrderLine(models.Model):
                             'uom_id': line.product_uom_id.id,
                         }
                         tmpl = line.product_id.product_tmpl_id
+                        categ = tmpl.categ_id
                         if tmpl:
                             line_vals.update({
                                 'country_of_origin_id': tmpl.country_of_origin_id.id or op.origin_country_id.id,
                                 'manufacturer_id': tmpl.manufacturer_id.id,
-                                'health_certificate_required': tmpl.health_certificate_required,
-                                'analysis_required': tmpl.analysis_required,
-                                'import_permit_required': tmpl.import_permit_required,
+                                'health_certificate_required': tmpl.health_certificate_required or categ.health_certificate_required,
+                                'analysis_required': tmpl.analysis_required or categ.analysis_required,
+                                'import_permit_required': tmpl.import_permit_required or categ.import_permit_required,
+                                'original_documents_required': tmpl.original_documents_required or categ.original_documents_required,
                             })
                             if hasattr(line.product_id, 'hs_code'):
                                 line_vals['hs_code'] = line.product_id.hs_code
                             elif hasattr(tmpl, 'hs_code'):
                                 line_vals['hs_code'] = tmpl.hs_code
                         self.env['customs.operation.line'].create(line_vals)
+                        op._generate_default_document_requirements()
         return lines
 
     def write(self, vals):
@@ -270,8 +288,26 @@ class PurchaseOrderLine(models.Model):
                             col_vals['quantity'] = vals['product_qty']
                         if 'product_id' in vals:
                             col_vals['product_id'] = vals['product_id']
+                            tmpl = line.product_id.product_tmpl_id
+                            categ = tmpl.categ_id
+                            col_vals.update({
+                                'description': line.name,
+                                'uom_id': line.product_uom_id.id,
+                                'country_of_origin_id': tmpl.country_of_origin_id.id or op.origin_country_id.id,
+                                'manufacturer_id': tmpl.manufacturer_id.id,
+                                'health_certificate_required': tmpl.health_certificate_required or categ.health_certificate_required,
+                                'analysis_required': tmpl.analysis_required or categ.analysis_required,
+                                'import_permit_required': tmpl.import_permit_required or categ.import_permit_required,
+                                'original_documents_required': tmpl.original_documents_required or categ.original_documents_required,
+                            })
+                            if hasattr(line.product_id, 'hs_code'):
+                                col_vals['hs_code'] = line.product_id.hs_code
+                            elif hasattr(tmpl, 'hs_code'):
+                                col_vals['hs_code'] = tmpl.hs_code
                         if col_vals:
                             col.write(col_vals)
+                            if 'product_id' in vals:
+                                op._generate_default_document_requirements()
         return res
 
     def unlink(self):

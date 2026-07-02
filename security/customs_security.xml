@@ -84,4 +84,26 @@
         <field name="global" eval="True"/>
         <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
+
+    <!-- Portal Record Rules -->
+    <record id="customs_operation_portal_rule" model="ir.rule">
+        <field name="name">Customs Operation Portal Rule</field>
+        <field name="model_id" ref="model_customs_operation"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('supplier_ids', 'child_of', [user.partner_id.commercial_partner_id.id]), ('broker_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
+
+    <record id="customs_operation_line_portal_rule" model="ir.rule">
+        <field name="name">Customs Operation Line Portal Rule</field>
+        <field name="model_id" ref="model_customs_operation_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('operation_id.supplier_ids', 'child_of', [user.partner_id.commercial_partner_id.id]), ('operation_id.broker_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
+
+    <record id="customs_document_requirement_portal_rule" model="ir.rule">
+        <field name="name">Customs Document Requirement Portal Rule</field>
+        <field name="model_id" ref="model_customs_document_requirement"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('operation_id.supplier_ids', 'child_of', [user.partner_id.commercial_partner_id.id]), ('operation_id.broker_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
 </odoo>

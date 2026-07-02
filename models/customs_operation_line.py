@@ -53,6 +53,7 @@ class CustomsOperationLine(models.Model):
     health_certificate_required = fields.Boolean(string='Health Certificate Required', default=False)
     analysis_required = fields.Boolean(string='Analysis Required', default=False)
     import_permit_required = fields.Boolean(string='Import Permit Required', default=False)
+    original_documents_required = fields.Boolean(string='Original Documents Required', default=False)
     notes = fields.Text(string='Notes')
     company_id = fields.Many2one(
         'res.company', 
