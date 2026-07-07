@@ -396,7 +396,7 @@ msgstr "Yakında Varacaklar"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
 msgid "Assignment & Level"
-msgstr ""
+msgstr "Atama ve Seviye"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
@@ -425,7 +425,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
 msgid "Attachments & Photos"
-msgstr ""
+msgstr "Ekler ve Fotoğraflar"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
@@ -811,7 +811,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
 msgid "Courier & Shipment Info"
-msgstr ""
+msgstr "Kurye ve Sevkiyat Bilgileri"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.purchase_order_customs_form_view
@@ -1057,7 +1057,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_home_customs
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_home_menu_customs
 msgid "Customs Operations"
-msgstr ""
+msgstr "Gümrük Operasyonları"
 
 #. module: midvex_customs_op
 #: model:res.groups.privilege,name:midvex_customs_op.privilege_customs_operations
@@ -1491,7 +1491,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
 msgid "Files & Attachments"
-msgstr ""
+msgstr "Dosyalar ve Ekler"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
@@ -1569,7 +1569,7 @@ msgstr "Örnek Veri Üret veya Temizle"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
 msgid "Geographics & Links"
-msgstr ""
+msgstr "Coğrafi Bilgiler ve Bağlantılar"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__goods_prepared_date
@@ -1601,7 +1601,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
 msgid "Handover & Final Dates"
-msgstr ""
+msgstr "Teslim ve Son Tarihler"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,help:midvex_customs_op.field_product_product__hs_code
@@ -1758,7 +1758,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.purchase_order_customs_form_view
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.res_config_settings_view_form
 msgid "Import & Customs"
-msgstr ""
+msgstr "İthalat ve Gümrük"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.product_category_customs_form_view
@@ -1768,7 +1768,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_picking_form_customs_inherit
 msgid "Import & Customs Integration"
-msgstr ""
+msgstr "İthalat ve Gümrük Entegrasyonu"
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -1780,7 +1780,7 @@ msgstr "İthalat & Gümrük Operasyonu"
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_purchase_order__customs_operation_ids
 msgid "Import & Customs Operations"
-msgstr ""
+msgstr "İthalat & Gümrük Operasyonları"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_product_category__customs_required
@@ -2019,7 +2019,7 @@ msgstr "İlişkili Satış Siparişleri (MTO)"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
 msgid "Linked Vendor Bills & Expenses"
-msgstr ""
+msgstr "İlişkili Satıcı Faturaları ve Giderler"
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -2458,7 +2458,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_line_form
 msgid "Origin & Manufacturer"
-msgstr ""
+msgstr "Menşe ve Üretici"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__dispatch_date
@@ -2799,7 +2799,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.purchase_order_customs_form_view
 msgid "Readiness & Compliance"
-msgstr ""
+msgstr "Hazırlık ve Uyum"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__is_overridden
@@ -2888,7 +2888,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
 msgid "Rejection & Notes"
-msgstr ""
+msgstr "Red ve Notlar"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__rejection_reason
@@ -3560,7 +3560,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
 msgid "Verification & Review"
-msgstr ""
+msgstr "Doğrulama ve İnceleme"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_line_form
