@@ -52,7 +52,9 @@
 | 2026-06-29 | Enforce import linkage consistency server-side | Purchase, inventory, accounting, and product profile links can be created through APIs, imports, or form edits, so UI-only protection is insufficient for multi-company and duplicate-file safety. | Rely on UI domains and manual cleanup | Added database-level constraints for company consistency and one Customs Operation per Purchase Order; made document generation idempotent and category-aware. |
 | 2026-06-29 | Use assigned-partner portal access for Customs Operations | Suppliers and customs brokers need external collaboration without exposing unrelated import files or internal admin workflows. | Public token links only / broad portal access | Added `portal` dependency, partner-scoped portal rules, supplier-only document submission guards, and broker-only declaration update/download routes. |
 | 2026-06-29 | Keep portal users out of backend customs role groups | Odoo's Portal and Internal User roles are exclusive, and backend customs groups imply Internal User access. Supplier and broker portal users must use portal ACLs and record rules only. | Allow mixed portal/backend customs groups | Added a `res.users` create/write sanitizer that removes backend customs groups when Portal access is assigned. |
+| 2026-07-03 | Portal UX Simplification & Layout | Keep portal simple and focused on local customs brokers and willing suppliers, while assuming internal staff handle the bulk of data entry and uploads. | Build complex portal roles for all parties | Designed visual timeline tracker, card-based document status layout, and dedicated broker-only update sidebar. |
 
 ## Pending decisions
 
 None. All pending architectural decisions have been resolved.
+

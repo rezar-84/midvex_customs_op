@@ -43,23 +43,51 @@ class ResUsers(models.Model):
     def _sanitize_customs_portal_group_vals(self, vals, remove_existing=False):
         sanitized_vals = dict(vals)
         backend_ids = self._customs_backend_group_ids()
+        portal_group = self.env.ref('base.group_portal', raise_if_not_found=False)
+        portal_id = portal_group.id if portal_group else None
+
+        # Check if portal group is being assigned in the write vals
+        assigns_portal = False
         for field_name in ('groups_id', 'group_ids'):
-            commands = sanitized_vals.get(field_name)
-            if not self._customs_groups_assign_portal(commands):
+            if field_name not in self._fields:
                 continue
-            cleaned_commands = []
-            for command in commands:
-                if not isinstance(command, (list, tuple)) or not command:
-                    cleaned_commands.append(command)
-                elif command[0] == 6:
-                    cleaned_commands.append((6, 0, list(set(command[2] or []) - backend_ids)))
-                elif command[0] == 4 and command[1] in backend_ids:
+            commands = vals.get(field_name)
+            if self._customs_groups_assign_portal(commands):
+                assigns_portal = True
+                break
+
+        # Check if the user is already a portal user (for write operations)
+        is_portal_user = False
+        if portal_id:
+            # self might be empty or a new record
+            try:
+                # Odoo 19 uses group_ids, but check dynamically
+                group_field = 'group_ids' if 'group_ids' in self._fields else 'groups_id'
+                if any(portal_id in user[group_field].ids for user in self if user.id):
+                    is_portal_user = True
+            except Exception:
+                pass
+
+        if assigns_portal or is_portal_user:
+            for field_name in ('groups_id', 'group_ids'):
+                if field_name not in self._fields:
                     continue
-                else:
-                    cleaned_commands.append(command)
-            if remove_existing:
-                cleaned_commands += [(3, group_id) for group_id in backend_ids]
-            sanitized_vals[field_name] = cleaned_commands
+                commands = sanitized_vals.get(field_name)
+                cleaned_commands = []
+                if commands:
+                    for command in commands:
+                        if not isinstance(command, (list, tuple)) or not command:
+                            cleaned_commands.append(command)
+                        elif command[0] == 6:
+                            cleaned_commands.append((6, 0, list(set(command[2] or []) - backend_ids)))
+                        elif command[0] == 4 and command[1] in backend_ids:
+                            continue
+                        else:
+                            cleaned_commands.append(command)
+                if remove_existing:
+                    cleaned_commands += [(3, group_id) for group_id in backend_ids]
+                if cleaned_commands or commands:
+                    sanitized_vals[field_name] = cleaned_commands
         return sanitized_vals
 
     @api.model_create_multi
