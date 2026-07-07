@@ -18,6 +18,7 @@ msgstr ""
 
 #. module: midvex_customs_op
 #: model:ir.model,name:midvex_customs_op.model_customs_operation
+#. legacy occurrence: field:account.move,customs_operation_id:0
 msgid "Customs File"
 msgstr "Gümrük Dosyası"
 
@@ -74,46 +75,55 @@ msgstr "Taşıyıcı"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,purchase_order_ids:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Purchase Orders"
 msgstr "Satınalma Siparişleri"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,picking_ids:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Incoming Shipments"
 msgstr "Gelen Teslimatlar"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,operation_line_ids:0
+#. legacy occurrence: page:customs.operation,product_lines:0
 msgid "Product Lines"
 msgstr "Ürün Satırları"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,document_requirement_ids:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Document Requirements"
 msgstr "Belge Gereksinimleri"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,transport_mode:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Transport Mode"
 msgstr "Taşıma Şekli"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,incoterm_id:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Incoterm"
 msgstr "Teslim Şekli (Incoterm)"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,origin_country_id:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Country of Origin"
 msgstr "Menşe Ülke"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,departure_country_id:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Country of Departure"
 msgstr "Çıkış Ülkesi"
 
 #. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,destination_country_id:0
+#: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Country of Destination"
 msgstr "Varış Ülkesi"
 
@@ -231,6 +241,7 @@ msgstr "Beklemede"
 
 #. module: midvex_customs_op
 #. legacy occurrence: selection:customs.stage,name:0
+#. legacy occurrence: selection:customs.operation,production_status:0
 msgid "Cancelled"
 msgstr "İptal Edildi"
 
@@ -253,31 +264,6 @@ msgstr "orijinal nüsha düzenlenmemiş"
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Document '%s': %s"
 msgstr "Belge '%s': %s"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Transport Mode"
-msgstr "Taşıma Şekli"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Country of Origin"
-msgstr "Menşe Ülke"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Country of Departure"
-msgstr "Çıkış Ülkesi"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Country of Destination"
-msgstr "Varış Ülkesi"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Incoterm"
-msgstr "Teslim Şekli (Incoterm)"
 
 #. module: midvex_customs_op
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
@@ -308,21 +294,6 @@ msgstr "Depo Teslim Tarihi"
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "<strong>Warning:</strong> The Customs File was closed, but the following operational details are missing: %s"
 msgstr "<strong>Uyarı:</strong> Gümrük Dosyası kapatıldı, ancak şu operasyonel detaylar eksik: %s"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Purchase Orders"
-msgstr "Satınalma Siparişleri"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Incoming Shipments"
-msgstr "Gelen Teslimatlar"
-
-#. module: midvex_customs_op
-#: code:addons/midvex_customs_op/models/customs_operation.py:0
-msgid "Document Requirements"
-msgstr "Belge Gereksinimleri"
 
 #. module: midvex_customs_op
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
@@ -712,11 +683,6 @@ msgid "Delayed"
 msgstr "Gecikti"
 
 #. module: midvex_customs_op
-#. legacy occurrence: selection:customs.operation,production_status:0
-msgid "Cancelled"
-msgstr "İptal Edildi"
-
-#. module: midvex_customs_op
 #. legacy occurrence: selection:customs.operation,customs_status:0
 msgid "Documents Waiting"
 msgstr "Belgeler Bekleniyor"
@@ -776,11 +742,6 @@ msgstr "Üretim"
 #. legacy occurrence: page:customs.operation,logistics:0
 msgid "Logistics"
 msgstr "Lojistik"
-
-#. module: midvex_customs_op
-#. legacy occurrence: page:customs.operation,product_lines:0
-msgid "Product Lines"
-msgstr "Ürün Satırları"
 
 #. module: midvex_customs_op
 #. legacy occurrence: page:customs.operation,documents:0
@@ -899,11 +860,6 @@ msgid "Block Warehouse Receipt Before Customs Clearance"
 msgstr "Gümrüklemeden Önce Depo Makbuzunu Engelle"
 
 #. module: midvex_customs_op
-#. legacy occurrence: field:account.move,customs_operation_id:0
-msgid "Customs File"
-msgstr "Gümrük Dosyası"
-
-#. module: midvex_customs_op
 #. legacy occurrence: field:customs.operation,vendor_bill_ids:0
 msgid "Vendor Bills"
 msgstr "Satıcı Faturaları"
@@ -912,8 +868,6 @@ msgstr "Satıcı Faturaları"
 #. legacy occurrence: field:customs.operation,sale_order_ids:0
 msgid "Sales Orders"
 msgstr "Satış Siparişleri"
-
-
 
 # Additional Integration Translations
 #. module: midvex_customs_op
