@@ -53,6 +53,7 @@
 | 2026-06-29 | Use assigned-partner portal access for Customs Operations | Suppliers and customs brokers need external collaboration without exposing unrelated import files or internal admin workflows. | Public token links only / broad portal access | Added `portal` dependency, partner-scoped portal rules, supplier-only document submission guards, and broker-only declaration update/download routes. |
 | 2026-06-29 | Keep portal users out of backend customs role groups | Odoo's Portal and Internal User roles are exclusive, and backend customs groups imply Internal User access. Supplier and broker portal users must use portal ACLs and record rules only. | Allow mixed portal/backend customs groups | Added a `res.users` create/write sanitizer that removes backend customs groups when Portal access is assigned. |
 | 2026-07-03 | Portal UX Simplification & Layout | Keep portal simple and focused on local customs brokers and willing suppliers, while assuming internal staff handle the bulk of data entry and uploads. | Build complex portal roles for all parties | Designed visual timeline tracker, card-based document status layout, and dedicated broker-only update sidebar. |
+| 2026-07-07 | Rename Turkish translation file to `tr_TR.po` | Odoo standard Turkish locale code is `tr_TR` and it looks for `tr_TR.po` for module translation lookups. A file named `tr.po` is ignored by Odoo's translation engine. | Keep file as `tr.po` | Rename `tr.po` to `tr_TR.po` and set header locale to `tr_TR` |
 
 ## Pending decisions
 

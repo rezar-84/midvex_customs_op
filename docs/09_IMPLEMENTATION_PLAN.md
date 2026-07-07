@@ -175,7 +175,7 @@ Status: Complete
 Progress notes:
 - Created a comprehensive User & Administration Manual covering Setup, Master Data Configuration, Operation Management, Document Tracking, Shipment Entry, and closing validation.
 - Incorporated the manual into the repository `README.md` and created an aesthetic HTML dashboard description in `static/description/index.html`.
-- Implemented Turkish PO translation mappings inside `i18n/tr.po` localizing stages, models, status selections, field labels, and buttons.
+- Implemented Turkish PO translation mappings inside `i18n/tr_TR.po` localizing stages, models, status selections, field labels, and buttons.
 - Suppressed readiness block ribbons and text on draft Customs Files (where `is_draft` is True) to prevent pre-shipment alerts on fresh forms, and added Turkish translation entries for all dynamic python-computed error messages and status components.
 - Conducted the final role-based UX review and verified licensing alignment (both repository and manifest using GPL-3).
 
@@ -222,7 +222,7 @@ Status: Complete
   - Automated activity creation hooks on: BL upload, warehouse delivery, damaged cargo detection, and approaching ETA.
 - Milestone 4: Tests and Turkish Translations (Completed)
   - Added unit test coverage for commercial PO computations, cost totals, and activity triggers.
-  - Translated all new fields, selection values, tab titles, and activity alerts inside `i18n/tr.po`.
+  - Translated all new fields, selection values, tab titles, and activity alerts inside `i18n/tr_TR.po`.
 - Milestone 5: Demo Seed Data & Documentation (Completed)
   - Seeded representative operation records showing various workflow stages (Production, Shipped, Customs Clearance with missing docs, Delivered with damages) in `demo/customs_demo_data.xml`.
   - Added safe cleanup instructions and Odoo shell script to `README.md`.
@@ -251,7 +251,7 @@ Status: Complete (on branch `feature/purchase-inventory-sales-sync`)
   - Implemented Sales Order reference tracking on `customs.operation` via origin text tracing and stock move destination chains for MTO-procured shipments.
   - Designed smart navigation buttons for Sales Orders and Vendor Bills.
 - **Milestone 5: Localization & Automated Tests Integration** (Completed)
-  - Added complete Turkish translations in `i18n/tr.po` for all new fields, buttons, alerts, and settings.
+  - Added complete Turkish translations in `i18n/tr_TR.po` for all new fields, buttons, alerts, and settings.
   - Wrote robust integration unit tests in `tests/test_customs_integration.py` covering PO auto-creation, line synchronization/lock rules, picking receipt validation blocks/warnings, and vendor bill linkages.
 
 ## Post-Integration Remediation

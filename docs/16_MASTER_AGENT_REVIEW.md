@@ -57,7 +57,7 @@ midvex_customs_op/
     customs_document_type_data.xml
   demo/
   i18n/
-    tr.po
+    tr_TR.po
   models/
     __init__.py
     customs_document_requirement.py

@@ -15,7 +15,7 @@ All notable changes to the Customs Operations module should be documented here.
   - Associated PO-generated vendor bills (`account.move`) to Customs Files and supported manual external expense bill linkage with cross-navigation.
   - Implemented Sales Order tracing for MTO-procured shipments using origin field, stock move destinations, and procurement groups.
   - Added `tests/test_customs_integration.py` to cover all sync behaviors, warnings, and lock states.
-  - Translated all new fields and options to Turkish in `tr.po`.
+  - Translated all new fields and options to Turkish in `tr_TR.po`.
 
 - **Integration Phase (Purchase, Inventory, Accounting, Sales Sync) Planning**:
   - Created feature branch `feature/purchase-inventory-sales-sync`.
@@ -43,7 +43,7 @@ All notable changes to the Customs Operations module should be documented here.
 
 - Reorganized the client form view into 9 structured notebook tabs aligning with the import lifecycle (Overview, Purchase & Supplier, Production, Logistics, Product Lines, Required Documents, Customs & Laboratory, Warehouse, Accounting & Costs).
 - Renamed the application, menus, and action labels to "Import & Customs Operations" to match its expanded scope.
-- Translated all new fields, status selection options, tab titles, and activity log text into Turkish inside `i18n/tr.po`.
+- Translated all new fields, status selection options, tab titles, and activity log text into Turkish inside `i18n/tr_TR.po`.
 
 - Initial project requirements
 - AI coding-agent instructions
@@ -70,7 +70,7 @@ All notable changes to the Customs Operations module should be documented here.
 ### Fixed
 
 - Fixed Odoo search view parse error in `customs.document.requirement` by replacing tuple syntax with standard list syntax in `state` domain filters in `views/customs_document_requirement_views.xml` and `views/customs_menus.xml`.
-- Added missing Turkish translation mappings in `i18n/tr.po` for all dynamic computed messages, warning text fragments, smart button names, and Python validation/error messages.
+- Added missing Turkish translation mappings in `i18n/tr_TR.po` for all dynamic computed messages, warning text fragments, smart button names, and Python validation/error messages.
 - Fixed `KeyError: 'group_id'` traceback on Purchase Order integration by removing the deprecated `group_id` mapped lookup on `purchase.order` in `_compute_sale_orders`, relying instead on origin string parsing and stock move destination chains.
 - Fixed `AttributeError: 'res.groups' object has no attribute 'users'` traceback during activity creation by replacing direct group users references with explicit search queries on `res.users` using `groups_id` relation.
 

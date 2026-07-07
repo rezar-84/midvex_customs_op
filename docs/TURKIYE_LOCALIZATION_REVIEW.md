@@ -66,7 +66,7 @@ Turkey imports involve complex tax structures. Here is the compliance status of 
 
 ## 3. Operational Language (Terminology Review)
 
-The Turkish translations in [tr.po](file:///home/rubuntu/Projects/midvex_customs_op/i18n/tr.po) were audited for natural flow:
+The Turkish translations in [tr_TR.po](file:///home/rubuntu/Projects/midvex_customs_op/i18n/tr_TR.po) were audited for natural flow:
 
 * **Unnatural Labels Identified**:
   * `Warehouse Delivery` -> translated as "Depo Teslimi". **Fix**: Change to "Depoya Giriş Tarihi" or "Depo Kabul Tarihi".
