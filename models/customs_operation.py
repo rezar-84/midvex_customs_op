@@ -15,6 +15,9 @@ class CustomsOperation(models.Model):
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default='New', tracking=True)
     active = fields.Boolean(string='Active', default=True, tracking=True, index=True)
     hide_complex_tabs = fields.Boolean(compute='_compute_hide_complex_tabs', store=False)
+    is_pre_shipping = fields.Boolean(string='Is Pre-Shipping Stage', compute='_compute_stage_visibility_flags', store=True)
+    is_pre_clearance = fields.Boolean(string='Is Pre-Clearance Stage', compute='_compute_stage_visibility_flags', store=True)
+    hide_sync_button = fields.Boolean(string='Hide Sync Button', compute='_compute_hide_sync_button', store=True)
 
     @api.depends_context('uid')
     def _compute_hide_complex_tabs(self):
@@ -23,6 +26,19 @@ class CustomsOperation(models.Model):
         val = has_approver and not has_manager
         for rec in self:
             rec.hide_complex_tabs = val
+
+    @api.depends('stage_id', 'stage_id.sequence')
+    def _compute_stage_visibility_flags(self):
+        for op in self:
+            seq = op.stage_id.sequence or 0
+            op.is_pre_shipping = seq < 6
+            op.is_pre_clearance = seq < 8
+
+    @api.depends('stage_id', 'stage_id.sequence')
+    def _compute_hide_sync_button(self):
+        for op in self:
+            op.hide_sync_button = (op.stage_id.sequence or 0) > 2
+
 
     company_id = fields.Many2one(
         'res.company', 

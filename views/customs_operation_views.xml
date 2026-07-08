@@ -141,14 +141,17 @@
                             invisible="not is_overridden"
                             groups="midvex_customs_op.group_customs_manager"/>
                     <button name="action_sync_purchase_lines" 
-                            string="Sync Purchase Lines" 
-                            type="object" 
-                            class="btn-secondary" 
-                            invisible="not purchase_order_ids"/>
+                             string="Sync Purchase Lines" 
+                             type="object" 
+                             class="btn-secondary" 
+                             invisible="not purchase_order_ids or hide_sync_button"/>
                     <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
                 </header>
                 <sheet>
                     <field name="hide_complex_tabs" invisible="1"/>
+                    <field name="is_pre_shipping" invisible="1"/>
+                    <field name="is_pre_clearance" invisible="1"/>
+                    <field name="hide_sync_button" invisible="1"/>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_purchase_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="hide_complex_tabs">
                             <div class="o_field_widget o_stat_info">
@@ -347,7 +350,7 @@
                             </field>
                         </page>
 
-                        <page string="Customs &amp; Laboratory" name="customs_lab" invisible="hide_complex_tabs">
+                        <page string="Customs &amp; Laboratory" name="customs_lab" invisible="hide_complex_tabs or is_pre_clearance">
                             <group>
                                 <group string="Customs Entry">
                                     <field name="customs_status"/>
@@ -374,7 +377,7 @@
                             </group>
                         </page>
 
-                        <page string="Warehouse" name="warehouse" invisible="hide_complex_tabs">
+                        <page string="Warehouse" name="warehouse" invisible="hide_complex_tabs or is_pre_shipping">
                             <group>
                                 <group string="Receiving Status">
                                     <field name="warehouse_received"/>
