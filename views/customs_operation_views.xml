@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Customs Operation Tree View -->
     <record id="view_customs_operation_tree" model="ir.ui.view">
         <field name="name">customs.operation.tree</field>
         <field name="model">customs.operation</field>
         <field name="arch" type="xml">
             <list string="Customs Files" sample="1">
                 <field name="priority" widget="priority" nolabel="1"/>
-                <field name="name" string="Reference"/>
+                <field name="name" string="Reference" decoration-bf="1"/>
+                <field name="purchase_order_ids" widget="many2many_tags" optional="show"/>
                 <field name="supplier_ids" widget="many2many_tags"/>
+                <field name="bl_number" optional="show"/>
+                <field name="customs_declaration_number" optional="show"/>
+                <field name="customs_status" optional="show" widget="badge" decoration-info="customs_status in ('opened', 'tax_paid', 'inspection')" decoration-success="customs_status == 'released'"/>
                 <field name="user_id" widget="many2one_avatar_user"/>
                 <field name="planned_arrival_date"/>
-                <field name="planned_clearance_date"/>
+                <field name="planned_clearance_date" optional="hide"/>
                 <field name="document_completion_percentage" widget="progressbar"/>
-                <field name="shipment_ready" widget="boolean"/>
-                <field name="company_id" groups="base.group_multi_company"/>
-                <field name="stage_id" decoration-bf="1"/>
+                <field name="shipment_ready" widget="boolean" decoration-success="shipment_ready == True" decoration-danger="shipment_ready == False"/>
+                <field name="cost_total" sum="Total Cost" optional="show" widget="monetary"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="stage_id" decoration-bf="1" widget="badge"/>
             </list>
         </field>
     </record>

@@ -21,12 +21,12 @@ msgstr ""
 msgid ""
 "%s '%s' belongs to company '%s' and cannot be linked to Customs File %s for "
 "company '%s'."
-msgstr ""
+msgstr "%s '%s' '%s' şirketine aittir ve '%s' şirketi için Gümrük Dosyası %s ile ilişkilendirilemez."
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "16-character format"
-msgstr ""
+msgstr "16 karakterli format"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
@@ -138,14 +138,14 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "<strong>Deadline:</strong>"
-msgstr ""
+msgstr "<strong>Son Teslim Tarihi:</strong>"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid ""
 "<strong>Error!</strong> Please select a valid file before attempting to "
 "upload."
-msgstr ""
+msgstr "<strong>Hata!</strong> Lütfen yüklemeden önce geçerli bir dosya seçin."
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -158,7 +158,7 @@ msgstr "<strong>Hazırlık kontrolü geçersiz kılındı</strong><br/><strong>K
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "<strong>Responsible:</strong>"
-msgstr ""
+msgstr "<strong>Sorumlu:</strong>"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
@@ -166,11 +166,12 @@ msgid ""
 "<strong>Success!</strong> Your update has been successfully submitted and "
 "logged."
 msgstr ""
+"<strong>Başarılı!</strong> Güncellemeniz başarıyla gönderildi ve kaydedildi."
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "<strong>Version:</strong> v"
-msgstr ""
+msgstr "<strong>Versiyon:</strong> v"
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -315,18 +316,18 @@ msgstr ""
 #. module: midvex_customs_op
 #: model:ir.actions.act_window,name:midvex_customs_op.action_customs_operation_all
 msgid "All Import & Customs Operations"
-msgstr ""
+msgstr "Tüm İthalat ve Gümrük Operasyonları"
 
 #. module: midvex_customs_op
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_operation_all
 msgid "All Operations"
-msgstr ""
+msgstr "Tüm Operasyonlar"
 
 #. module: midvex_customs_op
 #: model:ir.actions.act_window,name:midvex_customs_op.action_customs_document_requirement_all
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_document_requirement_all
 msgid "All Requirements"
-msgstr ""
+msgstr "Tüm Gereksinimler"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__allowed_vendor_ids
@@ -440,7 +441,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_customs_operations
 msgid "B/L Number"
-msgstr ""
+msgstr "Konşimento Numarası"
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -958,7 +959,7 @@ msgstr "Gümrük Dosyası"
 msgid ""
 "Customs File %s belongs to company '%s' and cannot be linked to bill %s for "
 "company '%s'."
-msgstr ""
+msgstr "Gümrük Dosyası %s '%s' şirketine aittir ve '%s' şirketi için fatura %s ile ilişkilendirilemez."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_stock_picking__customs_operation_count
@@ -1026,7 +1027,7 @@ msgstr "Gümrük Müdürlüğü"
 msgid ""
 "Customs Office %s belongs to company '%s' and cannot be linked to Customs "
 "File %s for company '%s'."
-msgstr ""
+msgstr "Gümrük Müdürlüğü %s '%s' şirketine aittir ve '%s' şirketi için Gümrük Dosyası %s ile ilişkilendirilemez."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__customs_office
@@ -1038,7 +1039,7 @@ msgstr ""
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_office
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_office_tree
 msgid "Customs Offices"
-msgstr ""
+msgstr "Gümrük Müdürlükleri"
 
 #. module: midvex_customs_op
 #: model:ir.model,name:midvex_customs_op.model_customs_operation_line
@@ -1049,7 +1050,7 @@ msgstr "Gümrük İşlem Satırı"
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Customs Operation not found."
-msgstr ""
+msgstr "Gümrük İşlemi bulunamadı."
 
 #. module: midvex_customs_op
 #: model:ir.module.category,name:midvex_customs_op.module_category_customs_operations
@@ -1112,7 +1113,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Customs declaration uploaded from the broker portal."
-msgstr ""
+msgstr "Gümrük beyannamesi müşavir portalından yüklendi."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,help:midvex_customs_op.field_customs_stage__is_cancelled
@@ -1132,7 +1133,7 @@ msgstr "Hasar / Eksik Açıklaması"
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__damaged_product
 msgid "Damaged Product"
-msgstr "Hasarlı Ürün"
+msgstr "Hasarlı Ürün Tespit Edildi"
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -1163,7 +1164,7 @@ msgstr "Beyanname Tarihi"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Declaration Number"
-msgstr ""
+msgstr "Beyanname Numarası"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields.selection,name:midvex_customs_op.selection__customs_operation__customs_status__opened
@@ -1173,7 +1174,7 @@ msgstr "Beyanname Açıldı"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Declaration PDF (Upload signed copy)"
-msgstr ""
+msgstr "Beyanname PDF (İmzalı kopyayı yükleyin)"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_product_product__country_of_origin_id
@@ -1385,7 +1386,7 @@ msgstr "Belge Türleri"
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Document requirement not found."
-msgstr ""
+msgstr "Belge gereksinimi bulunamadı."
 
 #. module: midvex_customs_op
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_documents
@@ -1395,7 +1396,7 @@ msgstr "Belgeler"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_customs_operations
 msgid "Documents Progress"
-msgstr ""
+msgstr "Belge İlerlemesi"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields.selection,name:midvex_customs_op.selection__customs_operation__customs_status__waiting
@@ -1486,7 +1487,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Files"
-msgstr ""
+msgstr "Dosyalar"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
@@ -1549,7 +1550,7 @@ msgstr "Nakliyeci/Forwarder"
 #: code:addons/midvex_customs_op/models/customs_operation_line.py:0
 msgid ""
 "GTİP Code must consist of exactly 12 digits for Turkey imports. Product: %s"
-msgstr ""
+msgstr "Türkiye ithalatları için GTİP Kodu tam olarak 12 haneli olmalıdır. Ürün: %s"
 
 #. module: midvex_customs_op
 #: model:customs.office,name:midvex_customs_op.office_gemlik
@@ -1838,7 +1839,7 @@ msgstr "Gelen Teslimatlar"
 msgid ""
 "Incoming shipment %s was validated before Customs File %s was cleared. "
 "Please review compliance status."
-msgstr ""
+msgstr "Gelen sevkiyat %s, Gümrük Dosyası %s gümrükten çekilmeden önce onaylandı. Lütfen uyumluluk durumunu gözden geçirin."
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -2027,7 +2028,7 @@ msgstr "İlişkili Satıcı Faturaları ve Giderler"
 msgid ""
 "Linked to auto-created Import & Customs Operation: <a href='#' data-oe-"
 "model='customs.operation' data-oe-id='%s'>%s</a>"
-msgstr ""
+msgstr "Otomatik oluşturulan İthalat ve Gümrük Operasyonuna bağlandı: <a href='#' data-oe-model='customs.operation' data-oe-id='%s'>%s</a>"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields.selection,name:midvex_customs_op.selection__customs_operation__production_status__loaded
@@ -2213,7 +2214,7 @@ msgstr "Yeni"
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Newest"
-msgstr ""
+msgstr "En Yeni"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__activity_date_deadline
@@ -2257,7 +2258,7 @@ msgstr "Açıklama belirtilmedi."
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "No documents are currently requested for this shipment."
-msgstr ""
+msgstr "Bu sevkiyat için şu anda herhangi bir belge talep edilmemiştir."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields.selection,name:midvex_customs_op.selection__customs_operation__priority__0
@@ -2290,7 +2291,7 @@ msgstr "Başlamadı"
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_customs_operations
 msgid "Not set"
-msgstr ""
+msgstr "Belirlenmedi"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation_line__notes
@@ -2398,7 +2399,7 @@ msgstr "Gümrük Dosyalarını yalnızca Gümrük Yöneticileri veya Yöneticile
 #. odoo-python
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Only Customs Managers or Administrators can close a Customs File."
-msgstr ""
+msgstr "Bir Gümrük Dosyasını yalnızca Gümrük Yöneticileri veya Yöneticiler kapatabilir."
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -2415,18 +2416,20 @@ msgid ""
 "Only suppliers assigned to this Customs Operation can upload supplier "
 "documents."
 msgstr ""
+"Yalnızca bu Gümrük İşlemine atanmış tedarikçiler tedarikçi belgelerini yükleyebilir."
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Only the assigned broker can download the approved document package."
-msgstr ""
+msgstr "Yalnızca atanmış müşavir onaylı belge paketini indirebilir."
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "Only the assigned broker can update customs declaration details."
 msgstr ""
+"Yalnızca atanmış müşavir gümrük beyannamesi detaylarını güncelleyebilir."
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.purchase_order_customs_form_view
@@ -2447,7 +2450,7 @@ msgstr "Operasyonlar"
 #: model:ir.actions.act_window,name:midvex_customs_op.action_customs_operation_analysis
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_operation_analysis
 msgid "Operations Analysis"
-msgstr ""
+msgstr "Operasyon Analizi"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields.selection,name:midvex_customs_op.selection__customs_document_requirement__requirement_level__optional
@@ -2628,7 +2631,7 @@ msgstr "Tahmini Kalkış (ETD)"
 #: code:addons/midvex_customs_op/models/customs_document_requirement.py:0
 msgid ""
 "Portal users can only submit supplier documents assigned to their company."
-msgstr ""
+msgstr "Portal kullanıcıları yalnızca kendi şirketlerine atanmış tedarikçi belgelerini gönderebilir."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__priority
@@ -2750,7 +2753,7 @@ msgstr "Satınalma Siparişi"
 msgid ""
 "Purchase Order %s belongs to company '%s' and cannot be linked to Customs "
 "File %s for company '%s'."
-msgstr ""
+msgstr "Satın Alma Siparişi %s '%s' şirketine aittir ve '%s' şirketi için Gümrük Dosyası %s ile ilişkilendirilemez."
 
 #. module: midvex_customs_op
 #: model:ir.model,name:midvex_customs_op.model_purchase_order_line
@@ -2764,7 +2767,7 @@ msgstr "Satınalma Sipariş Satırı"
 msgid ""
 "Purchase Order(s) %s are already linked to Customs File %s. Only one Customs"
 " File per Purchase Order is allowed by default."
-msgstr ""
+msgstr "Satın Alma Sipariş(ler)i %s zaten Gümrük Dosyası %s ile ilişkilendirilmiş. Varsayılan olarak her Satın Alma Siparişi için yalnızca bir Gümrük Dosyasına izin verilir."
 
 #. module: midvex_customs_op
 #. odoo-python
@@ -2836,13 +2839,13 @@ msgstr "Hazırlık Engellendi"
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_search
 msgid "Ready to Ship"
-msgstr "Sevkıyata Hazır"
+msgstr "Sevkiyata Hazır"
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/models/stock_picking.py:0
 msgid "Receipt Before Customs Clearance"
-msgstr ""
+msgstr "Gümrük İşlemlerinden Önce Teslim Alma"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__received_date
@@ -2933,7 +2936,7 @@ msgstr "Zorunlu Belgeler"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Required Documents Checklist"
-msgstr ""
+msgstr "Gerekli Belgeler Kontrol Listesi"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_requirement__requirement_level
@@ -3119,7 +3122,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:midvex_customs_op.action_customs_config_settings
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_config_settings
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
@@ -3129,12 +3132,12 @@ msgstr "Sevkiyat Tarihleri"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Shipment Overview"
-msgstr ""
+msgstr "Sevkiyat Genel Bakış"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Shipment Progress"
-msgstr ""
+msgstr "Sevkiyat İlerlemesi"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
@@ -3217,7 +3220,7 @@ msgstr "Durumlar"
 msgid ""
 "Stock Picking %s belongs to company '%s' and cannot be linked to Customs "
 "File %s for company '%s'."
-msgstr ""
+msgstr "Stok Transferi %s '%s' şirketine aittir ve '%s' şirketi için Gümrük Dosyası %s ile ilişkilendirilemez."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__cost_storage
@@ -3237,7 +3240,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Submit Update"
-msgstr ""
+msgstr "Güncellemeyi Gönder"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
@@ -3253,7 +3256,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/midvex_customs_op/models/res_config_settings.py:0
 msgid "Success"
-msgstr ""
+msgstr "Başarılı"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_form
@@ -3374,12 +3377,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_customs_operations
 msgid "There are currently no Customs Operations linked to your account."
 msgstr ""
+"Hesabınızla ilişkilendirilmiş herhangi bir Gümrük İşlemi bulunmamaktadır."
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "This document is not assigned to the supplier portal."
-msgstr ""
+msgstr "Bu belge tedarikçi portalına atanmamış."
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,help:midvex_customs_op.field_customs_stage__fold
@@ -3410,7 +3414,7 @@ msgstr "Uyum belgelerini buradan takip edin."
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_home_customs
 msgid "Track import documents and customs status"
-msgstr ""
+msgstr "İthalat belgelerini ve gümrük durumunu takip edin"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.purchase_order_customs_form_view
@@ -3452,7 +3456,7 @@ msgid ""
 "Turkish Customs Declaration Number must consist of exactly 16 characters in "
 "standard format: 2-digit year, 6-digit office code, 2-letter regime (e.g. "
 "IM), and 6-digit registration number. Example: 26340500IM012345"
-msgstr ""
+msgstr "Türk Gümrük Beyanname Numarası standart formatta tam olarak 16 karakterden oluşmalıdır: 2 haneli yıl, 6 haneli ofis kodu, 2 harfli rejim (örn. IM) ve 6 haneli tescil numarası. Örnek: 26340500IM012345"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_document_type__name_tr
@@ -3490,7 +3494,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Upload"
-msgstr ""
+msgstr "Yükle"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_requirement_form
@@ -3595,7 +3599,7 @@ msgstr "Ödeme Bekleniyor"
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_customs_operation
 msgid "Waiting for Docs"
-msgstr ""
+msgstr "Belge Bekleniyor"
 
 #. module: midvex_customs_op
 #: model:customs.stage,name:midvex_customs_op.stage_waiting_docs
@@ -3617,19 +3621,19 @@ msgstr "Depo Kontrolü"
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__warehouse_delivery_date
 msgid "Warehouse Delivery"
-msgstr ""
+msgstr "Depoya Giriş"
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Warehouse Delivery Completed"
-msgstr "Depo Teslimi Tamamlandı"
+msgstr "Depoya Giriş Tamamlandı"
 
 #. module: midvex_customs_op
 #. odoo-python
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "Warehouse Delivery Date"
-msgstr "Depo Teslim Tarihi"
+msgstr "Depoya Giriş Tarihi"
 
 #. module: midvex_customs_op
 #: model:ir.model.fields,field_description:midvex_customs_op.field_customs_operation__warehouse_received
@@ -3785,7 +3789,7 @@ msgstr "Bu Gümrük Dosyası 'Belgeler Bekleniyor' aşamasını geçtiği için 
 #. odoo-python
 #: code:addons/midvex_customs_op/controllers/portal.py:0
 msgid "You do not have access to this Customs Operation."
-msgstr ""
+msgstr "Bu Gümrük İşlemine erişim yetkiniz yok."
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_document_type_form
@@ -3832,3 +3836,4 @@ msgstr "orijinal nüsha düzenlenmemiş"
 #: code:addons/midvex_customs_op/models/customs_operation.py:0
 msgid "planned_arrival_date"
 msgstr ""
+
