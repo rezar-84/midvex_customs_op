@@ -148,24 +148,25 @@
                     <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
                 </header>
                 <sheet>
+                    <field name="hide_complex_tabs" invisible="1"/>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_purchase_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart">
+                        <button name="action_view_purchase_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="hide_complex_tabs">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Purchase Orders</span>
                             </div>
                         </button>
-                        <button name="action_view_incoming_shipments" type="object" class="oe_stat_button" icon="fa-truck">
+                        <button name="action_view_incoming_shipments" type="object" class="oe_stat_button" icon="fa-truck" invisible="hide_complex_tabs">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Stock Receipts</span>
                             </div>
                         </button>
-                        <button name="action_view_sales_orders" type="object" class="oe_stat_button" icon="fa-usd" invisible="sale_order_count == 0">
+                        <button name="action_view_sales_orders" type="object" class="oe_stat_button" icon="fa-usd" invisible="sale_order_count == 0 or hide_complex_tabs">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value"><field name="sale_order_count"/></span>
                                 <span class="o_stat_text">Sales Orders</span>
                             </div>
                         </button>
-                        <button name="action_view_vendor_bills" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="vendor_bill_count == 0">
+                        <button name="action_view_vendor_bills" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="vendor_bill_count == 0 or hide_complex_tabs">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value"><field name="vendor_bill_count"/></span>
                                 <span class="o_stat_text">Bills &amp; Expenses</span>
@@ -244,7 +245,7 @@
                             </group>
                         </page>
 
-                        <page string="Purchase &amp; Supplier" name="purchase_supplier">
+                        <page string="Purchase &amp; Supplier" name="purchase_supplier" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Commercial Details">
                                     <field name="supplier_ref"/>
@@ -258,7 +259,7 @@
                             </group>
                         </page>
 
-                        <page string="Production" name="production">
+                        <page string="Production" name="production" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Status">
                                     <field name="production_status"/>
@@ -271,7 +272,7 @@
                             </group>
                         </page>
 
-                        <page string="Logistics" name="logistics">
+                        <page string="Logistics" name="logistics" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Shipment Transport">
                                     <field name="transport_mode"/>
@@ -346,7 +347,7 @@
                             </field>
                         </page>
 
-                        <page string="Customs &amp; Laboratory" name="customs_lab">
+                        <page string="Customs &amp; Laboratory" name="customs_lab" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Customs Entry">
                                     <field name="customs_status"/>
@@ -373,7 +374,7 @@
                             </group>
                         </page>
 
-                        <page string="Warehouse" name="warehouse">
+                        <page string="Warehouse" name="warehouse" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Receiving Status">
                                     <field name="warehouse_received"/>
@@ -396,7 +397,7 @@
                             </group>
                         </page>
 
-                        <page string="Accounting &amp; Costs" name="accounting_costs">
+                        <page string="Accounting &amp; Costs" name="accounting_costs" invisible="hide_complex_tabs">
                             <group>
                                 <group string="Closing Control">
                                     <field name="accounting_status"/>

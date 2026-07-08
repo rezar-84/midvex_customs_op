@@ -14,6 +14,16 @@ class CustomsOperation(models.Model):
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default='New', tracking=True)
     active = fields.Boolean(string='Active', default=True, tracking=True, index=True)
+    hide_complex_tabs = fields.Boolean(compute='_compute_hide_complex_tabs', store=False)
+
+    @api.depends_context('uid')
+    def _compute_hide_complex_tabs(self):
+        has_approver = self.env.user.has_group('midvex_customs_op.group_customs_approver')
+        has_manager = self.env.user.has_group('midvex_customs_op.group_customs_manager')
+        val = has_approver and not has_manager
+        for rec in self:
+            rec.hide_complex_tabs = val
+
     company_id = fields.Many2one(
         'res.company', 
         string='Company', 
