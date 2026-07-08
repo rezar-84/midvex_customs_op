@@ -745,7 +745,7 @@ msgstr "Yapılandırma Ayarları"
 #. module: midvex_customs_op
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_configuration
 msgid "Configuration"
-msgstr ""
+msgstr "Yapılandırma"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.view_customs_operation_override_wizard_form
@@ -1390,7 +1390,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_documents
 msgid "Documents"
-msgstr ""
+msgstr "Belgeler"
 
 #. module: midvex_customs_op
 #: model_terms:ir.ui.view,arch_db:midvex_customs_op.portal_my_customs_operations
@@ -2441,7 +2441,7 @@ msgstr ""
 #. module: midvex_customs_op
 #: model:ir.ui.menu,name:midvex_customs_op.menu_customs_operations
 msgid "Operations"
-msgstr ""
+msgstr "Operasyonlar"
 
 #. module: midvex_customs_op
 #: model:ir.actions.act_window,name:midvex_customs_op.action_customs_operation_analysis
